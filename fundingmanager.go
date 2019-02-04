@@ -2711,7 +2711,7 @@ func (f *fundingManager) handleInitFundingMsg(msg *initFundingMsg) {
 	switch registeredChains.PrimaryChain() {
 	case bitcoinChain:
 		ourDustLimit = lnwallet.DefaultDustLimit()
-	case litecoinChain:
+	case actiniumChain:
 		ourDustLimit = defaultActiniumDustLimit
 	}
 

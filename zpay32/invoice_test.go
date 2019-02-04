@@ -19,7 +19,7 @@ import (
 	"github.com/lightningnetwork/lnd/lnwire"
 	"github.com/lightningnetwork/lnd/routing"
 
-	litecoinCfg "github.com/Actinium-project/acmd/chaincfg"
+	actiniumCfg "github.com/Actinium-project/acmd/chaincfg"
 )
 
 var (
@@ -103,15 +103,15 @@ func init() {
 	copy(testPaymentHash[:], testPaymentHashSlice[:])
 	copy(testDescriptionHash[:], testDescriptionHashSlice[:])
 
-	// Initialize litecoin testnet and mainnet params by applying key fields
+	// Initialize actinium testnet and mainnet params by applying key fields
 	// to copies of bitcoin params.
 	// TODO(sangaman): create an interface for chaincfg.params
 	ltcTestNetParams = chaincfg.TestNet3Params
-	ltcTestNetParams.Net = wire.BitcoinNet(litecoinCfg.TestNet4Params.Net)
-	ltcTestNetParams.Bech32HRPSegwit = litecoinCfg.TestNet4Params.Bech32HRPSegwit
+	ltcTestNetParams.Net = wire.BitcoinNet(actiniumCfg.TestNet4Params.Net)
+	ltcTestNetParams.Bech32HRPSegwit = actiniumCfg.TestNet4Params.Bech32HRPSegwit
 	ltcMainNetParams = chaincfg.MainNetParams
-	ltcMainNetParams.Net = wire.BitcoinNet(litecoinCfg.MainNetParams.Net)
-	ltcMainNetParams.Bech32HRPSegwit = litecoinCfg.MainNetParams.Bech32HRPSegwit
+	ltcMainNetParams.Net = wire.BitcoinNet(actiniumCfg.MainNetParams.Net)
+	ltcMainNetParams.Bech32HRPSegwit = actiniumCfg.MainNetParams.Bech32HRPSegwit
 }
 
 // TestDecodeEncode tests that an encoded invoice gets decoded into the expected
@@ -549,7 +549,7 @@ func TestDecodeEncode(t *testing.T) {
 			skipEncoding: true, // Skip encoding since we were given the wrong net
 		},
 		{
-			// Decode a litecoin testnet invoice
+			// Decode a actinium testnet invoice
 			encodedInvoice: "lntltc241pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqhp58yjmdan79s6qqdhdzgynm4zwqd5d7xmw5fk98klysy043l2ahrqsnp4q0n326hr8v9zprg8gsvezcch06gfaqqhde2aj730yg0durunfhv66m2eq2fx9uctzkmj30meaghyskkgsd6geap5qg9j2ae444z24a4p8xg3a6g73p8l7d689vtrlgzj0wyx2h6atq8dfty7wmkt4frx9g9sp730h5a",
 			valid:          true,
 			decodedInvoice: func() *Invoice {
@@ -565,7 +565,7 @@ func TestDecodeEncode(t *testing.T) {
 			},
 		},
 		{
-			// Decode a litecoin mainnet invoice
+			// Decode a actinium mainnet invoice
 			encodedInvoice: "lnltc241pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqhp58yjmdan79s6qqdhdzgynm4zwqd5d7xmw5fk98klysy043l2ahrqsnp4q0n326hr8v9zprg8gsvezcch06gfaqqhde2aj730yg0durunfhv66859t2d55efrxdlgqg9hdqskfstdmyssdw4fjc8qdl522ct885pqk7acn2aczh0jeht0xhuhnkmm3h0qsrxedlwm9x86787zzn4qwwwcpjkl3t2",
 			valid:          true,
 			decodedInvoice: func() *Invoice {
@@ -712,7 +712,7 @@ func TestNewInvoice(t *testing.T) {
 			encodedInvoice: "lnbcrt241pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdqqnp4q0n326hr8v9zprg8gsvezcch06gfaqqhde2aj730yg0durunfhv66df5c8pqjjt4z4ymmuaxfx8eh5v7hmzs3wrfas8m2sz5qz56rw2lxy8mmgm4xln0ha26qkw6u3vhu22pss2udugr9g74c3x20slpcqjgq0el4h6",
 		},
 		{
-			// Create a litecoin testnet invoice
+			// Create a actinium testnet invoice
 			newInvoice: func() (*Invoice, error) {
 				return NewInvoice(&ltcTestNetParams,
 					testPaymentHash, time.Unix(1496314658, 0),
@@ -724,7 +724,7 @@ func TestNewInvoice(t *testing.T) {
 			encodedInvoice: "lntltc241pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqhp58yjmdan79s6qqdhdzgynm4zwqd5d7xmw5fk98klysy043l2ahrqsnp4q0n326hr8v9zprg8gsvezcch06gfaqqhde2aj730yg0durunfhv66m2eq2fx9uctzkmj30meaghyskkgsd6geap5qg9j2ae444z24a4p8xg3a6g73p8l7d689vtrlgzj0wyx2h6atq8dfty7wmkt4frx9g9sp730h5a",
 		},
 		{
-			// Create a litecoin mainnet invoice
+			// Create a actinium mainnet invoice
 			newInvoice: func() (*Invoice, error) {
 				return NewInvoice(&ltcMainNetParams,
 					testPaymentHash, time.Unix(1496314658, 0),

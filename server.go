@@ -759,7 +759,7 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB, cc *chainControl,
 	chainCfg := cfg.Bitcoin
 	minRemoteDelay := minBtcRemoteDelay
 	maxRemoteDelay := maxBtcRemoteDelay
-	if primaryChain == litecoinChain {
+	if primaryChain == actiniumChain {
 		chainCfg = cfg.Actinium
 		minRemoteDelay = minLtcRemoteDelay
 		maxRemoteDelay = maxLtcRemoteDelay

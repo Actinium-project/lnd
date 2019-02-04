@@ -82,8 +82,8 @@ const (
 	// bitcoinChain is Bitcoin's testnet chain.
 	bitcoinChain chainCode = iota
 
-	// litecoinChain is Actinium's testnet chain.
-	litecoinChain
+	// actiniumChain is Actinium's testnet chain.
+	actiniumChain
 )
 
 // String returns a string representation of the target chainCode.
@@ -91,8 +91,8 @@ func (c chainCode) String() string {
 	switch c {
 	case bitcoinChain:
 		return "bitcoin"
-	case litecoinChain:
-		return "litecoin"
+	case actiniumChain:
+		return "actinium"
 	default:
 		return "kekcoin"
 	}
@@ -135,7 +135,7 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 	// Set the RPC config from the "home" chain. Multi-chain isn't yet
 	// active, so we'll restrict usage to a particular chain for now.
 	homeChainConfig := cfg.Bitcoin
-	if registeredChains.PrimaryChain() == litecoinChain {
+	if registeredChains.PrimaryChain() == actiniumChain {
 		homeChainConfig = cfg.Actinium
 	}
 	ltndLog.Infof("Primary chain is set to: %v",
@@ -154,7 +154,7 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 		cc.feeEstimator = lnwallet.NewStaticFeeEstimator(
 			defaultBitcoinStaticFeePerKW, 0,
 		)
-	case litecoinChain:
+	case actiniumChain:
 		cc.routingPolicy = htlcswitch.ForwardingPolicy{
 			MinHTLC:       cfg.Actinium.MinHTLC,
 			BaseFee:       cfg.Actinium.BaseFee,
@@ -506,7 +506,7 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 
 	// Select the default channel constraints for the primary chain.
 	channelConstraints := defaultBtcChannelConstraints
-	if registeredChains.PrimaryChain() == litecoinChain {
+	if registeredChains.PrimaryChain() == actiniumChain {
 		channelConstraints = defaultLtcChannelConstraints
 	}
 
@@ -563,17 +563,17 @@ var (
 		0x68, 0xd6, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00,
 	})
 
-	// litecoinTestnetGenesis is the genesis hash of Actinium's testnet4
+	// actiniumTestnetGenesis is the genesis hash of Actinium's testnet4
 	// chain.
-	litecoinTestnetGenesis = chainhash.Hash([chainhash.HashSize]byte{
+	actiniumTestnetGenesis = chainhash.Hash([chainhash.HashSize]byte{
 		0xa0, 0x29, 0x3e, 0x4e, 0xeb, 0x3d, 0xa6, 0xe6,
 		0xf5, 0x6f, 0x81, 0xed, 0x59, 0x5f, 0x57, 0x88,
 		0x0d, 0x1a, 0x21, 0x56, 0x9e, 0x13, 0xee, 0xfd,
 		0xd9, 0x51, 0x28, 0x4b, 0x5a, 0x62, 0x66, 0x49,
 	})
 
-	// litecoinMainnetGenesis is the genesis hash of Actinium's main chain.
-	litecoinMainnetGenesis = chainhash.Hash([chainhash.HashSize]byte{
+	// actiniumMainnetGenesis is the genesis hash of Actinium's main chain.
+	actiniumMainnetGenesis = chainhash.Hash([chainhash.HashSize]byte{
 		0xe2, 0xbf, 0x04, 0x7e, 0x7e, 0x5a, 0x19, 0x1a,
 		0xa4, 0xef, 0x34, 0xd3, 0x14, 0x97, 0x9d, 0xc9,
 		0x98, 0x6e, 0x0f, 0x19, 0x25, 0x1e, 0xda, 0xba,
@@ -584,10 +584,10 @@ var (
 	// chainCode enum for that chain.
 	chainMap = map[chainhash.Hash]chainCode{
 		bitcoinTestnetGenesis:  bitcoinChain,
-		litecoinTestnetGenesis: litecoinChain,
+		actiniumTestnetGenesis: actiniumChain,
 
 		bitcoinMainnetGenesis:  bitcoinChain,
-		litecoinMainnetGenesis: litecoinChain,
+		actiniumMainnetGenesis: actiniumChain,
 	}
 
 	// chainDNSSeeds is a map of a chain's hash to the set of DNS seeds
@@ -617,7 +617,7 @@ var (
 			},
 		},
 
-		litecoinMainnetGenesis: {
+		actiniumMainnetGenesis: {
 			{
 				"ltc.nodes.lightning.directory",
 				"soa.nodes.lightning.directory",

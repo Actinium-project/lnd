@@ -89,7 +89,7 @@ var (
 	defaultLtcdRPCCertFile = filepath.Join(defaultLtcdDir, "rpc.cert")
 
 	defaultBitcoindDir  = btcutil.AppDataDir("bitcoin", false)
-	defaultActiniumdDir = btcutil.AppDataDir("litecoin", false)
+	defaultActiniumdDir = btcutil.AppDataDir("actinium", false)
 
 	defaultTorSOCKS   = net.JoinHostPort("localhost", strconv.Itoa(defaultTorSOCKSPort))
 	defaultTorDNS     = net.JoinHostPort(defaultTorDNSHost, strconv.Itoa(defaultTorDNSPort))
@@ -218,7 +218,7 @@ type config struct {
 	BitcoindMode *bitcoindConfig `group:"bitcoind" namespace:"bitcoind"`
 	NeutrinoMode *neutrinoConfig `group:"neutrino" namespace:"neutrino"`
 
-	Actinium      *chainConfig    `group:"Actinium" namespace:"litecoin"`
+	Actinium      *chainConfig    `group:"Actinium" namespace:"actinium"`
 	LtcdMode      *btcdConfig     `group:"acmd" namespace:"acmd"`
 	ActiniumdMode *bitcoindConfig `group:"actiniumd" namespace:"actiniumd"`
 
@@ -561,15 +561,15 @@ func loadConfig() (*config, error) {
 	// Otherwise, we don't know which chain we're on.
 	case !cfg.Bitcoin.Active && !cfg.Actinium.Active:
 		return nil, fmt.Errorf("%s: either bitcoin.active or "+
-			"litecoin.active must be set to 1 (true)", funcName)
+			"actinium.active must be set to 1 (true)", funcName)
 
 	case cfg.Actinium.Active:
 		if cfg.Actinium.SimNet {
-			str := "%s: simnet mode for litecoin not currently supported"
+			str := "%s: simnet mode for actinium not currently supported"
 			return nil, fmt.Errorf(str, funcName)
 		}
 		if cfg.Actinium.RegTest {
-			str := "%s: regnet mode for litecoin not currently supported"
+			str := "%s: regnet mode for actinium not currently supported"
 			return nil, fmt.Errorf(str, funcName)
 		}
 
@@ -582,14 +582,14 @@ func loadConfig() (*config, error) {
 		// number of network flags passed; assign active network params
 		// while we're at it.
 		numNets := 0
-		var ltcParams litecoinNetParams
+		var ltcParams actiniumNetParams
 		if cfg.Actinium.MainNet {
 			numNets++
-			ltcParams = litecoinMainNetParams
+			ltcParams = actiniumMainNetParams
 		}
 		if cfg.Actinium.TestNet3 {
 			numNets++
-			ltcParams = litecoinTestNetParams
+			ltcParams = actiniumTestNetParams
 		}
 		if numNets > 1 {
 			str := "%s: The mainnet, testnet, and simnet params " +
@@ -602,29 +602,29 @@ func loadConfig() (*config, error) {
 		// The target network must be provided, otherwise, we won't
 		// know how to initialize the daemon.
 		if numNets == 0 {
-			str := "%s: either --litecoin.mainnet, or " +
-				"litecoin.testnet must be specified"
+			str := "%s: either --actinium.mainnet, or " +
+				"actinium.testnet must be specified"
 			err := fmt.Errorf(str, funcName)
 			return nil, err
 		}
 
 		if cfg.Actinium.MainNet && cfg.DebugHTLC {
 			str := "%s: debug-htlc mode cannot be used " +
-				"on litecoin mainnet"
+				"on actinium mainnet"
 			err := fmt.Errorf(str, funcName)
 			return nil, err
 		}
 
-		// The litecoin chain is the current active chain. However
+		// The actinium chain is the current active chain. However
 		// throughout the codebase we required chaincfg.Params. So as a
 		// temporary hack, we'll mutate the default net params for
-		// bitcoin with the litecoin specific information.
+		// bitcoin with the actinium specific information.
 		applyActiniumParams(&activeNetParams, &ltcParams)
 
 		switch cfg.Actinium.Node {
 		case "acmd":
 			err := parseRPCParams(cfg.Actinium, cfg.LtcdMode,
-				litecoinChain, funcName)
+				actiniumChain, funcName)
 			if err != nil {
 				err := fmt.Errorf("unable to load RPC "+
 					"credentials for acmd: %v", err)
@@ -636,7 +636,7 @@ func loadConfig() (*config, error) {
 					"support simnet", funcName)
 			}
 			err := parseRPCParams(cfg.Actinium, cfg.ActiniumdMode,
-				litecoinChain, funcName)
+				actiniumChain, funcName)
 			if err != nil {
 				err := fmt.Errorf("unable to load RPC "+
 					"credentials for actiniumd: %v", err)
@@ -644,17 +644,17 @@ func loadConfig() (*config, error) {
 			}
 		default:
 			str := "%s: only acmd and actiniumd mode supported for " +
-				"litecoin at this time"
+				"actinium at this time"
 			return nil, fmt.Errorf(str, funcName)
 		}
 
 		cfg.Actinium.ChainDir = filepath.Join(cfg.DataDir,
 			defaultChainSubDirname,
-			litecoinChain.String())
+			actiniumChain.String())
 
-		// Finally we'll register the litecoin chain as our current
+		// Finally we'll register the actinium chain as our current
 		// primary chain.
-		registeredChains.RegisterPrimaryChain(litecoinChain)
+		registeredChains.RegisterPrimaryChain(actiniumChain)
 		maxFundingAmount = maxLtcFundingAmount
 		maxPaymentMSat = maxLtcPaymentMSat
 
@@ -1128,7 +1128,7 @@ func parseRPCParams(cConfig *chainConfig, nodeConfig interface{}, net chainCode,
 			daemonName = "btcd"
 			confDir = conf.Dir
 			confFile = "btcd"
-		case litecoinChain:
+		case actiniumChain:
 			daemonName = "acmd"
 			confDir = conf.Dir
 			confFile = "acmd"
@@ -1166,10 +1166,10 @@ func parseRPCParams(cConfig *chainConfig, nodeConfig interface{}, net chainCode,
 			daemonName = "bitcoind"
 			confDir = conf.Dir
 			confFile = "bitcoin"
-		case litecoinChain:
+		case actiniumChain:
 			daemonName = "actiniumd"
 			confDir = conf.Dir
-			confFile = "litecoin"
+			confFile = "actinium"
 		}
 
 		// If not all of the parameters are set, we'll assume the user

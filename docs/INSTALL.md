@@ -294,7 +294,7 @@ lnd --bitcoin.active --bitcoin.testnet --debuglevel=debug --bitcoin.node=neutrin
 The configuration for bitcoind and actiniumd are nearly identical, the
 following steps can be mirrored with loss of generality to enable a actiniumd
 backend.  Setup will be described in regards to `bitcoind`, but note that `lnd`
-uses a distinct `litecoin.node=actiniumd` argument and analogous
+uses a distinct `actinium.node=actiniumd` argument and analogous
 subconfigurations prefixed by `actiniumd`. Note that adding `--txindex` is
 optional, as it will take longer to sync the node, but then `lnd` will
 generally operate faster as it can hit the index directly, rather than scanning

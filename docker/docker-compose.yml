@@ -32,7 +32,7 @@ services:
         entrypoint: ["./start-btcctl.sh"]
 
 
-    # ltc is an image of litecoin node which used as base image for acmd and
+    # ltc is an image of actinium node which used as base image for acmd and
     # ltcctl. The environment variables default values determined on stage of
     # container start within starting script.
     ltc:
@@ -41,7 +41,7 @@ services:
         context: acmd/
       volumes:
             - shared:/rpc
-            - litecoin:/data
+            - actinium:/data
       environment:
         - RPCUSER
         - RPCPASS
@@ -100,7 +100,7 @@ volumes:
   bitcoin:
     driver: local
 
-  # litecoin volume is needed for maintaining blockchain persistence
+  # actinium volume is needed for maintaining blockchain persistence
   # during acmd container recreation.
-  litecoin:
+  actinium:
     driver: local

@@ -666,7 +666,7 @@ func waitForWalletPassword(grpcEndpoints, restEndpoints []net.Addr,
 	grpcServer := grpc.NewServer(serverOpts...)
 
 	chainConfig := cfg.Bitcoin
-	if registeredChains.PrimaryChain() == litecoinChain {
+	if registeredChains.PrimaryChain() == actiniumChain {
 		chainConfig = cfg.Actinium
 	}
 

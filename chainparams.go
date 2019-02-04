@@ -6,8 +6,8 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	bitcoinWire "github.com/btcsuite/btcd/wire"
 	"github.com/lightningnetwork/lnd/keychain"
-	litecoinCfg "github.com/Actinium-project/acmd/chaincfg"
-	litecoinWire "github.com/Actinium-project/acmd/wire"
+	actiniumCfg "github.com/Actinium-project/acmd/chaincfg"
+	actiniumWire "github.com/Actinium-project/acmd/wire"
 )
 
 // activeNetParams is a pointer to the parameters specific to the currently
@@ -22,10 +22,10 @@ type bitcoinNetParams struct {
 	CoinType uint32
 }
 
-// litecoinNetParams couples the p2p parameters of a network with the
+// actiniumNetParams couples the p2p parameters of a network with the
 // corresponding RPC port of a daemon running on the particular network.
-type litecoinNetParams struct {
-	*litecoinCfg.Params
+type actiniumNetParams struct {
+	*actiniumCfg.Params
 	rpcPort  string
 	CoinType uint32
 }
@@ -54,18 +54,18 @@ var bitcoinSimNetParams = bitcoinNetParams{
 	CoinType: keychain.CoinTypeTestnet,
 }
 
-// litecoinTestNetParams contains parameters specific to the 4th version of the
+// actiniumTestNetParams contains parameters specific to the 4th version of the
 // test network.
-var litecoinTestNetParams = litecoinNetParams{
-	Params:   &litecoinCfg.TestNet4Params,
+var actiniumTestNetParams = actiniumNetParams{
+	Params:   &actiniumCfg.TestNet4Params,
 	rpcPort:  "19334",
 	CoinType: keychain.CoinTypeTestnet,
 }
 
-// litecoinMainNetParams contains the parameters specific to the current
+// actiniumMainNetParams contains the parameters specific to the current
 // Actinium mainnet.
-var litecoinMainNetParams = litecoinNetParams{
-	Params:   &litecoinCfg.MainNetParams,
+var actiniumMainNetParams = actiniumNetParams{
+	Params:   &actiniumCfg.MainNetParams,
 	rpcPort:  "9334",
 	CoinType: keychain.CoinTypeActinium,
 }
@@ -78,51 +78,51 @@ var regTestNetParams = bitcoinNetParams{
 }
 
 // applyActiniumParams applies the relevant chain configuration parameters that
-// differ for litecoin to the chain parameters typed for btcsuite derivation.
+// differ for actinium to the chain parameters typed for btcsuite derivation.
 // This function is used in place of using something like interface{} to
 // abstract over _which_ chain (or fork) the parameters are for.
-func applyActiniumParams(params *bitcoinNetParams, litecoinParams *litecoinNetParams) {
-	params.Name = litecoinParams.Name
-	params.Net = bitcoinWire.BitcoinNet(litecoinParams.Net)
-	params.DefaultPort = litecoinParams.DefaultPort
-	params.CoinbaseMaturity = litecoinParams.CoinbaseMaturity
+func applyActiniumParams(params *bitcoinNetParams, actiniumParams *actiniumNetParams) {
+	params.Name = actiniumParams.Name
+	params.Net = bitcoinWire.BitcoinNet(actiniumParams.Net)
+	params.DefaultPort = actiniumParams.DefaultPort
+	params.CoinbaseMaturity = actiniumParams.CoinbaseMaturity
 
-	copy(params.GenesisHash[:], litecoinParams.GenesisHash[:])
+	copy(params.GenesisHash[:], actiniumParams.GenesisHash[:])
 
 	// Address encoding magics
-	params.PubKeyHashAddrID = litecoinParams.PubKeyHashAddrID
-	params.ScriptHashAddrID = litecoinParams.ScriptHashAddrID
-	params.PrivateKeyID = litecoinParams.PrivateKeyID
-	params.WitnessPubKeyHashAddrID = litecoinParams.WitnessPubKeyHashAddrID
-	params.WitnessScriptHashAddrID = litecoinParams.WitnessScriptHashAddrID
-	params.Bech32HRPSegwit = litecoinParams.Bech32HRPSegwit
+	params.PubKeyHashAddrID = actiniumParams.PubKeyHashAddrID
+	params.ScriptHashAddrID = actiniumParams.ScriptHashAddrID
+	params.PrivateKeyID = actiniumParams.PrivateKeyID
+	params.WitnessPubKeyHashAddrID = actiniumParams.WitnessPubKeyHashAddrID
+	params.WitnessScriptHashAddrID = actiniumParams.WitnessScriptHashAddrID
+	params.Bech32HRPSegwit = actiniumParams.Bech32HRPSegwit
 
-	copy(params.HDPrivateKeyID[:], litecoinParams.HDPrivateKeyID[:])
-	copy(params.HDPublicKeyID[:], litecoinParams.HDPublicKeyID[:])
+	copy(params.HDPrivateKeyID[:], actiniumParams.HDPrivateKeyID[:])
+	copy(params.HDPublicKeyID[:], actiniumParams.HDPublicKeyID[:])
 
-	params.HDCoinType = litecoinParams.HDCoinType
+	params.HDCoinType = actiniumParams.HDCoinType
 
-	checkPoints := make([]chaincfg.Checkpoint, len(litecoinParams.Checkpoints))
-	for i := 0; i < len(litecoinParams.Checkpoints); i++ {
+	checkPoints := make([]chaincfg.Checkpoint, len(actiniumParams.Checkpoints))
+	for i := 0; i < len(actiniumParams.Checkpoints); i++ {
 		var chainHash chainhash.Hash
-		copy(chainHash[:], litecoinParams.Checkpoints[i].Hash[:])
+		copy(chainHash[:], actiniumParams.Checkpoints[i].Hash[:])
 
 		checkPoints[i] = chaincfg.Checkpoint{
-			Height: litecoinParams.Checkpoints[i].Height,
+			Height: actiniumParams.Checkpoints[i].Height,
 			Hash:   &chainHash,
 		}
 	}
 	params.Checkpoints = checkPoints
 
-	params.rpcPort = litecoinParams.rpcPort
-	params.CoinType = litecoinParams.CoinType
+	params.rpcPort = actiniumParams.rpcPort
+	params.CoinType = actiniumParams.CoinType
 }
 
 // isTestnet tests if the given params correspond to a testnet
 // parameter configuration.
 func isTestnet(params *bitcoinNetParams) bool {
 	switch params.Params.Net {
-	case bitcoinWire.TestNet3, bitcoinWire.BitcoinNet(litecoinWire.TestNet4):
+	case bitcoinWire.TestNet3, bitcoinWire.BitcoinNet(actiniumWire.TestNet4):
 		return true
 	default:
 		return false
