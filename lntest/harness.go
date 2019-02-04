@@ -134,7 +134,7 @@ func (f *fakeLogger) Printf(format string, args ...interface{}) {}
 func (f *fakeLogger) Println(args ...interface{})               {}
 
 // SetUp starts the initial seeder nodes within the test harness. The initial
-// node's wallets will be funded wallets with ten 1 BTC outputs each. Finally
+// node's wallets will be funded wallets with ten 1 LTC outputs each. Finally
 // rpc clients capable of communicating with the initial seeder nodes are
 // created. Nodes are initialized with the given extra command line flags, which
 // should be formatted properly - "--arg=value".
@@ -173,7 +173,7 @@ func (n *NetworkHarness) SetUp(lndArgs []string) error {
 	default:
 	}
 
-	// Load up the wallets of the seeder nodes with 10 outputs of 1 BTC
+	// Load up the wallets of the seeder nodes with 10 outputs of 1 LTC
 	// each.
 	ctxb := context.Background()
 	addrReq := &lnrpc.NewAddressRequest{

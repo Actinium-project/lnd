@@ -84,7 +84,7 @@ func (b *BtcWallet) GetUtxo(op *wire.OutPoint, pkScript []byte,
 			return nil, err
 		}
 
-		// We'll ensure we properly convert the amount given in BTC to
+		// We'll ensure we properly convert the amount given in LTC to
 		// satoshis.
 		amt, err := btcutil.NewAmount(txout.Value)
 		if err != nil {
@@ -109,7 +109,7 @@ func (b *BtcWallet) GetUtxo(op *wire.OutPoint, pkScript []byte,
 			return nil, err
 		}
 
-		// Sadly, gettxout returns the output value in BTC instead of
+		// Sadly, gettxout returns the output value in LTC instead of
 		// satoshis.
 		amt, err := btcutil.NewAmount(txout.Value)
 		if err != nil {

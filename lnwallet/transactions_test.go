@@ -1034,7 +1034,7 @@ func TestCommitmentSpendValidation(t *testing.T) {
 	const csvTimeout = uint32(5)
 
 	// We also set up set some resources for the commitment transaction.
-	// Each side currently has 1 BTC within the channel, with a total
+	// Each side currently has 1 LTC within the channel, with a total
 	// channel capacity of 2BTC.
 	aliceKeyPriv, aliceKeyPub := btcec.PrivKeyFromBytes(btcec.S256(),
 		testWalletPrivKey)

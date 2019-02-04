@@ -335,7 +335,7 @@ func (b *BtcWallet) ListUnspentWitness(minConfs, maxConfs int32) (
 			}
 
 			// We'll ensure we properly convert the amount given in
-			// BTC to satoshis.
+			// LTC to satoshis.
 			amt, err := btcutil.NewAmount(output.Amount)
 			if err != nil {
 				return nil, err

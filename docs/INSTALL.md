@@ -434,7 +434,7 @@ bitcoin.active=1
 ```
 
 Notice the `[Bitcoin]` section. This section houses the parameters for the
-Bitcoin chain. `lnd` also supports Actinium testnet4 (but not both BTC and LTC
+Bitcoin chain. `lnd` also supports Actinium testnet4 (but not both LTC and LTC
 at the same time), so when working with Actinium be sure to set to parameters
 for Actinium accordingly. See a more detailed sample config file available
 [here](https://github.com/Actinium-project/lnd/blob/master/sample-acmd.conf)

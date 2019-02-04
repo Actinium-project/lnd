@@ -102,27 +102,27 @@ func TestDecodeAmount(t *testing.T) {
 			result: 200000000000, // mSat
 		},
 		{
-			amount: "2", // BTC
+			amount: "2", // LTC
 			valid:  true,
 			result: 200000000000, // mSat
 		},
 		{
-			amount: "2000", // BTC
+			amount: "2000", // LTC
 			valid:  true,
 			result: 200000000000000, // mSat
 		},
 		{
-			amount: "2009", // BTC
+			amount: "2009", // LTC
 			valid:  true,
 			result: 200900000000000, // mSat
 		},
 		{
-			amount: "1234", // BTC
+			amount: "1234", // LTC
 			valid:  true,
 			result: 123400000000000, // mSat
 		},
 		{
-			amount: "21000000", // BTC
+			amount: "21000000", // LTC
 			valid:  true,
 			result: 2100000000000000000, // mSat
 		},
@@ -179,27 +179,27 @@ func TestEncodeAmount(t *testing.T) {
 		{
 			msat:   200000000000, // mSat
 			valid:  true,
-			result: "2", // BTC
+			result: "2", // LTC
 		},
 		{
 			msat:   200000000000000, // mSat
 			valid:  true,
-			result: "2000", // BTC
+			result: "2000", // LTC
 		},
 		{
 			msat:   200900000000000, // mSat
 			valid:  true,
-			result: "2009", // BTC
+			result: "2009", // LTC
 		},
 		{
 			msat:   123400000000000, // mSat
 			valid:  true,
-			result: "1234", // BTC
+			result: "1234", // LTC
 		},
 		{
 			msat:   2100000000000000000, // mSat
 			valid:  true,
-			result: "21000000", // BTC
+			result: "21000000", // LTC
 		},
 	}
 

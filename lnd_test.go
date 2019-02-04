@@ -723,7 +723,7 @@ func testOnchainFundRecovery(net *lntest.NetworkHarness, t *harnessTest) {
 				}
 			}
 
-			// Send one BTC to the next P2WKH address.
+			// Send one LTC to the next P2WKH address.
 			ctxt, _ := context.WithTimeout(ctxb, defaultTimeout)
 			err = net.SendCoins(
 				ctxt, btcutil.SatoshiPerBitcoin, node,
@@ -748,7 +748,7 @@ func testOnchainFundRecovery(net *lntest.NetworkHarness, t *harnessTest) {
 	// Restore Carol with a recovery window of 0. Since no coins have been
 	// sent, her balance should be zero.
 	//
-	// After, one BTC is sent to both her first external P2WKH and NP2WKH
+	// After, one LTC is sent to both her first external P2WKH and NP2WKH
 	// addresses.
 	restoreCheckBalance(0, 0, skipAndSend(0))
 
@@ -760,7 +760,7 @@ func testOnchainFundRecovery(net *lntest.NetworkHarness, t *harnessTest) {
 	// two transactions above.
 	//
 	// After, we will generate and skip 9 P2WKH and NP2WKH addresses, and
-	// send another BTC to the subsequent 10th address in each derivation
+	// send another LTC to the subsequent 10th address in each derivation
 	// path.
 	restoreCheckBalance(2*btcutil.SatoshiPerBitcoin, 1, skipAndSend(9))
 
@@ -769,7 +769,7 @@ func testOnchainFundRecovery(net *lntest.NetworkHarness, t *harnessTest) {
 	restoreCheckBalance(2*btcutil.SatoshiPerBitcoin, 9, nil)
 
 	// Extending our recovery window to 10 should find the most recent
-	// transactions, leaving the wallet with 4 BTC total.
+	// transactions, leaving the wallet with 4 LTC total.
 	//
 	// After, we will skip 19 more addrs, sending to the 20th address past
 	// our last found address, and repeat the same checks.
@@ -794,7 +794,7 @@ func testBasicChannelFunding(net *lntest.NetworkHarness, t *harnessTest) {
 	chanAmt := maxBtcFundingAmount
 	pushAmt := btcutil.Amount(100000)
 
-	// First establish a channel with a capacity of 0.5 BTC between Alice
+	// First establish a channel with a capacity of 0.5 LTC between Alice
 	// and Bob with Alice pushing 100k satoshis to Bob's side during
 	// funding. This function will block until the channel itself is fully
 	// open or an error occurs in the funding process. A series of
@@ -2101,7 +2101,7 @@ func testChannelFundingPersistence(net *lntest.NetworkHarness, t *harnessTest) {
 func testChannelBalance(net *lntest.NetworkHarness, t *harnessTest) {
 	ctxb := context.Background()
 
-	// Open a channel with 0.16 BTC between Alice and Bob, ensuring the
+	// Open a channel with 0.16 LTC between Alice and Bob, ensuring the
 	// channel has been opened properly.
 	amount := maxBtcFundingAmount
 
@@ -2152,7 +2152,7 @@ func testChannelBalance(net *lntest.NetworkHarness, t *harnessTest) {
 	}
 
 	// As this is a single funder channel, Alice's balance should be
-	// exactly 0.5 BTC since now state transitions have taken place yet.
+	// exactly 0.5 LTC since now state transitions have taken place yet.
 	checkChannelBalance(net.Alice, amount-calcStaticFee(0))
 
 	// Ensure Bob currently has no available balance within the channel.
@@ -6393,7 +6393,7 @@ func testRevokedCloseRetribution(net *lntest.NetworkHarness, t *harnessTest) {
 
 	// In order to test Carol's response to an uncooperative channel
 	// closure by Bob, we'll first open up a channel between them with a
-	// 0.5 BTC value.
+	// 0.5 LTC value.
 	ctxt, _ = context.WithTimeout(ctxb, channelOpenTimeout)
 	chanPoint := openChannelAndAssert(
 		ctxt, t, net, carol, net.Bob,
@@ -6657,7 +6657,7 @@ func testRevokedCloseRetributionZeroValueRemoteOutput(net *lntest.NetworkHarness
 
 	// In order to test Dave's response to an uncooperative channel
 	// closure by Carol, we'll first open up a channel between them with a
-	// 0.5 BTC value.
+	// 0.5 LTC value.
 	ctxt, _ = context.WithTimeout(ctxb, channelOpenTimeout)
 	chanPoint := openChannelAndAssert(
 		ctxt, t, net, dave, carol,
@@ -7356,7 +7356,7 @@ func testDataLossProtection(net *lntest.NetworkHarness, t *harnessTest) {
 				node.Name(), err)
 		}
 
-		// We'll first open up a channel between them with a 0.5 BTC
+		// We'll first open up a channel between them with a 0.5 LTC
 		// value.
 		ctxt, _ := context.WithTimeout(ctxb, channelOpenTimeout)
 		chanPoint := openChannelAndAssert(
@@ -7739,7 +7739,7 @@ func testHtlcErrorPropagation(net *lntest.NetworkHarness, t *harnessTest) {
 	// multi-hop payment.
 	const chanAmt = maxBtcFundingAmount
 
-	// First establish a channel with a capacity of 0.5 BTC between Alice
+	// First establish a channel with a capacity of 0.5 LTC between Alice
 	// and Bob.
 	ctxt, _ := context.WithTimeout(ctxb, channelOpenTimeout)
 	chanPointAlice := openChannelAndAssert(
@@ -12774,7 +12774,7 @@ func testSweepAllCoins(net *lntest.NetworkHarness, t *harnessTest) {
 	}
 	defer shutdownAndAssert(net, t, ainz)
 
-	// Next, we'll give Ainz exactly 2 utxos of 1 BTC each, with one of
+	// Next, we'll give Ainz exactly 2 utxos of 1 LTC each, with one of
 	// them being p2wkh and the other being a n2wpkh address.
 	ctxt, _ := context.WithTimeout(ctxb, defaultTimeout)
 	err = net.SendCoins(ctxt, btcutil.SatoshiPerBitcoin, ainz)

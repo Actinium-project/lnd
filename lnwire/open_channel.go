@@ -55,7 +55,7 @@ type OpenChannel struct {
 	// in limbo exceeds this amount, then the channel will be failed.
 	MaxValueInFlight MilliSatoshi
 
-	// ChannelReserve is the amount of BTC that the receiving party MUST
+	// ChannelReserve is the amount of LTC that the receiving party MUST
 	// maintain a balance above at all times. This is a safety mechanism to
 	// ensure that both sides always have skin in the game during the
 	// channel's lifetime.

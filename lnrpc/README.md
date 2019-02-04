@@ -21,9 +21,9 @@ The list of defined RPCs on the service `Lightning` are the following (with a br
 description):
 
   * WalletBalance
-     * Returns the wallet's current confirmed balance in BTC.
+     * Returns the wallet's current confirmed balance in LTC.
   * ChannelBalance
-     * Returns the daemons' available aggregate channel balance in BTC.
+     * Returns the daemons' available aggregate channel balance in LTC.
   * GetTransactions
      * Returns a list of on-chain transactions that pay to or are spends from
        `lnd`.

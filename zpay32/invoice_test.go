@@ -337,7 +337,7 @@ func TestDecodeEncode(t *testing.T) {
 			},
 		},
 		{
-			// Please send 0.0025 BTC for a cup of nonsense (ナンセンス 1杯) to the same peer, within 1 minute
+			// Please send 0.0025 LTC for a cup of nonsense (ナンセンス 1杯) to the same peer, within 1 minute
 			encodedInvoice: "lnbc2500u1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdpquwpc4curk03c9wlrswe78q4eyqc7d8d0xqzpuyk0sg5g70me25alkluzd2x62aysf2pyy8edtjeevuv4p2d5p76r4zkmneet7uvyakky2zr4cusd45tftc9c5fh0nnqpnl2jfll544esqchsrny",
 			valid:          true,
 			decodedInvoice: func() *Invoice {

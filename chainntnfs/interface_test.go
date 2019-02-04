@@ -1870,7 +1870,7 @@ var blockCatchupTests = []blockCatchupTestCase{
 func TestInterfaces(t *testing.T) {
 	// Initialize the harness around a btcd node which will serve as our
 	// dedicated miner to generate blocks, cause re-orgs, etc. We'll set up
-	// this node with a chain length of 125, so we have plenty of BTC to
+	// this node with a chain length of 125, so we have plenty of LTC to
 	// play around with.
 	miner, tearDown := chainntnfs.NewMiner(t, nil, true, 25)
 	defer tearDown()

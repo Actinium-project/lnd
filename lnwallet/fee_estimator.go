@@ -252,7 +252,7 @@ func (b *BtcdFeeEstimator) fetchEstimate(confTarget uint32) (SatPerKWeight, erro
 	}
 
 	// Next, we'll convert the returned value to satoshis, as it's
-	// currently returned in BTC.
+	// currently returned in LTC.
 	satPerKB, err := btcutil.NewAmount(btcPerKB)
 	if err != nil {
 		return 0, err
@@ -420,7 +420,7 @@ func (b *BitcoindFeeEstimator) fetchEstimate(confTarget uint32) (SatPerKWeight, 
 		return 0, err
 	}
 
-	// Next, we'll parse the response to get the BTC per KB.
+	// Next, we'll parse the response to get the LTC per KB.
 	feeEstimate := struct {
 		FeeRate float64 `json:"feerate"`
 	}{}
@@ -430,7 +430,7 @@ func (b *BitcoindFeeEstimator) fetchEstimate(confTarget uint32) (SatPerKWeight, 
 	}
 
 	// Next, we'll convert the returned value to satoshis, as it's currently
-	// returned in BTC.
+	// returned in LTC.
 	satPerKB, err := btcutil.NewAmount(feeEstimate.FeeRate)
 	if err != nil {
 		return 0, err

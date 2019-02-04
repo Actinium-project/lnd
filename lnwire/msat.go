@@ -25,7 +25,7 @@ func NewMSatFromSatoshis(sat btcutil.Amount) MilliSatoshi {
 }
 
 // ToBTC converts the target MilliSatoshi amount to its corresponding value
-// when expressed in BTC.
+// when expressed in LTC.
 func (m MilliSatoshi) ToBTC() float64 {
 	sat := m.ToSatoshis()
 	return sat.ToBTC()

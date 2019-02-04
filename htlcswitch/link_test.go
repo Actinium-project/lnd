@@ -617,7 +617,7 @@ func TestLinkForwardTimelockPolicyMismatch(t *testing.T) {
 	}
 	defer n.stop()
 
-	// We'll be sending 1 BTC over a 2-hop (3 vertex) route.
+	// We'll be sending 1 LTC over a 2-hop (3 vertex) route.
 	amount := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
 
 	// Generate the route over two hops, ignoring the total time lock that
@@ -675,8 +675,8 @@ func TestLinkForwardFeePolicyMismatch(t *testing.T) {
 	}
 	defer n.stop()
 
-	// We'll be sending 1 BTC over a 2-hop (3 vertex) route. Given the
-	// current default fee of 1 SAT, if we just send a single BTC over in
+	// We'll be sending 1 LTC over a 2-hop (3 vertex) route. Given the
+	// current default fee of 1 SAT, if we just send a single LTC over in
 	// an HTLC, it should be rejected.
 	amountNoFee := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
 
@@ -876,7 +876,7 @@ func TestUpdateForwardingPolicy(t *testing.T) {
 }
 
 // TestChannelLinkMultiHopInsufficientPayment checks that we receive error if
-// bob<->alice channel has insufficient BTC capacity/bandwidth. In this test we
+// bob<->alice channel has insufficient LTC capacity/bandwidth. In this test we
 // send the payment from Carol to Alice over Bob peer. (Carol -> Bob -> Alice)
 func TestChannelLinkMultiHopInsufficientPayment(t *testing.T) {
 	t.Parallel()
@@ -901,8 +901,8 @@ func TestChannelLinkMultiHopInsufficientPayment(t *testing.T) {
 	secondBobBandwidthBefore := n.secondBobChannelLink.Bandwidth()
 	aliceBandwidthBefore := n.aliceChannelLink.Bandwidth()
 
-	// We'll attempt to send 4 BTC although the alice-to-bob channel only
-	// has 3 BTC total capacity. As a result, this payment should be
+	// We'll attempt to send 4 LTC although the alice-to-bob channel only
+	// has 3 LTC total capacity. As a result, this payment should be
 	// rejected.
 	amount := lnwire.NewMSatFromSatoshis(4 * btcutil.SatoshiPerBitcoin)
 	htlcAmt, totalTimelock, hops := generateHops(amount, testStartingHeight,
@@ -1811,7 +1811,7 @@ func TestChannelLinkBandwidthConsistency(t *testing.T) {
 	expectedBandwidth := lnwire.NewMSatFromSatoshis(chanAmt - defaultCommitFee)
 	assertLinkBandwidth(t, aliceLink, expectedBandwidth)
 
-	// Next, we'll create an HTLC worth 1 BTC, and send it into the link as
+	// Next, we'll create an HTLC worth 1 LTC, and send it into the link as
 	// a switch initiated payment.  The resulting bandwidth should
 	// now be decremented to reflect the new HTLC.
 	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
@@ -2437,7 +2437,7 @@ func TestChannelLinkTrimCircuitsPending(t *testing.T) {
 		halfHtlcs = numHtlcs / 2
 	)
 
-	// We'll start by creating a new link with our chanAmt (5 BTC). We will
+	// We'll start by creating a new link with our chanAmt (5 LTC). We will
 	// only be testing Alice's behavior, so the reference to Bob's channel
 	// state is unnecessary.
 	aliceLink, _, batchTicker, start, cleanUp, restore, err :=
@@ -2476,7 +2476,7 @@ func TestChannelLinkTrimCircuitsPending(t *testing.T) {
 	// bandwidth assertions.
 	aliceStartingBandwidth := alice.link.Bandwidth()
 
-	// Next, we'll create an HTLC worth 1 BTC that will be used as a dummy
+	// Next, we'll create an HTLC worth 1 LTC that will be used as a dummy
 	// message for the test.
 	var mockBlob [lnwire.OnionPacketSize]byte
 	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
@@ -2709,7 +2709,7 @@ func TestChannelLinkTrimCircuitsNoCommit(t *testing.T) {
 		halfHtlcs = numHtlcs / 2
 	)
 
-	// We'll start by creating a new link with our chanAmt (5 BTC). We will
+	// We'll start by creating a new link with our chanAmt (5 LTC). We will
 	// only be testing Alice's behavior, so the reference to Bob's channel
 	// state is unnecessary.
 	aliceLink, _, batchTicker, start, cleanUp, restore, err :=
@@ -2754,7 +2754,7 @@ func TestChannelLinkTrimCircuitsNoCommit(t *testing.T) {
 	// bandwidth assertions.
 	aliceStartingBandwidth := alice.link.Bandwidth()
 
-	// Next, we'll create an HTLC worth 1 BTC that will be used as a dummy
+	// Next, we'll create an HTLC worth 1 LTC that will be used as a dummy
 	// message for the test.
 	var mockBlob [lnwire.OnionPacketSize]byte
 	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
@@ -3007,7 +3007,7 @@ func TestChannelLinkBandwidthChanReserve(t *testing.T) {
 		chanAmt - defaultCommitFee - chanReserve)
 	assertLinkBandwidth(t, aliceLink, expectedBandwidth)
 
-	// Next, we'll create an HTLC worth 3 BTC, and send it into the link as
+	// Next, we'll create an HTLC worth 3 LTC, and send it into the link as
 	// a switch initiated payment.  The resulting bandwidth should
 	// now be decremented to reflect the new HTLC.
 	htlcAmt := lnwire.NewMSatFromSatoshis(3 * btcutil.SatoshiPerBitcoin)
