@@ -85,8 +85,8 @@ var (
 	defaultBtcdDir         = btcutil.AppDataDir("btcd", false)
 	defaultBtcdRPCCertFile = filepath.Join(defaultBtcdDir, "rpc.cert")
 
-	defaultLtcdDir         = btcutil.AppDataDir("acmd", false)
-	defaultLtcdRPCCertFile = filepath.Join(defaultLtcdDir, "rpc.cert")
+	defaultAcmdDir         = btcutil.AppDataDir("acmd", false)
+	defaultAcmdRPCCertFile = filepath.Join(defaultAcmdDir, "rpc.cert")
 
 	defaultBitcoindDir  = btcutil.AppDataDir("bitcoin", false)
 	defaultActiniumdDir = btcutil.AppDataDir("actinium", false)
@@ -219,7 +219,7 @@ type config struct {
 	NeutrinoMode *neutrinoConfig `group:"neutrino" namespace:"neutrino"`
 
 	Actinium      *chainConfig    `group:"Actinium" namespace:"actinium"`
-	LtcdMode      *btcdConfig     `group:"acmd" namespace:"acmd"`
+	AcmdMode      *btcdConfig     `group:"acmd" namespace:"acmd"`
 	ActiniumdMode *bitcoindConfig `group:"actiniumd" namespace:"actiniumd"`
 
 	Autopilot *autoPilotConfig `group:"Autopilot" namespace:"autopilot"`
@@ -292,10 +292,10 @@ func loadConfig() (*config, error) {
 			TimeLockDelta: defaultActiniumTimeLockDelta,
 			Node:          "acmd",
 		},
-		LtcdMode: &btcdConfig{
-			Dir:     defaultLtcdDir,
+		AcmdMode: &btcdConfig{
+			Dir:     defaultAcmdDir,
 			RPCHost: defaultRPCHost,
-			RPCCert: defaultLtcdRPCCertFile,
+			RPCCert: defaultAcmdRPCCertFile,
 		},
 		ActiniumdMode: &bitcoindConfig{
 			Dir:     defaultActiniumdDir,
@@ -420,7 +420,7 @@ func loadConfig() (*config, error) {
 	cfg.InvoiceMacPath = cleanAndExpandPath(cfg.InvoiceMacPath)
 	cfg.LogDir = cleanAndExpandPath(cfg.LogDir)
 	cfg.BtcdMode.Dir = cleanAndExpandPath(cfg.BtcdMode.Dir)
-	cfg.LtcdMode.Dir = cleanAndExpandPath(cfg.LtcdMode.Dir)
+	cfg.AcmdMode.Dir = cleanAndExpandPath(cfg.AcmdMode.Dir)
 	cfg.BitcoindMode.Dir = cleanAndExpandPath(cfg.BitcoindMode.Dir)
 	cfg.ActiniumdMode.Dir = cleanAndExpandPath(cfg.ActiniumdMode.Dir)
 	cfg.Tor.PrivateKeyPath = cleanAndExpandPath(cfg.Tor.PrivateKeyPath)
@@ -623,7 +623,7 @@ func loadConfig() (*config, error) {
 
 		switch cfg.Actinium.Node {
 		case "acmd":
-			err := parseRPCParams(cfg.Actinium, cfg.LtcdMode,
+			err := parseRPCParams(cfg.Actinium, cfg.AcmdMode,
 				actiniumChain, funcName)
 			if err != nil {
 				err := fmt.Errorf("unable to load RPC "+

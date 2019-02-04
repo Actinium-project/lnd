@@ -395,7 +395,7 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 		case cfg.Bitcoin.Active:
 			btcdMode = cfg.BtcdMode
 		case cfg.Actinium.Active:
-			btcdMode = cfg.LtcdMode
+			btcdMode = cfg.AcmdMode
 		}
 		var rpcCert []byte
 		if btcdMode.RawRPCCert != "" {

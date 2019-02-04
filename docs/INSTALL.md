@@ -439,5 +439,5 @@ at the same time), so when working with Actinium be sure to set to parameters
 for Actinium accordingly. See a more detailed sample config file available
 [here](https://github.com/lightningnetwork/lnd/blob/master/sample-lnd.conf)
 and explore the other sections for node configuration, including `[Btcd]`,
-`[Bitcoind]`, `[Neutrino]`, `[Ltcd]`, and `[Actiniumd]` depending on which
+`[Bitcoind]`, `[Neutrino]`, `[Acmd]`, and `[Actiniumd]` depending on which
 chain and node type you're using.
