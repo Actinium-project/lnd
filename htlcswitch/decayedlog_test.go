@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lightningnetwork/lightning-onion"
+	"github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/chainntnfs"
 )
 

@@ -17,7 +17,7 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-errors/errors"
 
-	"github.com/lightningnetwork/lightning-onion"
+	"github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/htlcswitch"
 	"github.com/Actinium-project/lnd/input"
