@@ -32,13 +32,13 @@ services:
         entrypoint: ["./start-btcctl.sh"]
 
 
-    # ltc is an image of litecoin node which used as base image for ltcd and
+    # ltc is an image of litecoin node which used as base image for acmd and
     # ltcctl. The environment variables default values determined on stage of
     # container start within starting script.
     ltc:
-      image: ltcd
+      image: acmd
       build:
-        context: ltcd/
+        context: acmd/
       volumes:
             - shared:/rpc
             - litecoin:/data
@@ -47,19 +47,19 @@ services:
         - RPCPASS
         - NETWORK
 
-    ltcd:
+    acmd:
         extends: ltc
-        container_name: ltcd
+        container_name: acmd
         environment:
           - DEBUG
           - MINING_ADDRESS
-        entrypoint: ["./start-ltcd.sh"]
+        entrypoint: ["./start-acmd.sh"]
 
     ltcctl:
         extends: ltc
         container_name: ltcctl
         links:
-            - "ltcd:rpcserver"
+            - "acmd:rpcserver"
         entrypoint: ["./start-ltcctl.sh"]
 
     lnd:
@@ -81,7 +81,7 @@ services:
       extends: lnd
       container_name: lnd_ltc
       links:
-          - "ltcd:blockchain"
+          - "acmd:blockchain"
 
     lnd_btc:
       extends: lnd
@@ -101,6 +101,6 @@ volumes:
     driver: local
 
   # litecoin volume is needed for maintaining blockchain persistence
-  # during ltcd container recreation.
+  # during acmd container recreation.
   litecoin:
     driver: local

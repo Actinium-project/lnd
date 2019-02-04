@@ -6,8 +6,8 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	bitcoinWire "github.com/btcsuite/btcd/wire"
 	"github.com/lightningnetwork/lnd/keychain"
-	litecoinCfg "github.com/ltcsuite/ltcd/chaincfg"
-	litecoinWire "github.com/ltcsuite/ltcd/wire"
+	litecoinCfg "github.com/Actinium-project/acmd/chaincfg"
+	litecoinWire "github.com/Actinium-project/acmd/wire"
 )
 
 // activeNetParams is a pointer to the parameters specific to the currently
@@ -63,11 +63,11 @@ var litecoinTestNetParams = litecoinNetParams{
 }
 
 // litecoinMainNetParams contains the parameters specific to the current
-// Litecoin mainnet.
+// Actinium mainnet.
 var litecoinMainNetParams = litecoinNetParams{
 	Params:   &litecoinCfg.MainNetParams,
 	rpcPort:  "9334",
-	CoinType: keychain.CoinTypeLitecoin,
+	CoinType: keychain.CoinTypeActinium,
 }
 
 // regTestNetParams contains parameters specific to a local regtest network.
@@ -77,11 +77,11 @@ var regTestNetParams = bitcoinNetParams{
 	CoinType: keychain.CoinTypeTestnet,
 }
 
-// applyLitecoinParams applies the relevant chain configuration parameters that
+// applyActiniumParams applies the relevant chain configuration parameters that
 // differ for litecoin to the chain parameters typed for btcsuite derivation.
 // This function is used in place of using something like interface{} to
 // abstract over _which_ chain (or fork) the parameters are for.
-func applyLitecoinParams(params *bitcoinNetParams, litecoinParams *litecoinNetParams) {
+func applyActiniumParams(params *bitcoinNetParams, litecoinParams *litecoinNetParams) {
 	params.Name = litecoinParams.Name
 	params.Net = bitcoinWire.BitcoinNet(litecoinParams.Net)
 	params.DefaultPort = litecoinParams.DefaultPort

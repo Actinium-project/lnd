@@ -2,11 +2,11 @@ FROM golang:1.10-alpine as builder
 
 MAINTAINER Olaoluwa Osuntokun <lightning.engineering>
 
-# Grab and install the latest version of roasbeef's fork of ltcd and all
+# Grab and install the latest version of roasbeef's fork of acmd and all
 # related dependencies.
-WORKDIR $GOPATH/src/github.com/ltcsuite/ltcd
+WORKDIR $GOPATH/src/github.com/Actinium-project/acmd
 RUN apk add --no-cache git \
-&&  git clone https://github.com/ltcsuite/ltcd ./ \
+&&  git clone https://github.com/Actinium-project/acmd ./ \
 &&  go get -u github.com/Masterminds/glide \
 &&  glide install \
 &&  go install . ./cmd/ltcctl ./cmd/gencerts
@@ -28,24 +28,24 @@ EXPOSE 28901 28902
 
 # Copy the compiled binaries from the builder image.
 COPY --from=builder /go/bin/ltcctl /bin/
-COPY --from=builder /go/bin/ltcd /bin/
+COPY --from=builder /go/bin/acmd /bin/
 COPY --from=builder /go/bin/gencerts /bin/
 
 COPY "start-ltcctl.sh" .
-COPY "start-ltcd.sh" .
+COPY "start-acmd.sh" .
 
 RUN apk add --no-cache \
     bash \
     ca-certificates \
 &&  chmod +x start-ltcctl.sh \
-&&  chmod +x start-ltcd.sh \
-&&  mkdir "/rpc" "/root/.ltcd" "/root/.ltcctl" \
-&&  touch "/root/.ltcd/ltcd.conf" \
-# "ltcctl" and "lnd" to "ltcd" over docker links.
+&&  chmod +x start-acmd.sh \
+&&  mkdir "/rpc" "/root/.acmd" "/root/.ltcctl" \
+&&  touch "/root/.acmd/acmd.conf" \
+# "ltcctl" and "lnd" to "acmd" over docker links.
 &&  "/bin/gencerts" --host="*" --directory="/rpc" --force
 
 # Create a volume to house pregenerated RPC credentials. This will be
-# shared with any lnd, btcctl containers so they can securely query ltcd's RPC
+# shared with any lnd, btcctl containers so they can securely query acmd's RPC
 # server.
 # You should NOT do this before certificate generation!
 # Otherwise manually generated certificate will be overridden with shared

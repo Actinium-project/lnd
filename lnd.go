@@ -112,10 +112,10 @@ func lndMain() error {
 
 	var network string
 	switch {
-	case cfg.Bitcoin.TestNet3 || cfg.Litecoin.TestNet3:
+	case cfg.Bitcoin.TestNet3 || cfg.Actinium.TestNet3:
 		network = "testnet"
 
-	case cfg.Bitcoin.MainNet || cfg.Litecoin.MainNet:
+	case cfg.Bitcoin.MainNet || cfg.Actinium.MainNet:
 		network = "mainnet"
 
 	case cfg.Bitcoin.SimNet:
@@ -352,7 +352,7 @@ func lndMain() error {
 	// continue the start up of the remainder of the daemon. This ensures
 	// that we don't accept any possibly invalid state transitions, or
 	// accept channels with spent funds.
-	if !(cfg.Bitcoin.SimNet || cfg.Litecoin.SimNet) {
+	if !(cfg.Bitcoin.SimNet || cfg.Actinium.SimNet) {
 		_, bestHeight, err := activeChainControl.chainIO.GetBestBlock()
 		if err != nil {
 			return err
@@ -667,7 +667,7 @@ func waitForWalletPassword(grpcEndpoints, restEndpoints []net.Addr,
 
 	chainConfig := cfg.Bitcoin
 	if registeredChains.PrimaryChain() == litecoinChain {
-		chainConfig = cfg.Litecoin
+		chainConfig = cfg.Actinium
 	}
 
 	// The macaroon files are passed to the wallet unlocker since they are

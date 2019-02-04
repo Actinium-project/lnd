@@ -19,7 +19,7 @@ import (
 	"github.com/lightningnetwork/lnd/lnwire"
 	"github.com/lightningnetwork/lnd/routing"
 
-	litecoinCfg "github.com/ltcsuite/ltcd/chaincfg"
+	litecoinCfg "github.com/Actinium-project/acmd/chaincfg"
 )
 
 var (
