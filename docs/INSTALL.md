@@ -15,7 +15,7 @@
 * [Macaroons](#macaroons)
 * [Network Reachability](#network-reachability)
 * [Simnet vs. Testnet Development](#simnet-vs-testnet-development)
-* [Creating an lnd.conf (Optional)](#creating-an-lndconf-optional)
+* [Creating an acmd.conf (Optional)](#creating-an-lndconf-optional)
 
 # Installation
 
@@ -331,7 +331,7 @@ zmqpubrawtx=tcp://127.0.0.1:28333
 Once all of the above is complete, and you've confirmed `bitcoind` is fully
 updated with the latest blocks on testnet, run the command below to launch
 `lnd` with `bitcoind` as your backend (as with `bitcoind`, you can create an
-`lnd.conf` to save these options, more info on that is described further
+`acmd.conf` to save these options, more info on that is described further
 below):
 
 ```
@@ -343,7 +343,7 @@ lnd --bitcoin.active --bitcoin.testnet --debuglevel=debug --bitcoin.node=bitcoin
   determined by `lnd` for a `bitcoind` instance running under the same user,
   including when using cookie auth. In this case, you can exclude them from the
   `lnd` options entirely.
-- If you DO choose to explicitly pass the auth parameters in your `lnd.conf` or
+- If you DO choose to explicitly pass the auth parameters in your `acmd.conf` or
   command line options for `lnd` (`bitcoind.rpcuser` and `bitcoind.rpcpass` as
   shown in example command above), you must also specify the
   `bitcoind.zmqpubrawblock` and `bitcoind.zmqpubrawtx` options. Otherwise, `lnd`
@@ -411,19 +411,19 @@ There are currently two primary ways to run `lnd`: one requires a local `btcd`
 instance with the RPC service exposed, and the other uses a fully integrated
 light client powered by [neutrino](https://github.com/lightninglabs/neutrino).
 
-# Creating an lnd.conf (Optional)
+# Creating an acmd.conf (Optional)
 
 Optionally, if you'd like to have a persistent configuration between `lnd`
 launches, allowing you to simply type `lnd --bitcoin.testnet --bitcoin.active`
-at the command line, you can create an `lnd.conf`.
+at the command line, you can create an `acmd.conf`.
 
 **On MacOS, located at:**
-`/Users/[username]/Library/Application Support/Lnd/lnd.conf`
+`/Users/[username]/Library/Application Support/Lnd/acmd.conf`
 
 **On Linux, located at:**
-`~/.lnd/lnd.conf`
+`~/.lnd/acmd.conf`
 
-Here's a sample `lnd.conf` for `btcd` to get you started:
+Here's a sample `acmd.conf` for `btcd` to get you started:
 ```
 [Application Options]
 debuglevel=trace
@@ -437,7 +437,7 @@ Notice the `[Bitcoin]` section. This section houses the parameters for the
 Bitcoin chain. `lnd` also supports Actinium testnet4 (but not both BTC and LTC
 at the same time), so when working with Actinium be sure to set to parameters
 for Actinium accordingly. See a more detailed sample config file available
-[here](https://github.com/lightningnetwork/lnd/blob/master/sample-lnd.conf)
+[here](https://github.com/lightningnetwork/lnd/blob/master/sample-acmd.conf)
 and explore the other sections for node configuration, including `[Btcd]`,
 `[Bitcoind]`, `[Neutrino]`, `[Acmd]`, and `[Actiniumd]` depending on which
 chain and node type you're using.
