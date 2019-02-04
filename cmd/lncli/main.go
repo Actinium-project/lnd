@@ -225,8 +225,8 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "chain, c",
-			Usage: "the chain lnd is running on e.g. bitcoin",
-			Value: "bitcoin",
+			Usage: "the chain lnd is running on e.g. actinium",
+			Value: "actinium",
 		},
 		cli.StringFlag{
 			Name: "network, n",
