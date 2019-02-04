@@ -14,12 +14,12 @@ import (
 	"github.com/btcsuite/btcutil"
 	"github.com/coreos/bbolt"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/chainntnfs"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/contractcourt"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/ticker"
+	"github.com/Actinium-project/lnd/chainntnfs"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/contractcourt"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/ticker"
 )
 
 const (

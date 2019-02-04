@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/lnwire"
 	"golang.org/x/time/rate"
 )
 

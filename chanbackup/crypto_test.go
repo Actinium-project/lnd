@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/btcsuite/btcd/btcec"
-	"github.com/lightningnetwork/lnd/keychain"
+	"github.com/Actinium-project/lnd/keychain"
 )
 
 var (

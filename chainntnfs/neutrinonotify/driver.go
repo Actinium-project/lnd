@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/lightninglabs/neutrino"
-	"github.com/lightningnetwork/lnd/chainntnfs"
+	"github.com/Actinium-project/lnd/chainntnfs"
 )
 
 // createNewNotifier creates a new instance of the ChainNotifier interface

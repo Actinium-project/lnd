@@ -3,8 +3,8 @@ package hodl_test
 import (
 	"testing"
 
-	"github.com/lightningnetwork/lnd/build"
-	"github.com/lightningnetwork/lnd/htlcswitch/hodl"
+	"github.com/Actinium-project/lnd/build"
+	"github.com/Actinium-project/lnd/htlcswitch/hodl"
 )
 
 var hodlMaskTests = []struct {

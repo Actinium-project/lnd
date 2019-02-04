@@ -9,9 +9,9 @@ import (
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/keychain"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/keychain"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 // SingleBackupVersion denotes the version of the single static channel backup.

@@ -10,11 +10,11 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcutil"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/lntypes"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/queue"
-	"github.com/lightningnetwork/lnd/zpay32"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/lntypes"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/queue"
+	"github.com/Actinium-project/lnd/zpay32"
 )
 
 var (

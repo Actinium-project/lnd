@@ -11,8 +11,8 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcutil"
 	"github.com/btcsuite/btcutil/bech32"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/routing"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/routing"
 )
 
 // TestDecodeAmount ensures that the amount string in the hrp of the Invoice

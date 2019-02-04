@@ -13,9 +13,9 @@ import (
 	"github.com/btcsuite/btcutil"
 	"github.com/btcsuite/fastsha256"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/ticker"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/ticker"
 )
 
 func genPreimage() ([32]byte, error) {

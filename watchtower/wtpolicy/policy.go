@@ -6,8 +6,8 @@ import (
 
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/watchtower/blob"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/watchtower/blob"
 )
 
 const (

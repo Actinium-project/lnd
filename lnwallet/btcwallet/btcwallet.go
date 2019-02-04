@@ -18,8 +18,8 @@ import (
 	"github.com/btcsuite/btcwallet/waddrmgr"
 	base "github.com/btcsuite/btcwallet/wallet"
 	"github.com/btcsuite/btcwallet/walletdb"
-	"github.com/lightningnetwork/lnd/keychain"
-	"github.com/lightningnetwork/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/keychain"
+	"github.com/Actinium-project/lnd/lnwallet"
 )
 
 const (

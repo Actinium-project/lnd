@@ -15,11 +15,11 @@ import (
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
 	"github.com/go-errors/errors"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/routing/chainview"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/routing/chainview"
 )
 
 var (

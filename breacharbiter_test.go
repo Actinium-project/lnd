@@ -24,14 +24,14 @@ import (
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
 	"github.com/go-errors/errors"
-	"github.com/lightningnetwork/lnd/chainntnfs"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/htlcswitch"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/keychain"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/shachain"
+	"github.com/Actinium-project/lnd/chainntnfs"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/htlcswitch"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/keychain"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/shachain"
 )
 
 var (

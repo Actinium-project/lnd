@@ -13,11 +13,11 @@ import (
 	"github.com/btcsuite/btcd/connmgr"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcutil"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/watchtower/blob"
-	"github.com/lightningnetwork/lnd/watchtower/wtdb"
-	"github.com/lightningnetwork/lnd/watchtower/wtpolicy"
-	"github.com/lightningnetwork/lnd/watchtower/wtwire"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/watchtower/blob"
+	"github.com/Actinium-project/lnd/watchtower/wtdb"
+	"github.com/Actinium-project/lnd/watchtower/wtpolicy"
+	"github.com/Actinium-project/lnd/watchtower/wtwire"
 )
 
 var (

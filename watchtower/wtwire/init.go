@@ -1,6 +1,6 @@
 package wtwire
 
-import "github.com/lightningnetwork/lnd/lnwire"
+import "github.com/Actinium-project/lnd/lnwire"
 
 // Init is the first message sent over the watchtower wire protocol, and
 // specifies features and level of requiredness maintained by the sending node.

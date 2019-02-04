@@ -2,7 +2,7 @@ package lookout
 
 import (
 	"github.com/btcsuite/btcd/wire"
-	"github.com/lightningnetwork/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwallet"
 )
 
 // PunisherConfig houses the resources required by the Punisher.

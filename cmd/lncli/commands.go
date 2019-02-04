@@ -19,7 +19,7 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
-	"github.com/lightningnetwork/lnd/lnrpc"
+	"github.com/Actinium-project/lnd/lnrpc"
 	"github.com/urfave/cli"
 	"golang.org/x/crypto/ssh/terminal"
 	"golang.org/x/net/context"

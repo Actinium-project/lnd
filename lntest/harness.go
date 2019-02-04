@@ -19,8 +19,8 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
-	"github.com/lightningnetwork/lnd/lnrpc"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/lnrpc"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 const (

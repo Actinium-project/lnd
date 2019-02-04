@@ -8,8 +8,8 @@ import (
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
-	"github.com/lightningnetwork/lnd/tor"
-	"github.com/lightningnetwork/lnd/watchtower/lookout"
+	"github.com/Actinium-project/lnd/tor"
+	"github.com/Actinium-project/lnd/watchtower/lookout"
 )
 
 const (

@@ -4,8 +4,8 @@ package invoicesrpc
 
 import (
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/lightningnetwork/lnd/invoices"
-	"github.com/lightningnetwork/lnd/macaroons"
+	"github.com/Actinium-project/lnd/invoices"
+	"github.com/Actinium-project/lnd/macaroons"
 )
 
 // Config is the primary configuration struct for the invoices RPC server. It

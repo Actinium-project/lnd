@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/lightningnetwork/lightning-onion"
-	"github.com/lightningnetwork/lnd/chainntnfs"
+	"github.com/Actinium-project/lnd/chainntnfs"
 )
 
 const (

@@ -21,13 +21,13 @@ import (
 
 	"github.com/btcsuite/btcutil"
 	flags "github.com/jessevdk/go-flags"
-	"github.com/lightningnetwork/lnd/build"
-	"github.com/lightningnetwork/lnd/htlcswitch/hodl"
-	"github.com/lightningnetwork/lnd/lncfg"
-	"github.com/lightningnetwork/lnd/lnrpc/signrpc"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/routing"
-	"github.com/lightningnetwork/lnd/tor"
+	"github.com/Actinium-project/lnd/build"
+	"github.com/Actinium-project/lnd/htlcswitch/hodl"
+	"github.com/Actinium-project/lnd/lncfg"
+	"github.com/Actinium-project/lnd/lnrpc/signrpc"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/routing"
+	"github.com/Actinium-project/lnd/tor"
 )
 
 const (

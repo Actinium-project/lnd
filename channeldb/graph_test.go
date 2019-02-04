@@ -19,7 +19,7 @@ import (
 	"github.com/btcsuite/btcd/wire"
 	"github.com/coreos/bbolt"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 var (

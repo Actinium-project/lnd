@@ -2,13 +2,13 @@ package contractcourt
 
 import (
 	"fmt"
-	"github.com/lightningnetwork/lnd/input"
+	"github.com/Actinium-project/lnd/input"
 	"io"
 
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/chainntnfs"
+	"github.com/Actinium-project/lnd/chainntnfs"
 )
 
 // htlcOutgoingContestResolver is a ContractResolver that's able to resolve an

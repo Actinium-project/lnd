@@ -5,7 +5,7 @@ import (
 	bitcoinCfg "github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	bitcoinWire "github.com/btcsuite/btcd/wire"
-	"github.com/lightningnetwork/lnd/keychain"
+	"github.com/Actinium-project/lnd/keychain"
 	actiniumCfg "github.com/Actinium-project/acmd/chaincfg"
 	actiniumWire "github.com/Actinium-project/acmd/wire"
 )

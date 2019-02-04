@@ -16,8 +16,8 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/routing"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/routing"
 
 	actiniumCfg "github.com/Actinium-project/acmd/chaincfg"
 )

@@ -16,10 +16,10 @@ import (
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcutil"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/chainntnfs"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/chainntnfs"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 // forceStateTransition executes the necessary interaction between the two

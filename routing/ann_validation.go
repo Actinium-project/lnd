@@ -8,7 +8,7 @@ import (
 	"github.com/btcsuite/btcutil"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-errors/errors"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 // ValidateChannelAnn validates the channel announcement message and checks

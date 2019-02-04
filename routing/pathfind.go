@@ -12,8 +12,8 @@ import (
 	"github.com/coreos/bbolt"
 
 	"github.com/lightningnetwork/lightning-onion"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 const (

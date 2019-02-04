@@ -12,8 +12,8 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcutil"
 	"github.com/btcsuite/btcutil/bech32"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/routing"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/routing"
 )
 
 const (

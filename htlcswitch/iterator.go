@@ -6,7 +6,7 @@ import (
 
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/lightningnetwork/lightning-onion"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 // NetworkHop indicates the blockchain network that is intended to be the next

@@ -11,8 +11,8 @@ import (
 
 	"github.com/btcsuite/btcd/wire"
 	"github.com/coreos/bbolt"
-	"github.com/lightningnetwork/lnd/lntypes"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/lntypes"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 var (

@@ -1,6 +1,6 @@
 package wtwire
 
-import "github.com/lightningnetwork/lnd/lnwire"
+import "github.com/Actinium-project/lnd/lnwire"
 
 // GlobalFeatures holds the globally advertised feature bits understood by
 // watchtower implementations.

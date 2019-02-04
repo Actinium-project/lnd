@@ -3,7 +3,7 @@
 package autopilotrpc
 
 import (
-	"github.com/lightningnetwork/lnd/autopilot"
+	"github.com/Actinium-project/lnd/autopilot"
 )
 
 // Config is the primary configuration struct for the autopilot RPC server. It

@@ -13,9 +13,9 @@ import (
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/keychain"
-	"github.com/lightningnetwork/lnd/lnrpc"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/keychain"
+	"github.com/Actinium-project/lnd/lnrpc"
 
 	"google.golang.org/grpc"
 	"gopkg.in/macaroon-bakery.v2/bakery"

@@ -5,14 +5,14 @@ import (
 	"reflect"
 
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/lightningnetwork/lnd/autopilot"
-	"github.com/lightningnetwork/lnd/invoices"
-	"github.com/lightningnetwork/lnd/lnrpc/autopilotrpc"
-	"github.com/lightningnetwork/lnd/lnrpc/chainrpc"
-	"github.com/lightningnetwork/lnd/lnrpc/invoicesrpc"
-	"github.com/lightningnetwork/lnd/lnrpc/signrpc"
-	"github.com/lightningnetwork/lnd/lnrpc/walletrpc"
-	"github.com/lightningnetwork/lnd/macaroons"
+	"github.com/Actinium-project/lnd/autopilot"
+	"github.com/Actinium-project/lnd/invoices"
+	"github.com/Actinium-project/lnd/lnrpc/autopilotrpc"
+	"github.com/Actinium-project/lnd/lnrpc/chainrpc"
+	"github.com/Actinium-project/lnd/lnrpc/invoicesrpc"
+	"github.com/Actinium-project/lnd/lnrpc/signrpc"
+	"github.com/Actinium-project/lnd/lnrpc/walletrpc"
+	"github.com/Actinium-project/lnd/macaroons"
 )
 
 // subRPCServerConfigs is special sub-config in the main configuration that

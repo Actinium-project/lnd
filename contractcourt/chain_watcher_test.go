@@ -8,9 +8,9 @@ import (
 
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/lightningnetwork/lnd/chainntnfs"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/chainntnfs"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 type mockNotifier struct {

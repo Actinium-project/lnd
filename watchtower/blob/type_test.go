@@ -3,7 +3,7 @@ package blob_test
 import (
 	"testing"
 
-	"github.com/lightningnetwork/lnd/watchtower/blob"
+	"github.com/Actinium-project/lnd/watchtower/blob"
 )
 
 var unknownFlag = blob.Flag(16)

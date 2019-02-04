@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/lightningnetwork/lnd/lnrpc"
+	"github.com/Actinium-project/lnd/lnrpc"
 )
 
 // OutPoint displays an outpoint string in the form "<txid>:<output-index>".

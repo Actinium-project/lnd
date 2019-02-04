@@ -10,9 +10,9 @@ import (
 
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/txscript"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/watchtower/blob"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/watchtower/blob"
 )
 
 func makePubKey(i uint64) blob.PubKey {

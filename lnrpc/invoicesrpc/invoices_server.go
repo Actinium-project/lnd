@@ -10,8 +10,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/lightningnetwork/lnd/lnrpc"
-	"github.com/lightningnetwork/lnd/lntypes"
+	"github.com/Actinium-project/lnd/lnrpc"
+	"github.com/Actinium-project/lnd/lntypes"
 )
 
 const (

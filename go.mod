@@ -1,4 +1,4 @@
-module github.com/lightningnetwork/lnd
+module github.com/Actinium-project/lnd
 
 require (
 	git.schwanenlied.me/yawning/bsaes.git v0.0.0-20180720073208-c0276d75487e // indirect

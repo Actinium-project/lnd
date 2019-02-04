@@ -17,9 +17,9 @@ import (
 	"github.com/btcsuite/btcutil"
 	_ "github.com/btcsuite/btcwallet/walletdb/bdb"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/keychain"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/shachain"
+	"github.com/Actinium-project/lnd/keychain"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/shachain"
 )
 
 var (

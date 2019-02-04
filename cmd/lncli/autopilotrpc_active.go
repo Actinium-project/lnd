@@ -5,7 +5,7 @@ package main
 import (
 	"context"
 
-	"github.com/lightningnetwork/lnd/lnrpc/autopilotrpc"
+	"github.com/Actinium-project/lnd/lnrpc/autopilotrpc"
 	"github.com/urfave/cli"
 )
 

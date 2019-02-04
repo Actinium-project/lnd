@@ -2,10 +2,10 @@ package lnwallet
 
 import (
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/lightningnetwork/lnd/chainntnfs"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/keychain"
+	"github.com/Actinium-project/lnd/chainntnfs"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/keychain"
 )
 
 // Config is a struct which houses configuration parameters which modify the

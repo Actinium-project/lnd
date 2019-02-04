@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lightningnetwork/lnd/lnpeer"
+	"github.com/Actinium-project/lnd/lnpeer"
 )
 
 // TestWriteBufferPool verifies that buffer pool properly resets used write

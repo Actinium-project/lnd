@@ -38,17 +38,17 @@ import (
 	proxy "github.com/grpc-ecosystem/grpc-gateway/runtime"
 	flags "github.com/jessevdk/go-flags"
 
-	"github.com/lightningnetwork/lnd/autopilot"
-	"github.com/lightningnetwork/lnd/build"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/keychain"
-	"github.com/lightningnetwork/lnd/lncfg"
-	"github.com/lightningnetwork/lnd/lnrpc"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwallet/btcwallet"
-	"github.com/lightningnetwork/lnd/macaroons"
-	"github.com/lightningnetwork/lnd/signal"
-	"github.com/lightningnetwork/lnd/walletunlocker"
+	"github.com/Actinium-project/lnd/autopilot"
+	"github.com/Actinium-project/lnd/build"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/keychain"
+	"github.com/Actinium-project/lnd/lncfg"
+	"github.com/Actinium-project/lnd/lnrpc"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwallet/btcwallet"
+	"github.com/Actinium-project/lnd/macaroons"
+	"github.com/Actinium-project/lnd/signal"
+	"github.com/Actinium-project/lnd/walletunlocker"
 )
 
 const (

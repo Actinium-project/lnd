@@ -6,8 +6,8 @@ import (
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/keychain"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/keychain"
 )
 
 // MockSigner is an input.Signer that allows one to add arbitrary private keys

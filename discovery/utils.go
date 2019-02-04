@@ -3,9 +3,9 @@ package discovery
 import (
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/go-errors/errors"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 // CreateChanAnnouncement is a helper function which creates all channel

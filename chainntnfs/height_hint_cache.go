@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	bolt "github.com/coreos/bbolt"
-	"github.com/lightningnetwork/lnd/channeldb"
+	"github.com/Actinium-project/lnd/channeldb"
 )
 
 const (

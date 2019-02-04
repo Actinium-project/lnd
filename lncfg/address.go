@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/btcsuite/btcd/btcec"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/tor"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/tor"
 )
 
 var (

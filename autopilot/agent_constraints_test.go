@@ -7,7 +7,7 @@ import (
 	prand "math/rand"
 
 	"github.com/btcsuite/btcutil"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 func TestConstraintsChannelBudget(t *testing.T) {

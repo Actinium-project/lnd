@@ -15,9 +15,9 @@ import (
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/btcsuite/btcutil/bech32"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/autopilot"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/tor"
+	"github.com/Actinium-project/lnd/autopilot"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/tor"
 	"github.com/miekg/dns"
 )
 

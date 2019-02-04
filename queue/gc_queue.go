@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/lightningnetwork/lnd/ticker"
+	"github.com/Actinium-project/lnd/ticker"
 )
 
 // Recycler is an interface that allows an object to be reclaimed without

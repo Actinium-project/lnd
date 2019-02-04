@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/lnrpc"
-	"github.com/lightningnetwork/lnd/routing"
-	"github.com/lightningnetwork/lnd/zpay32"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/lnrpc"
+	"github.com/Actinium-project/lnd/routing"
+	"github.com/Actinium-project/lnd/zpay32"
 )
 
 // CreateRPCInvoice creates an *lnrpc.Invoice from the *channeldb.Invoice.
