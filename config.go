@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	defaultConfigFilename      = "acmd.conf"
+	defaultConfigFilename      = "lnd.conf"
 	defaultDataDirname         = "data"
 	defaultChainSubDirname     = "chain"
 	defaultGraphSubDirname     = "graph"
