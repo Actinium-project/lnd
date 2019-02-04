@@ -87,9 +87,9 @@ func TestConstraintsChannelBudget(t *testing.T) {
 		},
 
 		// Ratio of funds in channels and total funds is below the
-		// threshold. We have 10 LTC allocated amongst channels and
-		// funds, atm. We're targeting 50%, so 5 LTC should be
-		// allocated. Only 1 LTC is atm, so 4 LTC should be
+		// threshold. We have 10 ACM allocated amongst channels and
+		// funds, atm. We're targeting 50%, so 5 ACM should be
+		// allocated. Only 1 ACM is atm, so 4 ACM should be
 		// recommended. We should also request 2 more channels as the
 		// limit is 3.
 		{
@@ -106,10 +106,10 @@ func TestConstraintsChannelBudget(t *testing.T) {
 		},
 
 		// Ratio of funds in channels and total funds is below the
-		// threshold. We have 14 LTC total amongst the wallet's
+		// threshold. We have 14 ACM total amongst the wallet's
 		// balance, and our currently opened channels. Since we're
-		// targeting a 50% allocation, we should commit 7 LTC. The
-		// current channels commit 4 LTC, so we should expected 3 LTC
+		// targeting a 50% allocation, we should commit 7 ACM. The
+		// current channels commit 4 ACM, so we should expected 3 ACM
 		// to be committed. We should only request a single additional
 		// channel as the limit is 3.
 		{

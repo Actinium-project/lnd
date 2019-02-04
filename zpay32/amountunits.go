@@ -93,7 +93,7 @@ func decodeAmount(amount string) (lnwire.MilliSatoshi, error) {
 	}
 
 	// If last character is a digit, then the amount can just be
-	// interpreted as LTC.
+	// interpreted as ACM.
 	char := amount[len(amount)-1]
 	digit := char - '0'
 	if digit >= 0 && digit <= 9 {
@@ -131,13 +131,13 @@ func encodeAmount(msat lnwire.MilliSatoshi) (string, error) {
 		return "", fmt.Errorf("amount must be positive: %v", msat)
 	}
 
-	// If possible to express in LTC, that will always be the shortest
+	// If possible to express in ACM, that will always be the shortest
 	// representation.
 	if msat%mSatPerBtc == 0 {
 		return strconv.FormatInt(int64(msat/mSatPerBtc), 10), nil
 	}
 
-	// Should always be expressible in pico LTC.
+	// Should always be expressible in pico ACM.
 	pico, err := fromMSat['p'](msat)
 	if err != nil {
 		return "", fmt.Errorf("unable to express %d msat as pBTC: %v",

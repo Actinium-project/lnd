@@ -102,27 +102,27 @@ func TestDecodeAmount(t *testing.T) {
 			result: 200000000000, // mSat
 		},
 		{
-			amount: "2", // LTC
+			amount: "2", // ACM
 			valid:  true,
 			result: 200000000000, // mSat
 		},
 		{
-			amount: "2000", // LTC
+			amount: "2000", // ACM
 			valid:  true,
 			result: 200000000000000, // mSat
 		},
 		{
-			amount: "2009", // LTC
+			amount: "2009", // ACM
 			valid:  true,
 			result: 200900000000000, // mSat
 		},
 		{
-			amount: "1234", // LTC
+			amount: "1234", // ACM
 			valid:  true,
 			result: 123400000000000, // mSat
 		},
 		{
-			amount: "21000000", // LTC
+			amount: "21000000", // ACM
 			valid:  true,
 			result: 2100000000000000000, // mSat
 		},
@@ -179,27 +179,27 @@ func TestEncodeAmount(t *testing.T) {
 		{
 			msat:   200000000000, // mSat
 			valid:  true,
-			result: "2", // LTC
+			result: "2", // ACM
 		},
 		{
 			msat:   200000000000000, // mSat
 			valid:  true,
-			result: "2000", // LTC
+			result: "2000", // ACM
 		},
 		{
 			msat:   200900000000000, // mSat
 			valid:  true,
-			result: "2009", // LTC
+			result: "2009", // ACM
 		},
 		{
 			msat:   123400000000000, // mSat
 			valid:  true,
-			result: "1234", // LTC
+			result: "1234", // ACM
 		},
 		{
 			msat:   2100000000000000000, // mSat
 			valid:  true,
-			result: "21000000", // LTC
+			result: "21000000", // ACM
 		},
 	}
 

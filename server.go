@@ -823,7 +823,7 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB, cc *chainControl,
 			// we will require more confirmations before
 			// we consider it open.
 			// TODO(halseth): Use Actinium params in case
-			// of LTC channels.
+			// of ACM channels.
 
 			// In case the user has explicitly specified
 			// a default value for the number of
@@ -856,7 +856,7 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB, cc *chainControl,
 			// close) linearly from minRemoteDelay blocks
 			// for small channels, to maxRemoteDelay blocks
 			// for channels of size maxFundingAmount.
-			// TODO(halseth): Actinium parameter for LTC.
+			// TODO(halseth): Actinium parameter for ACM.
 
 			// In case the user has explicitly specified
 			// a default value for the remote delay, we

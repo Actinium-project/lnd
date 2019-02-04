@@ -1358,8 +1358,8 @@ func createTestArbiter(t *testing.T, contractBreaches chan *ContractBreachEvent,
 	return ba, cleanUp, nil
 }
 
-// createInitChannels creates two initialized test channels funded with 10 LTC,
-// with 5 LTC allocated to each side. Within the channel, Alice is the
+// createInitChannels creates two initialized test channels funded with 10 ACM,
+// with 5 ACM allocated to each side. Within the channel, Alice is the
 // initiator.
 func createInitChannels(revocationWindow int) (*lnwallet.LightningChannel, *lnwallet.LightningChannel, func(), error) {
 

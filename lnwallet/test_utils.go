@@ -90,7 +90,7 @@ var (
 
 // CreateTestChannels creates to fully populated channels to be used within
 // testing fixtures. The channels will be returned as if the funding process
-// has just completed.  The channel itself is funded with 10 LTC, with 5 LTC
+// has just completed.  The channel itself is funded with 10 ACM, with 5 ACM
 // allocated to each side. Within the channel, Alice is the initiator. The
 // function also returns a "cleanup" function that is meant to be called once
 // the test has been finalized. The clean up function will remote all temporary

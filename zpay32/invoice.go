@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	// mSatPerBtc is the number of millisatoshis in 1 LTC.
+	// mSatPerBtc is the number of millisatoshis in 1 ACM.
 	mSatPerBtc = 100000000000
 
 	// signatureBase32Len is the number of 5-bit groups needed to encode

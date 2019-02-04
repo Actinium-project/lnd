@@ -406,10 +406,10 @@ func testDualFundingReservationWorkflow(miner *rpctest.Harness,
 	}
 
 	// In this scenario, we'll test a dual funder reservation, with each
-	// side putting in 10 LTC.
+	// side putting in 10 ACM.
 
-	// Alice initiates a channel funded with 5 LTC for each side, so 10 LTC
-	// total. She also generates 2 LTC in change.
+	// Alice initiates a channel funded with 5 ACM for each side, so 10 ACM
+	// total. She also generates 2 ACM in change.
 	feePerKw, err := alice.Cfg.FeeEstimator.EstimateFeePerKW(1)
 	if err != nil {
 		t.Fatalf("unable to query fee estimator: %v", err)
@@ -444,8 +444,8 @@ func testDualFundingReservationWorkflow(miner *rpctest.Harness,
 	}
 
 	// The channel reservation should now be populated with a multi-sig key
-	// from our HD chain, a change output with 3 LTC, and 2 outputs
-	// selected of 4 LTC each. Additionally, the rest of the items needed
+	// from our HD chain, a change output with 3 ACM, and 2 outputs
+	// selected of 4 ACM each. Additionally, the rest of the items needed
 	// to fulfill a funding contribution should also have been filled in.
 	aliceContribution := aliceChanReservation.OurContribution()
 	if len(aliceContribution.Inputs) != 2 {
@@ -608,7 +608,7 @@ func testDualFundingReservationWorkflow(miner *rpctest.Harness,
 func testFundingTransactionLockedOutputs(miner *rpctest.Harness,
 	alice, _ *lnwallet.LightningWallet, t *testing.T) {
 
-	// Create a single channel asking for 16 LTC total.
+	// Create a single channel asking for 16 ACM total.
 	fundingAmount, err := btcutil.NewAmount(8)
 	if err != nil {
 		t.Fatalf("unable to create amt: %v", err)
@@ -633,7 +633,7 @@ func testFundingTransactionLockedOutputs(miner *rpctest.Harness,
 	}
 
 	// Now attempt to reserve funds for another channel, this time
-	// requesting 900 LTC. We only have around 64BTC worth of outpoints
+	// requesting 900 ACM. We only have around 64BTC worth of outpoints
 	// that aren't locked, so this should fail.
 	amt, err := btcutil.NewAmount(900)
 	if err != nil {
@@ -670,7 +670,7 @@ func testFundingCancellationNotEnoughFunds(miner *rpctest.Harness,
 		t.Fatalf("unable to query fee estimator: %v", err)
 	}
 
-	// Create a reservation for 44 LTC.
+	// Create a reservation for 44 ACM.
 	fundingAmount, err := btcutil.NewAmount(44)
 	if err != nil {
 		t.Fatalf("unable to create amt: %v", err)
@@ -691,7 +691,7 @@ func testFundingCancellationNotEnoughFunds(miner *rpctest.Harness,
 		t.Fatalf("unable to initialize funding reservation: %v", err)
 	}
 
-	// Attempt to create another channel with 44 LTC, this should fail.
+	// Attempt to create another channel with 44 ACM, this should fail.
 	_, err = alice.InitChannelReservation(req)
 	if _, ok := err.(*lnwallet.ErrInsufficientFunds); !ok {
 		t.Fatalf("coin selection succeeded should have insufficient funds: %v",
@@ -834,8 +834,8 @@ func testSingleFunderReservationWorkflow(miner *rpctest.Harness,
 	// For this scenario, Alice will be the channel initiator while bob
 	// will act as the responder to the workflow.
 
-	// First, Alice will Initialize a reservation for a channel with 4 LTC
-	// funded solely by us. We'll also initially push 1 LTC of the channel
+	// First, Alice will Initialize a reservation for a channel with 4 ACM
+	// funded solely by us. We'll also initially push 1 ACM of the channel
 	// towards Bob's side.
 	fundingAmt, err := btcutil.NewAmount(4)
 	if err != nil {
@@ -2091,7 +2091,7 @@ func testChangeOutputSpendConfirmation(r *rpctest.Harness,
 	// spends an output created by SendOutputs, we'll start by emptying
 	// Alice's wallet so that no other UTXOs can be picked. To do so, we'll
 	// generate an address for Bob, who will receive all the coins.
-	// Assuming a balance of 80 LTC and a transaction fee of 2500 sat/kw,
+	// Assuming a balance of 80 ACM and a transaction fee of 2500 sat/kw,
 	// we'll craft the following transaction so that Alice doesn't have any
 	// UTXOs left.
 	aliceBalance, err := alice.ConfirmedBalance(0)
@@ -2124,11 +2124,11 @@ func testChangeOutputSpendConfirmation(r *rpctest.Harness,
 		t.Fatalf("unable to retrieve alice's balance: %v", err)
 	}
 	if aliceBalance != 0 {
-		t.Fatalf("expected alice's balance to be 0 LTC, found %v",
+		t.Fatalf("expected alice's balance to be 0 ACM, found %v",
 			aliceBalance)
 	}
 
-	// Now, we'll send an output back to Alice from Bob of 1 LTC.
+	// Now, we'll send an output back to Alice from Bob of 1 ACM.
 	alicePkScript := newPkScript(t, alice, lnwallet.WitnessPubKey)
 	output = &wire.TxOut{
 		Value:    btcutil.SatoshiPerBitcoin,
@@ -2331,7 +2331,7 @@ func TestLightningWallet(t *testing.T) {
 
 	// Initialize the harness around a btcd node which will serve as our
 	// dedicated miner to generate blocks, cause re-orgs, etc. We'll set
-	// up this node with a chain length of 125, so we have plenty of LTC
+	// up this node with a chain length of 125, so we have plenty of ACM
 	// to play around with.
 	miningNode, err := rpctest.New(netParams, nil, []string{"--txindex"})
 	if err != nil {

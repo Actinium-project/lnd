@@ -226,7 +226,7 @@ func TestAgentChannelOpenSignal(t *testing.T) {
 	}
 
 	// Next we'll signal a new channel being opened by the backing LN node,
-	// with a capacity of 1 LTC.
+	// with a capacity of 1 ACM.
 	newChan := Channel{
 		ChanID:   randChanID(),
 		Capacity: btcutil.SatoshiPerBitcoin,
@@ -239,7 +239,7 @@ func TestAgentChannelOpenSignal(t *testing.T) {
 	case constraints.moreChansResps <- moreChansResp{0, 0}:
 		// At this point, the local state of the agent should
 		// have also been updated to reflect that the LN node
-		// now has an additional channel with one LTC.
+		// now has an additional channel with one ACM.
 		if _, ok := agent.chanState[newChan.ChanID]; !ok {
 			t.Fatalf("internal channel state wasn't updated")
 		}
@@ -544,7 +544,7 @@ func TestAgentBalanceUpdate(t *testing.T) {
 	}
 	memGraph, _, _ := newMemChanGraph()
 
-	// The wallet will start with 2 LTC available.
+	// The wallet will start with 2 ACM available.
 	var walletBalanceMtx sync.Mutex
 	walletBalance := btcutil.Amount(btcutil.SatoshiPerBitcoin * 2)
 
@@ -599,7 +599,7 @@ func TestAgentBalanceUpdate(t *testing.T) {
 	}
 
 	// Next we'll send a new balance update signal to the agent, adding 5
-	// LTC to the amount of available funds.
+	// ACM to the amount of available funds.
 	walletBalanceMtx.Lock()
 	walletBalance += btcutil.SatoshiPerBitcoin * 5
 	walletBalanceMtx.Unlock()
@@ -664,7 +664,7 @@ func TestAgentImmediateAttach(t *testing.T) {
 	}
 	memGraph, _, _ := newMemChanGraph()
 
-	// The wallet will start with 10 LTC available.
+	// The wallet will start with 10 ACM available.
 	const walletBalance = btcutil.SatoshiPerBitcoin * 10
 
 	// With the dependencies we created, we can now create the initial
@@ -730,7 +730,7 @@ func TestAgentImmediateAttach(t *testing.T) {
 	select {
 
 	// We'll send over a response indicating that it should
-	// establish more channels, and give it a budget of 5 LTC to do
+	// establish more channels, and give it a budget of 5 ACM to do
 	// so.
 	case constraints.moreChansResps <- moreChansResp{
 		numMore: numChans,
@@ -804,7 +804,7 @@ func TestAgentPrivateChannels(t *testing.T) {
 	}
 	memGraph, _, _ := newMemChanGraph()
 
-	// The wallet will start with 10 LTC available.
+	// The wallet will start with 10 ACM available.
 	const walletBalance = btcutil.SatoshiPerBitcoin * 10
 
 	// With the dependencies we created, we can now create the initial
@@ -866,7 +866,7 @@ func TestAgentPrivateChannels(t *testing.T) {
 	// method on the passed heuristic. So we'll provide it with a response
 	// that will kick off the main loop.  We'll send over a response
 	// indicating that it should establish more channels, and give it a
-	// budget of 5 LTC to do so.
+	// budget of 5 ACM to do so.
 	resp := moreChansResp{
 		numMore: numChans,
 		amt:     5 * btcutil.SatoshiPerBitcoin,
@@ -928,7 +928,7 @@ func TestAgentPendingChannelState(t *testing.T) {
 	}
 	memGraph, _, _ := newMemChanGraph()
 
-	// The wallet will start with 6 LTC available.
+	// The wallet will start with 6 ACM available.
 	var walletBalanceMtx sync.Mutex
 	walletBalance := btcutil.Amount(btcutil.SatoshiPerBitcoin * 6)
 
@@ -987,9 +987,9 @@ func TestAgentPendingChannelState(t *testing.T) {
 	}
 
 	// Once again, we'll start by telling the agent as part of its first
-	// query, that it needs more channels and has 3 LTC available for
+	// query, that it needs more channels and has 3 ACM available for
 	// attachment.  We'll send over a response indicating that it should
-	// establish more channels, and give it a budget of 1 LTC to do so.
+	// establish more channels, and give it a budget of 1 ACM to do so.
 	select {
 	case constraints.moreChansResps <- moreChansResp{
 		numMore: 1,
@@ -1115,7 +1115,7 @@ func TestAgentPendingOpenChannel(t *testing.T) {
 	}
 	memGraph, _, _ := newMemChanGraph()
 
-	// The wallet will start with 6 LTC available.
+	// The wallet will start with 6 ACM available.
 	const walletBalance = btcutil.SatoshiPerBitcoin * 6
 
 	// With the dependencies we created, we can now create the initial
@@ -1210,7 +1210,7 @@ func TestAgentOnNodeUpdates(t *testing.T) {
 	}
 	memGraph, _, _ := newMemChanGraph()
 
-	// The wallet will start with 6 LTC available.
+	// The wallet will start with 6 ACM available.
 	const walletBalance = btcutil.SatoshiPerBitcoin * 6
 
 	// With the dependencies we created, we can now create the initial
@@ -1324,7 +1324,7 @@ func TestAgentSkipPendingConns(t *testing.T) {
 	}
 	memGraph, _, _ := newMemChanGraph()
 
-	// The wallet will start with 6 LTC available.
+	// The wallet will start with 6 ACM available.
 	const walletBalance = btcutil.SatoshiPerBitcoin * 6
 
 	connect := make(chan chan error)

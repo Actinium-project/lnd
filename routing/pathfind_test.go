@@ -1369,7 +1369,7 @@ func TestPathInsufficientCapacity(t *testing.T) {
 	// channel graph cannot support due to insufficient capacity triggers
 	// an error.
 
-	// To test his we'll attempt to make a payment of 1 LTC, or 100 million
+	// To test his we'll attempt to make a payment of 1 ACM, or 100 million
 	// satoshis. The largest channel in the basic graph is of size 100k
 	// satoshis, so we shouldn't be able to find a path to sophon even
 	// though we have a 2-hop link.
