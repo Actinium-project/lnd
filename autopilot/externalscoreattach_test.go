@@ -5,7 +5,7 @@ import (
 
 	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmutil"
-	"github.com/lightningnetwork/lnd/autopilot"
+	"github.com/Actinium-project/lnd/autopilot"
 )
 
 // randKey returns a random public key.

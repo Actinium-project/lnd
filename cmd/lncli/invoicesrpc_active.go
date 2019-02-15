@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/lightningnetwork/lnd/lnrpc/invoicesrpc"
+	"github.com/Actinium-project/lnd/lnrpc/invoicesrpc"
 	"github.com/urfave/cli"
 )
 

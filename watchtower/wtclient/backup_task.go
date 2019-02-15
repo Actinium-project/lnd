@@ -7,11 +7,11 @@ import (
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/acmutil/txsort"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/watchtower/blob"
-	"github.com/lightningnetwork/lnd/watchtower/wtdb"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/watchtower/blob"
+	"github.com/Actinium-project/lnd/watchtower/wtdb"
 )
 
 // backupTask is an internal struct for computing the justice transaction for a

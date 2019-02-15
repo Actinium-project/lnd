@@ -4,8 +4,8 @@ import (
 	"sync/atomic"
 
 	"github.com/Actinium-project/acmd/wire"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/subscribe"
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/subscribe"
 )
 
 // ChannelNotifier is a subsystem which all active, inactive, and closed channel

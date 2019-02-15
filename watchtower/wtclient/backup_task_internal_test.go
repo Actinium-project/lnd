@@ -13,14 +13,14 @@ import (
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/keychain"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/watchtower/blob"
-	"github.com/lightningnetwork/lnd/watchtower/wtdb"
-	"github.com/lightningnetwork/lnd/watchtower/wtmock"
-	"github.com/lightningnetwork/lnd/watchtower/wtpolicy"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/keychain"
+	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/watchtower/blob"
+	"github.com/Actinium-project/lnd/watchtower/wtdb"
+	"github.com/Actinium-project/lnd/watchtower/wtmock"
+	"github.com/Actinium-project/lnd/watchtower/wtpolicy"
 )
 
 const csvDelay uint32 = 144
