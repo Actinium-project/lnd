@@ -11,11 +11,11 @@ import (
 	"github.com/Actinium-project/acmd/txscript"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/input"
 	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/davecgh/go-spew/spew"
 )
 
 const (
@@ -506,7 +506,7 @@ func (c *chainWatcher) toSelfAmount(tx *wire.MsgTx) acmutil.Amount {
 	for _, txOut := range tx.TxOut {
 		_, addrs, _, err := txscript.ExtractPkScriptAddrs(
 			// Doesn't matter what net we actually pass in.
-			txOut.PkScript, &chaincfg.TestNet3Params,
+			txOut.PkScript, &chaincfg.TestNet4Params,
 		)
 		if err != nil {
 			continue

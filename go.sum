@@ -8,6 +8,8 @@ github.com/Actinium-project/acmd v0.0.3 h1:un9iLxG/jSa9z9wiYTmu+y7xL/ZwtCwexauJT
 github.com/Actinium-project/acmd v0.0.3/go.mod h1:AwJgOXb56V8xPt0cwQXjV+jhBTRGAfhUbrdgVC5wRyw=
 github.com/Actinium-project/acmd v0.0.4 h1:vex/867rJ39st6tMEZJvdIBbJe5bpJ1+EUl7BrwIbno=
 github.com/Actinium-project/acmd v0.0.4/go.mod h1:eyGchHNtNdu0lPt2dZwSrqiWRGJIsdP6VrsR+NccPWo=
+github.com/Actinium-project/acmd v0.0.5 h1:ICzXOlfPUxpngDckx4flMmc7fs1I8m916s7qJ47d44g=
+github.com/Actinium-project/acmd v0.0.5/go.mod h1:eyGchHNtNdu0lPt2dZwSrqiWRGJIsdP6VrsR+NccPWo=
 github.com/Actinium-project/acmlog v0.0.1/go.mod h1:mYHeT//qvzCG6xv5MKbfyyy6bMchkZIH2aQ7LkTOnys=
 github.com/Actinium-project/acmutil v0.0.2 h1:0I6Ajh4oktijDYDdC02jZ0cbFhu60zfqYZPGNx4SGYU=
 github.com/Actinium-project/acmutil v0.0.2/go.mod h1:8yj6Xo5JtGIeu5FN9M2bL8+YkbWNmxI/K0zlGMyAZPE=
