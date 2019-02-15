@@ -7,7 +7,7 @@ LINT_PKG := gopkg.in/alecthomas/gometalinter.v2
 GOACC_PKG := github.com/ory/go-acc
 
 GO_BIN := ${GOPATH}/bin
-BTCD_BIN := $(GO_BIN)/btcd
+BTCD_BIN := $(GO_BIN)/acmd
 GOVERALLS_BIN := $(GO_BIN)/goveralls
 LINT_BIN := $(GO_BIN)/gometalinter.v2
 GOACC_BIN := $(GO_BIN)/go-acc
@@ -80,8 +80,8 @@ $(GOACC_BIN):
 	go get -u -v $(GOACC_PKG)@$(GOACC_COMMIT)
 	$(GOINSTALL) $(GOACC_PKG)
 
-btcd:
-	@$(call print, "Installing btcd.")
+acmd:
+	@$(call print, "Installing acmd.")
 	GO111MODULE=on go get -v github.com/Actinium-project/acmd/@$(BTCD_COMMIT)
 
 # ============
@@ -116,9 +116,9 @@ itest-only:
 	@$(call print, "Running integration tests.")
 	$(ITEST)
 
-itest: btcd build-itest itest-only
+itest: acmd build-itest itest-only
 
-unit: btcd
+unit: acmd
 	@$(call print, "Running unit tests.")
 	$(UNIT)
 
@@ -135,9 +135,9 @@ goveralls: $(GOVERALLS_BIN)
 	$(GOVERALLS_BIN) -coverprofile=coverage.txt -service=travis-ci
 
 
-travis-race: lint btcd unit-race
+travis-race: lint acmd unit-race
 
-travis-cover: lint btcd unit-cover goveralls
+travis-cover: lint acmd unit-cover goveralls
 
 travis-itest: lint itest
 
@@ -186,7 +186,7 @@ clean:
 
 
 .PHONY: all \
-	btcd \
+	acmd \
 	default \
 	build \
 	install \
