@@ -4,6 +4,8 @@ git.schwanenlied.me/yawning/bsaes.git v0.0.0-20180720073208-c0276d75487e/go.mod 
 github.com/Actinium-project/acmd v0.0.1/go.mod h1:RREw7W7bfdLfXwD58nMiV+eoXZK1vVNCDrp3/epaUOk=
 github.com/Actinium-project/acmd v0.0.2 h1:L247EPPxmryZaJ4WBSOdKloxKKdBp3ZY8BbcG0GFxLs=
 github.com/Actinium-project/acmd v0.0.2/go.mod h1:AwJgOXb56V8xPt0cwQXjV+jhBTRGAfhUbrdgVC5wRyw=
+github.com/Actinium-project/acmd v0.0.3 h1:un9iLxG/jSa9z9wiYTmu+y7xL/ZwtCwexauJTQYGd68=
+github.com/Actinium-project/acmd v0.0.3/go.mod h1:AwJgOXb56V8xPt0cwQXjV+jhBTRGAfhUbrdgVC5wRyw=
 github.com/Actinium-project/acmlog v0.0.1/go.mod h1:mYHeT//qvzCG6xv5MKbfyyy6bMchkZIH2aQ7LkTOnys=
 github.com/Actinium-project/acmutil v0.0.2 h1:0I6Ajh4oktijDYDdC02jZ0cbFhu60zfqYZPGNx4SGYU=
 github.com/Actinium-project/acmutil v0.0.2/go.mod h1:8yj6Xo5JtGIeu5FN9M2bL8+YkbWNmxI/K0zlGMyAZPE=
