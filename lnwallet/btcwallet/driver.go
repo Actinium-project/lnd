@@ -3,7 +3,7 @@ package btcwallet
 import (
 	"fmt"
 
-	"github.com/btcsuite/btcwallet/chain"
+	"github.com/Actinium-project/acmwallet/chain"
 	"github.com/Actinium-project/lnd/lnwallet"
 )
 

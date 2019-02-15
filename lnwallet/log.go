@@ -2,9 +2,9 @@ package lnwallet
 
 import (
 	"github.com/btcsuite/btclog"
-	"github.com/btcsuite/btcwallet/chain"
-	btcwallet "github.com/btcsuite/btcwallet/wallet"
-	"github.com/btcsuite/btcwallet/wtxmgr"
+	"github.com/Actinium-project/acmwallet/chain"
+	btcwallet "github.com/Actinium-project/acmwallet/wallet"
+	"github.com/Actinium-project/acmwallet/wtxmgr"
 
 	"github.com/Actinium-project/lnd/build"
 )

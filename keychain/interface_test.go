@@ -11,12 +11,12 @@ import (
 	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
-	"github.com/btcsuite/btcwallet/waddrmgr"
-	"github.com/btcsuite/btcwallet/wallet"
-	"github.com/btcsuite/btcwallet/walletdb"
+	"github.com/Actinium-project/acmwallet/waddrmgr"
+	"github.com/Actinium-project/acmwallet/wallet"
+	"github.com/Actinium-project/acmwallet/walletdb"
 	"github.com/davecgh/go-spew/spew"
 
-	_ "github.com/btcsuite/btcwallet/walletdb/bdb" // Required in order to create the default database.
+	_ "github.com/Actinium-project/acmwallet/walletdb/bdb" // Required in order to create the default database.
 )
 
 // versionZeroKeyFamilies is a slice of all the known key families for first

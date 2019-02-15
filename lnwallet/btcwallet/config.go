@@ -9,14 +9,14 @@ import (
 	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/lnd/lnwallet"
 
-	"github.com/btcsuite/btcwallet/chain"
-	"github.com/btcsuite/btcwallet/wallet"
+	"github.com/Actinium-project/acmwallet/chain"
+	"github.com/Actinium-project/acmwallet/wallet"
 
 	// This is required to register bdb as a valid walletdb driver. In the
 	// init function of the package, it registers itself. The import is used
 	// to activate the side effects w/o actually binding the package name to
 	// a file-level variable.
-	_ "github.com/btcsuite/btcwallet/walletdb/bdb"
+	_ "github.com/Actinium-project/acmwallet/walletdb/bdb"
 )
 
 var (

@@ -8,7 +8,7 @@ import (
 	"github.com/Actinium-project/acmd/txscript"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
-	"github.com/btcsuite/btcwallet/wallet/txrules"
+	"github.com/Actinium-project/acmwallet/wallet/txrules"
 	"github.com/Actinium-project/lnd/input"
 	"github.com/Actinium-project/lnd/lnwallet"
 )

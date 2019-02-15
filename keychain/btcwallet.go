@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/Actinium-project/acmd/btcec"
-	"github.com/btcsuite/btcwallet/waddrmgr"
-	"github.com/btcsuite/btcwallet/wallet"
-	"github.com/btcsuite/btcwallet/walletdb"
+	"github.com/Actinium-project/acmwallet/waddrmgr"
+	"github.com/Actinium-project/acmwallet/wallet"
+	"github.com/Actinium-project/acmwallet/walletdb"
 )
 
 const (

@@ -3,13 +3,17 @@ module github.com/Actinium-project/lnd
 require (
 	git.schwanenlied.me/yawning/bsaes.git v0.0.0-20180720073208-c0276d75487e // indirect
 	github.com/Actinium-project/acmd v0.0.2
+	github.com/Actinium-project/acmutil v0.0.2
+	github.com/Actinium-project/acmwallet v0.0.4
+	github.com/Actinium-project/actrino v0.0.2
+	github.com/Actinium-project/lightning-onion v0.0.1
 	github.com/NebulousLabs/fastrand v0.0.0-20180208210444-3cf7173006a0 // indirect
 	github.com/NebulousLabs/go-upnp v0.0.0-20180202185039-29b680b06c82
 	github.com/Yawning/aez v0.0.0-20180114000226-4dad034d9db2
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da // indirect
+	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
-	github.com/Actinium-project/acmutil v0.0.2
-	github.com/Actinium-project/acmwallet v0.0.4
+	github.com/Actinium-project/acmwallet v0.0.0-20190213034619-b51c1adeee55
 	github.com/btcsuite/fastsha256 v0.0.0-20160815193821-637e65642941
 	github.com/btcsuite/goleveldb v1.0.0 // indirect
 	github.com/coreos/bbolt v1.3.2
@@ -29,9 +33,12 @@ require (
 	github.com/juju/utils v0.0.0-20180820210520-bf9cc5bdd62d // indirect
 	github.com/juju/version v0.0.0-20180108022336-b64dbd566305 // indirect
 	github.com/kkdai/bstream v0.0.0-20181106074824-b3251f7901ec
-	github.com/Actinium-project/actrino v0.0.2
-	github.com/Actinium-project/lightning-onion v0.0.1
+	github.com/lightningnetwork/lnd v0.0.2
+	github.com/lightningnetwork/lnd/queue v1.0.0
 	github.com/miekg/dns v0.0.0-20171125082028-79bfde677fa8
+	github.com/roasbeef/btcd v0.0.0-20180418012700-a03db407e40d // indirect
+	github.com/roasbeef/btcutil v0.0.0-20180406014609-dfb640c57141 // indirect
+	github.com/roasbeef/btcwallet v0.0.0-20180426223453-30affec83c18 // indirect
 	github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af // indirect
 	github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02
 	github.com/urfave/cli v1.18.0

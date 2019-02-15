@@ -21,9 +21,9 @@ import (
 	"github.com/Actinium-project/acmd/txscript"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
-	"github.com/btcsuite/btcwallet/chain"
-	"github.com/btcsuite/btcwallet/walletdb"
-	_ "github.com/btcsuite/btcwallet/walletdb/bdb" // Required to register the boltdb walletdb implementation.
+	"github.com/Actinium-project/acmwallet/chain"
+	"github.com/Actinium-project/acmwallet/walletdb"
+	_ "github.com/Actinium-project/acmwallet/walletdb/bdb" // Required to register the boltdb walletdb implementation.
 
 	"github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lnd/channeldb"

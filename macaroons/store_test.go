@@ -11,7 +11,7 @@ import (
 
 	"github.com/Actinium-project/lnd/macaroons"
 
-	"github.com/btcsuite/btcwallet/snacl"
+	"github.com/Actinium-project/acmwallet/snacl"
 )
 
 func TestStore(t *testing.T) {

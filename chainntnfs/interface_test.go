@@ -16,8 +16,8 @@ import (
 	"github.com/Actinium-project/acmd/rpcclient"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
-	"github.com/btcsuite/btcwallet/chain"
-	_ "github.com/btcsuite/btcwallet/walletdb/bdb" // Required to auto-register the boltdb walletdb implementation.
+	"github.com/Actinium-project/acmwallet/chain"
+	_ "github.com/Actinium-project/acmwallet/walletdb/bdb" // Required to auto-register the boltdb walletdb implementation.
 	"github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/chainntnfs/bitcoindnotify"

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
-	"github.com/btcsuite/btcwallet/chain"
+	"github.com/Actinium-project/acmwallet/chain"
 	"github.com/Actinium-project/lnd/chainntnfs"
 )
 

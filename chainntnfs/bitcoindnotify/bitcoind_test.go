@@ -10,7 +10,7 @@ import (
 
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/integration/rpctest"
-	"github.com/btcsuite/btcwallet/chain"
+	"github.com/Actinium-project/acmwallet/chain"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/channeldb"
 )

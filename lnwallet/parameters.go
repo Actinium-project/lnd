@@ -2,7 +2,7 @@ package lnwallet
 
 import (
 	"github.com/Actinium-project/acmutil"
-	"github.com/btcsuite/btcwallet/wallet/txrules"
+	"github.com/Actinium-project/acmwallet/wallet/txrules"
 	"github.com/Actinium-project/lnd/input"
 )
 

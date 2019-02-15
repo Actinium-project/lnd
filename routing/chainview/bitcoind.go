@@ -10,8 +10,8 @@ import (
 	"github.com/Actinium-project/acmd/btcjson"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/wire"
-	"github.com/btcsuite/btcwallet/chain"
-	"github.com/btcsuite/btcwallet/wtxmgr"
+	"github.com/Actinium-project/acmwallet/chain"
+	"github.com/Actinium-project/acmwallet/wtxmgr"
 	"github.com/Actinium-project/lnd/channeldb"
 )
 

@@ -34,7 +34,7 @@ import (
 	"google.golang.org/grpc/credentials"
 
 	"github.com/Actinium-project/acmd/btcec"
-	"github.com/btcsuite/btcwallet/wallet"
+	"github.com/Actinium-project/acmwallet/wallet"
 	proxy "github.com/grpc-ecosystem/grpc-gateway/runtime"
 	flags "github.com/jessevdk/go-flags"
 
