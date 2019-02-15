@@ -33,7 +33,6 @@ require (
 	github.com/juju/version v0.0.0-20180108022336-b64dbd566305 // indirect
 	github.com/kkdai/bstream v0.0.0-20181106074824-b3251f7901ec
 	github.com/Actinium-project/lnd v0.0.1
-	github.com/Actinium-project/lnd/queue v0.0.1
 	github.com/miekg/dns v0.0.0-20171125082028-79bfde677fa8
 	github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af // indirect
 	github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02
