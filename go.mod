@@ -13,7 +13,6 @@ require (
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da // indirect
 	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
-	github.com/Actinium-project/acmwallet v0.0.0-20190213034619-b51c1adeee55
 	github.com/btcsuite/fastsha256 v0.0.0-20160815193821-637e65642941
 	github.com/btcsuite/goleveldb v1.0.0 // indirect
 	github.com/coreos/bbolt v1.3.2
@@ -36,9 +35,6 @@ require (
 	github.com/lightningnetwork/lnd v0.0.2
 	github.com/lightningnetwork/lnd/queue v1.0.0
 	github.com/miekg/dns v0.0.0-20171125082028-79bfde677fa8
-	github.com/Actinium-project/acmd v0.0.2 // indirect
-	github.com/Actinium-project/acmutil v0.0.2 // indirect
-	github.com/Actinium-project/acmwallet v0.0.4 // indirect
 	github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af // indirect
 	github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02
 	github.com/urfave/cli v1.18.0
