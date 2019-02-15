@@ -40,7 +40,7 @@ var (
 	}
 
 	privKey, pubKey = btcec.PrivKeyFromBytes(btcec.S256(), testPrivKey)
-	addrPk, _       = btcutil.NewAddressPubKey(pubKey.SerializeCompressed(),
+	addrPk, _       = acmutil.NewAddressPubKey(pubKey.SerializeCompressed(),
 		netParams)
 	testAddr = addrPk.AddressPubKeyHash()
 
@@ -49,7 +49,7 @@ var (
 
 func waitForMempoolTx(r *rpctest.Harness, txid *chainhash.Hash) error {
 	var found bool
-	var tx *btcutil.Tx
+	var tx *acmutil.Tx
 	var err error
 	timeout := time.After(10 * time.Second)
 	for !found {
@@ -481,7 +481,7 @@ func testFilterSingleBlock(node *rpctest.Harness, chainView FilteredChainView,
 	if err != nil {
 		t.Fatalf("unable to create spending tx: %v", err)
 	}
-	txns := []*btcutil.Tx{btcutil.NewTx(spendingTx1), btcutil.NewTx(spendingTx2)}
+	txns := []*acmutil.Tx{acmutil.NewTx(spendingTx1), acmutil.NewTx(spendingTx2)}
 	block, err := node.GenerateAndSubmitBlock(txns, 11, time.Time{})
 	if err != nil {
 		t.Fatalf("unable to generate block: %v", err)

@@ -121,8 +121,8 @@ func (b *BtcWallet) fetchPrivKey(keyDesc *keychain.KeyDescriptor) (*btcec.Privat
 		return key, nil
 	}
 
-	hash160 := btcutil.Hash160(keyDesc.PubKey.SerializeCompressed())
-	addr, err := btcutil.NewAddressWitnessPubKeyHash(hash160, b.netParams)
+	hash160 := acmutil.Hash160(keyDesc.PubKey.SerializeCompressed())
+	addr, err := acmutil.NewAddressWitnessPubKeyHash(hash160, b.netParams)
 	if err != nil {
 		return nil, err
 	}
@@ -223,13 +223,13 @@ func (b *BtcWallet) ComputeInputScript(tx *wire.MsgTx,
 	// we'll need to attach a sigScript in addition to witness data.
 	case pka.AddrType() == waddrmgr.NestedWitnessPubKey:
 		pubKey := privKey.PubKey()
-		pubKeyHash := btcutil.Hash160(pubKey.SerializeCompressed())
+		pubKeyHash := acmutil.Hash160(pubKey.SerializeCompressed())
 
 		// Next, we'll generate a valid sigScript that will allow us to
 		// spend the p2sh output. The sigScript will contain only a
 		// single push of the p2wkh witness program corresponding to
 		// the matching public key of this address.
-		p2wkhAddr, err := btcutil.NewAddressWitnessPubKeyHash(
+		p2wkhAddr, err := acmutil.NewAddressWitnessPubKeyHash(
 			pubKeyHash, b.netParams,
 		)
 		if err != nil {

@@ -265,7 +265,7 @@ func (s *UtxoSweeper) SweepInput(input input.Input) (chan Result, error) {
 	log.Infof("Sweep request received: out_point=%v, witness_type=%v, "+
 		"time_lock=%v, size=%v", input.OutPoint(), input.WitnessType(),
 		input.BlocksToMaturity(),
-		btcutil.Amount(input.SignDesc().Output.Value))
+		acmutil.Amount(input.SignDesc().Output.Value))
 
 	sweeperInput := &sweepInputMessage{
 		input:      input,

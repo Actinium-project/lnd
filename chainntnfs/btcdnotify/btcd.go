@@ -42,7 +42,7 @@ type chainUpdate struct {
 // the registered RPC client. This struct is used as an element within an
 // unbounded queue in order to avoid blocking the main rpc dispatch rule.
 type txUpdate struct {
-	tx      *btcutil.Tx
+	tx      *acmutil.Tx
 	details *btcjson.BlockDetails
 }
 
@@ -229,7 +229,7 @@ func (b *BtcdNotifier) onBlockConnected(hash *chainhash.Hash, height int32, t ti
 type filteredBlock struct {
 	hash   chainhash.Hash
 	height uint32
-	txns   []*btcutil.Tx
+	txns   []*acmutil.Tx
 
 	// connected is true if this update is a new block and false if it is a
 	// disconnected block.
@@ -248,7 +248,7 @@ func (b *BtcdNotifier) onBlockDisconnected(hash *chainhash.Hash, height int32, t
 }
 
 // onRedeemingTx implements on OnRedeemingTx callback for rpcclient.
-func (b *BtcdNotifier) onRedeemingTx(tx *btcutil.Tx, details *btcjson.BlockDetails) {
+func (b *BtcdNotifier) onRedeemingTx(tx *acmutil.Tx, details *btcjson.BlockDetails) {
 	// Append this new transaction update to the end of the queue of new
 	// chain updates.
 	b.txUpdates.ChanIn() <- &txUpdate{tx, details}
@@ -677,7 +677,7 @@ func (b *BtcdNotifier) handleBlockConnected(epoch chainntnfs.BlockEpoch) error {
 	newBlock := &filteredBlock{
 		hash:    *epoch.Hash,
 		height:  uint32(epoch.Height),
-		txns:    btcutil.NewBlock(rawBlock).Transactions(),
+		txns:    acmutil.NewBlock(rawBlock).Transactions(),
 		connect: true,
 	}
 
@@ -771,7 +771,7 @@ func (b *BtcdNotifier) RegisterSpendNtfn(outpoint *wire.OutPoint,
 		if err != nil {
 			return nil, err
 		}
-		addrs := []btcutil.Address{addr}
+		addrs := []acmutil.Address{addr}
 		if err := b.chainConn.NotifyReceived(addrs); err != nil {
 			return nil, err
 		}
@@ -808,7 +808,7 @@ func (b *BtcdNotifier) RegisterSpendNtfn(outpoint *wire.OutPoint,
 		if err != nil {
 			return nil, err
 		}
-		addrs := []btcutil.Address{addr}
+		addrs := []acmutil.Address{addr}
 		asyncResult := b.chainConn.RescanAsync(startHash, addrs, nil)
 		go func() {
 			if rescanErr := asyncResult.Receive(); rescanErr != nil {

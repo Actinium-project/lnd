@@ -43,7 +43,7 @@ const (
 	defaultActiniumBaseFeeMSat   = lnwire.MilliSatoshi(1000)
 	defaultActiniumFeeRate       = lnwire.MilliSatoshi(1)
 	defaultActiniumTimeLockDelta = 576
-	defaultActiniumDustLimit     = btcutil.Amount(54600)
+	defaultActiniumDustLimit     = acmutil.Amount(54600)
 
 	// defaultBitcoinStaticFeePerKW is the fee rate of 50 sat/vbyte
 	// expressed in sat/kw.

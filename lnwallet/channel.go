@@ -492,7 +492,7 @@ type commitment struct {
 	// fee is the amount that will be paid as fees for this commitment
 	// transaction. The fee is recorded here so that it can be added back
 	// and recalculated for each new update to the channel state.
-	fee btcutil.Amount
+	fee acmutil.Amount
 
 	// feePerKw is the fee per kw used to calculate this commitment
 	// transaction's fee.
@@ -500,7 +500,7 @@ type commitment struct {
 
 	// dustLimit is the limit on the commitment transaction such that no
 	// output values should be below this amount.
-	dustLimit btcutil.Amount
+	dustLimit acmutil.Amount
 
 	// outgoingHTLCs is a slice of all the outgoing HTLC's (from our PoV)
 	// on this commitment transaction.
@@ -679,7 +679,7 @@ func (c *commitment) toDiskCommit(ourCommit bool) *channeldb.ChannelCommitment {
 		LocalBalance:    c.ourBalance,
 		RemoteBalance:   c.theirBalance,
 		CommitFee:       c.fee,
-		FeePerKw:        btcutil.Amount(c.feePerKw),
+		FeePerKw:        acmutil.Amount(c.feePerKw),
 		CommitTx:        c.txn,
 		CommitSig:       c.sig,
 		Htlcs:           make([]channeldb.HTLC, 0, numHtlcs),
@@ -1313,7 +1313,7 @@ type LightningChannel struct {
 	pCache PreimageCache
 
 	// Capacity is the total capacity of this channel.
-	Capacity btcutil.Amount
+	Capacity acmutil.Amount
 
 	// stateHintObfuscator is a 48-bit state hint that's used to obfuscate
 	// the current state number on the commitment transactions.
@@ -1483,7 +1483,7 @@ func (lc *LightningChannel) ResetState() {
 func (lc *LightningChannel) logUpdateToPayDesc(logUpdate *channeldb.LogUpdate,
 	remoteUpdateLog *updateLog, commitHeight uint64,
 	feeRate SatPerKWeight, remoteCommitKeys *CommitmentKeyRing,
-	remoteDustLimit btcutil.Amount) (*PaymentDescriptor, error) {
+	remoteDustLimit acmutil.Amount) (*PaymentDescriptor, error) {
 
 	// Depending on the type of update message we'll map that to a distinct
 	// PaymentDescriptor instance.
@@ -1587,7 +1587,7 @@ func (lc *LightningChannel) logUpdateToPayDesc(logUpdate *channeldb.LogUpdate,
 		pd = &PaymentDescriptor{
 			LogIndex: logUpdate.LogIndex,
 			Amount: lnwire.NewMSatFromSatoshis(
-				btcutil.Amount(wireMsg.FeePerKw),
+				acmutil.Amount(wireMsg.FeePerKw),
 			),
 			EntryType:                FeeUpdate,
 			addCommitHeightRemote:    commitHeight,
@@ -2161,13 +2161,13 @@ func NewBreachRetribution(chanState *channeldb.OpenChannel, stateNum uint64,
 
 // htlcTimeoutFee returns the fee in satoshis required for an HTLC timeout
 // transaction based on the current fee rate.
-func htlcTimeoutFee(feePerKw SatPerKWeight) btcutil.Amount {
+func htlcTimeoutFee(feePerKw SatPerKWeight) acmutil.Amount {
 	return feePerKw.FeeForWeight(input.HtlcTimeoutWeight)
 }
 
 // htlcSuccessFee returns the fee in satoshis required for an HTLC success
 // transaction based on the current fee rate.
-func htlcSuccessFee(feePerKw SatPerKWeight) btcutil.Amount {
+func htlcSuccessFee(feePerKw SatPerKWeight) acmutil.Amount {
 	return feePerKw.FeeForWeight(input.HtlcSuccessWeight)
 }
 
@@ -2178,12 +2178,12 @@ func htlcSuccessFee(feePerKw SatPerKWeight) btcutil.Amount {
 // covenants. Depending on the two bits, we'll either be using a timeout or
 // success transaction which have different weights.
 func htlcIsDust(incoming, ourCommit bool, feePerKw SatPerKWeight,
-	htlcAmt, dustLimit btcutil.Amount) bool {
+	htlcAmt, dustLimit acmutil.Amount) bool {
 
 	// First we'll determine the fee required for this HTLC based on if this is
 	// an incoming HTLC or not, and also on whose commitment transaction it
 	// will be placed on.
-	var htlcFee btcutil.Amount
+	var htlcFee acmutil.Amount
 	switch {
 
 	// If this is an incoming HTLC on our commitment transaction, then the
@@ -2283,7 +2283,7 @@ func (lc *LightningChannel) fetchCommitmentView(remoteChain bool,
 
 	// Determine how many current HTLCs are over the dust limit, and should
 	// be counted for the purpose of fee calculation.
-	var dustLimit btcutil.Amount
+	var dustLimit acmutil.Amount
 	if remoteChain {
 		dustLimit = lc.remoteChanCfg.DustLimit
 	} else {
@@ -2392,7 +2392,7 @@ func (lc *LightningChannel) createCommitmentTx(c *commitment,
 
 	var (
 		delay                      uint32
-		delayBalance, p2wkhBalance btcutil.Amount
+		delayBalance, p2wkhBalance acmutil.Amount
 	)
 	if c.isOurs {
 		delay = uint32(lc.localChanCfg.CsvDelay)
@@ -2454,16 +2454,16 @@ func (lc *LightningChannel) createCommitmentTx(c *commitment,
 
 	// Next, we'll ensure that we don't accidentally create a commitment
 	// transaction which would be invalid by consensus.
-	uTx := btcutil.NewTx(commitTx)
+	uTx := acmutil.NewTx(commitTx)
 	if err := blockchain.CheckTransactionSanity(uTx); err != nil {
 		return err
 	}
 
 	// Finally, we'll assert that were not attempting to draw more out of
 	// the channel that was originally placed within it.
-	var totalOut btcutil.Amount
+	var totalOut acmutil.Amount
 	for _, txOut := range commitTx.TxOut {
-		totalOut += btcutil.Amount(txOut.Value)
+		totalOut += acmutil.Amount(txOut.Value)
 	}
 	if totalOut > lc.channelState.Capacity {
 		return fmt.Errorf("height=%v, for ChannelPoint(%v) attempts "+
@@ -5125,7 +5125,7 @@ func NewUnilateralCloseSummary(chanState *channeldb.OpenChannel, signer input.Si
 		CloseHeight:             uint32(commitSpend.SpendingHeight),
 		RemotePub:               chanState.IdentityPub,
 		Capacity:                chanState.Capacity,
-		SettledBalance:          btcutil.Amount(localBalance),
+		SettledBalance:          acmutil.Amount(localBalance),
 		CloseType:               channeldb.RemoteForceClose,
 		IsPending:               true,
 		RemoteCurrentRevocation: chanState.RemoteCurrentRevocation,
@@ -5253,7 +5253,7 @@ type HtlcResolutions struct {
 // the remote party's commitment transaction.
 func newOutgoingHtlcResolution(signer input.Signer, localChanCfg *channeldb.ChannelConfig,
 	commitHash chainhash.Hash, htlc *channeldb.HTLC, keyRing *CommitmentKeyRing,
-	feePerKw SatPerKWeight, dustLimit btcutil.Amount, csvDelay uint32, localCommit bool,
+	feePerKw SatPerKWeight, dustLimit acmutil.Amount, csvDelay uint32, localCommit bool,
 ) (*OutgoingHtlcResolution, error) {
 
 	op := wire.OutPoint{
@@ -5393,7 +5393,7 @@ func newOutgoingHtlcResolution(signer input.Signer, localChanCfg *channeldb.Chan
 // TODO(roasbeef) consolidate code with above func
 func newIncomingHtlcResolution(signer input.Signer, localChanCfg *channeldb.ChannelConfig,
 	commitHash chainhash.Hash, htlc *channeldb.HTLC, keyRing *CommitmentKeyRing,
-	feePerKw SatPerKWeight, dustLimit btcutil.Amount, csvDelay uint32,
+	feePerKw SatPerKWeight, dustLimit acmutil.Amount, csvDelay uint32,
 	localCommit bool, preimage [32]byte) (*IncomingHtlcResolution, error) {
 
 	op := wire.OutPoint{
@@ -5800,9 +5800,9 @@ func NewLocalForceCloseSummary(chanState *channeldb.OpenChannel, signer input.Si
 //
 // TODO(roasbeef): caller should initiate signal to reject all incoming HTLCs,
 // settle any in flight.
-func (lc *LightningChannel) CreateCloseProposal(proposedFee btcutil.Amount,
+func (lc *LightningChannel) CreateCloseProposal(proposedFee acmutil.Amount,
 	localDeliveryScript []byte,
-	remoteDeliveryScript []byte) ([]byte, *chainhash.Hash, btcutil.Amount, error) {
+	remoteDeliveryScript []byte) ([]byte, *chainhash.Hash, acmutil.Amount, error) {
 
 	lc.Lock()
 	defer lc.Unlock()
@@ -5837,7 +5837,7 @@ func (lc *LightningChannel) CreateCloseProposal(proposedFee btcutil.Amount,
 	// Ensure that the transaction doesn't explicitly violate any
 	// consensus rules such as being too big, or having any value with a
 	// negative output.
-	tx := btcutil.NewTx(closeTx)
+	tx := acmutil.NewTx(closeTx)
 	if err := blockchain.CheckTransactionSanity(tx); err != nil {
 		return nil, nil, 0, err
 	}
@@ -5869,7 +5869,7 @@ func (lc *LightningChannel) CreateCloseProposal(proposedFee btcutil.Amount,
 // signatures including the proper sighash byte.
 func (lc *LightningChannel) CompleteCooperativeClose(localSig, remoteSig []byte,
 	localDeliveryScript, remoteDeliveryScript []byte,
-	proposedFee btcutil.Amount) (*wire.MsgTx, btcutil.Amount, error) {
+	proposedFee acmutil.Amount) (*wire.MsgTx, acmutil.Amount, error) {
 
 	lc.Lock()
 	defer lc.Unlock()
@@ -5907,7 +5907,7 @@ func (lc *LightningChannel) CompleteCooperativeClose(localSig, remoteSig []byte,
 	// Ensure that the transaction doesn't explicitly validate any
 	// consensus rules such as being too big, or having any value with a
 	// negative output.
-	tx := btcutil.NewTx(closeTx)
+	tx := acmutil.NewTx(closeTx)
 	if err := blockchain.CheckTransactionSanity(tx); err != nil {
 		return nil, 0, err
 	}
@@ -6056,7 +6056,7 @@ func (lc *LightningChannel) UpdateFee(feePerKw SatPerKWeight) error {
 
 	pd := &PaymentDescriptor{
 		LogIndex:  lc.localUpdateLog.logIndex,
-		Amount:    lnwire.NewMSatFromSatoshis(btcutil.Amount(feePerKw)),
+		Amount:    lnwire.NewMSatFromSatoshis(acmutil.Amount(feePerKw)),
 		EntryType: FeeUpdate,
 	}
 
@@ -6080,7 +6080,7 @@ func (lc *LightningChannel) ReceiveUpdateFee(feePerKw SatPerKWeight) error {
 	// TODO(roasbeef): or just modify to use the other balance?
 	pd := &PaymentDescriptor{
 		LogIndex:  lc.remoteUpdateLog.logIndex,
-		Amount:    lnwire.NewMSatFromSatoshis(btcutil.Amount(feePerKw)),
+		Amount:    lnwire.NewMSatFromSatoshis(acmutil.Amount(feePerKw)),
 		EntryType: FeeUpdate,
 	}
 
@@ -6136,7 +6136,7 @@ func (lc *LightningChannel) generateRevocation(height uint64) (*lnwire.RevokeAnd
 // counterparty within the channel, which can be spent immediately.
 func CreateCommitTx(fundingOutput wire.TxIn,
 	keyRing *CommitmentKeyRing, csvTimeout uint32,
-	amountToSelf, amountToThem, dustLimit btcutil.Amount) (*wire.MsgTx, error) {
+	amountToSelf, amountToThem, dustLimit acmutil.Amount) (*wire.MsgTx, error) {
 
 	// First, we create the script for the delayed "pay-to-self" output.
 	// This output has 2 main redemption clauses: either we can redeem the
@@ -6190,7 +6190,7 @@ func CreateCommitTx(fundingOutput wire.TxIn,
 // expected that the initiator pays the transaction fees for the closing
 // transaction in full.
 func CreateCooperativeCloseTx(fundingTxIn wire.TxIn,
-	localDust, remoteDust, ourBalance, theirBalance btcutil.Amount,
+	localDust, remoteDust, ourBalance, theirBalance acmutil.Amount,
 	ourDeliveryScript, theirDeliveryScript []byte,
 	initiator bool) *wire.MsgTx {
 
@@ -6223,7 +6223,7 @@ func CreateCooperativeCloseTx(fundingTxIn wire.TxIn,
 
 // CalcFee returns the commitment fee to use for the given
 // fee rate (fee-per-kw).
-func (lc *LightningChannel) CalcFee(feeRate SatPerKWeight) btcutil.Amount {
+func (lc *LightningChannel) CalcFee(feeRate SatPerKWeight) acmutil.Amount {
 	return feeRate.FeeForWeight(input.CommitWeight)
 }
 
@@ -6308,7 +6308,7 @@ func (lc *LightningChannel) ActiveHtlcs() []channeldb.HTLC {
 }
 
 // LocalChanReserve returns our local ChanReserve requirement for the remote party.
-func (lc *LightningChannel) LocalChanReserve() btcutil.Amount {
+func (lc *LightningChannel) LocalChanReserve() acmutil.Amount {
 	return lc.localChanCfg.ChanReserve
 }
 

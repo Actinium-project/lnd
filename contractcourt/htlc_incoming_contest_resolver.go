@@ -174,7 +174,7 @@ func (h *htlcIncomingContestResolver) report() *ContractReport {
 
 	finalAmt := h.htlcAmt.ToSatoshis()
 	if h.htlcResolution.SignedSuccessTx != nil {
-		finalAmt = btcutil.Amount(
+		finalAmt = acmutil.Amount(
 			h.htlcResolution.SignedSuccessTx.TxOut[0].Value,
 		)
 	}

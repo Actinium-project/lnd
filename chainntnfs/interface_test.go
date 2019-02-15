@@ -86,7 +86,7 @@ func testSingleConfirmationNotification(miner *rpctest.Harness,
 			t.Fatalf("unable to fetch block: %v", err)
 		}
 
-		block := btcutil.NewBlock(msgBlock)
+		block := acmutil.NewBlock(msgBlock)
 		specifiedTxHash, err := block.TxHash(int(confInfo.TxIndex))
 		if err != nil {
 			t.Fatalf("unable to index into block: %v", err)
@@ -587,7 +587,7 @@ func testTxConfirmedBeforeNtfnRegistration(miner *rpctest.Harness,
 		if err != nil {
 			t.Fatalf("unable to fetch block: %v", err)
 		}
-		block := btcutil.NewBlock(msgBlock)
+		block := acmutil.NewBlock(msgBlock)
 		specifiedTxHash, err := block.TxHash(int(confInfo.TxIndex))
 		if err != nil {
 			t.Fatalf("unable to index into block: %v", err)

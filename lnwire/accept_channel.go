@@ -20,7 +20,7 @@ type AcceptChannel struct {
 	// would like enforced on their version of the commitment transaction.
 	// Any output below this value will be "trimmed" from the commitment
 	// transaction, with the amount of the HTLC going to dust.
-	DustLimit btcutil.Amount
+	DustLimit acmutil.Amount
 
 	// MaxValueInFlight represents the maximum amount of coins that can be
 	// pending within the channel at any given time. If the amount of funds
@@ -31,7 +31,7 @@ type AcceptChannel struct {
 	// maintain a balance above at all times. This is a safety mechanism to
 	// ensure that both sides always have skin in the game during the
 	// channel's lifetime.
-	ChannelReserve btcutil.Amount
+	ChannelReserve acmutil.Amount
 
 	// HtlcMinimum is the smallest HTLC that the sender of this message
 	// will accept.

@@ -140,7 +140,7 @@ func (d *databaseChannelGraph) ForEachNode(cb func(Node) error) error {
 // meant to aide in the generation of random graphs for use within test cases
 // the exercise the autopilot package.
 func (d *databaseChannelGraph) addRandChannel(node1, node2 *btcec.PublicKey,
-	capacity btcutil.Amount) (*ChannelEdge, *ChannelEdge, error) {
+	capacity acmutil.Amount) (*ChannelEdge, *ChannelEdge, error) {
 
 	fetchNode := func(pub *btcec.PublicKey) (*channeldb.LightningNode, error) {
 		if pub != nil {
@@ -351,7 +351,7 @@ func randKey() (*btcec.PublicKey, error) {
 // meant to aide in the generation of random graphs for use within test cases
 // the exercise the autopilot package.
 func (m *memChannelGraph) addRandChannel(node1, node2 *btcec.PublicKey,
-	capacity btcutil.Amount) (*ChannelEdge, *ChannelEdge, error) {
+	capacity acmutil.Amount) (*ChannelEdge, *ChannelEdge, error) {
 
 	var (
 		vertex1, vertex2 memNode

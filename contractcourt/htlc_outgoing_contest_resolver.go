@@ -245,7 +245,7 @@ func (h *htlcOutgoingContestResolver) report() *ContractReport {
 
 	finalAmt := h.htlcAmt.ToSatoshis()
 	if h.htlcResolution.SignedTimeoutTx != nil {
-		finalAmt = btcutil.Amount(
+		finalAmt = acmutil.Amount(
 			h.htlcResolution.SignedTimeoutTx.TxOut[0].Value,
 		)
 	}

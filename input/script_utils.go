@@ -180,7 +180,7 @@ func SenderHTLCScript(senderHtlcKey, receiverHtlcKey,
 	// the stack.
 	builder.AddOp(txscript.OP_DUP)
 	builder.AddOp(txscript.OP_HASH160)
-	builder.AddData(btcutil.Hash160(revocationKey.SerializeCompressed()))
+	builder.AddData(acmutil.Hash160(revocationKey.SerializeCompressed()))
 	builder.AddOp(txscript.OP_EQUAL)
 
 	// If the hash matches, then this is the revocation clause. The output
@@ -394,7 +394,7 @@ func ReceiverHTLCScript(cltvExpiry uint32, senderHtlcKey,
 	// the stack.
 	builder.AddOp(txscript.OP_DUP)
 	builder.AddOp(txscript.OP_HASH160)
-	builder.AddData(btcutil.Hash160(revocationKey.SerializeCompressed()))
+	builder.AddData(acmutil.Hash160(revocationKey.SerializeCompressed()))
 	builder.AddOp(txscript.OP_EQUAL)
 
 	// If the hash matches, then this is the revocation clause. The output
@@ -835,7 +835,7 @@ func CommitScriptUnencumbered(key *btcec.PublicKey) ([]byte, error) {
 	// This script goes to the "other" party, and it spendable immediately.
 	builder := txscript.NewScriptBuilder()
 	builder.AddOp(txscript.OP_0)
-	builder.AddData(btcutil.Hash160(key.SerializeCompressed()))
+	builder.AddData(acmutil.Hash160(key.SerializeCompressed()))
 
 	return builder.Script()
 }

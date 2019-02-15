@@ -214,8 +214,8 @@ func (b *BtcWallet) Stop() error {
 // final sum.
 //
 // This is a part of the WalletController interface.
-func (b *BtcWallet) ConfirmedBalance(confs int32) (btcutil.Amount, error) {
-	var balance btcutil.Amount
+func (b *BtcWallet) ConfirmedBalance(confs int32) (acmutil.Amount, error) {
+	var balance acmutil.Amount
 
 	witnessOutputs, err := b.ListUnspentWitness(confs, math.MaxInt32)
 	if err != nil {
@@ -235,7 +235,7 @@ func (b *BtcWallet) ConfirmedBalance(confs int32) (btcutil.Amount, error) {
 // returned.
 //
 // This is a part of the WalletController interface.
-func (b *BtcWallet) NewAddress(t lnwallet.AddressType, change bool) (btcutil.Address, error) {
+func (b *BtcWallet) NewAddress(t lnwallet.AddressType, change bool) (acmutil.Address, error) {
 	var keyScope waddrmgr.KeyScope
 
 	switch t {
@@ -257,7 +257,7 @@ func (b *BtcWallet) NewAddress(t lnwallet.AddressType, change bool) (btcutil.Add
 // IsOurAddress checks if the passed address belongs to this wallet
 //
 // This is a part of the WalletController interface.
-func (b *BtcWallet) IsOurAddress(a btcutil.Address) bool {
+func (b *BtcWallet) IsOurAddress(a acmutil.Address) bool {
 	result, err := b.wallet.HaveAddress(a)
 	return result && (err == nil)
 }
@@ -272,7 +272,7 @@ func (b *BtcWallet) SendOutputs(outputs []*wire.TxOut,
 
 	// Convert our fee rate from sat/kw to sat/kb since it's required by
 	// SendOutputs.
-	feeSatPerKB := btcutil.Amount(feeRate.FeePerKVByte())
+	feeSatPerKB := acmutil.Amount(feeRate.FeePerKVByte())
 
 	return b.wallet.SendOutputs(outputs, defaultAccount, 1, feeSatPerKB)
 }
@@ -336,7 +336,7 @@ func (b *BtcWallet) ListUnspentWitness(minConfs, maxConfs int32) (
 
 			// We'll ensure we properly convert the amount given in
 			// ACM to satoshis.
-			amt, err := btcutil.NewAmount(output.Amount)
+			amt, err := acmutil.NewAmount(output.Amount)
 			if err != nil {
 				return nil, err
 			}
@@ -454,16 +454,16 @@ func (b *BtcWallet) PublishTransaction(tx *wire.MsgTx) error {
 func extractBalanceDelta(
 	txSummary base.TransactionSummary,
 	tx *wire.MsgTx,
-) (btcutil.Amount, error) {
+) (acmutil.Amount, error) {
 	// For each input we debit the wallet's outflow for this transaction,
 	// and for each output we credit the wallet's inflow for this
 	// transaction.
-	var balanceDelta btcutil.Amount
+	var balanceDelta acmutil.Amount
 	for _, input := range txSummary.MyInputs {
 		balanceDelta -= input.PreviousAmount
 	}
 	for _, output := range txSummary.MyOutputs {
-		balanceDelta += btcutil.Amount(tx.TxOut[output.Index].Value)
+		balanceDelta += acmutil.Amount(tx.TxOut[output.Index].Value)
 	}
 
 	return balanceDelta, nil
@@ -486,7 +486,7 @@ func minedTransactionsToDetails(
 			return nil, err
 		}
 
-		var destAddresses []btcutil.Address
+		var destAddresses []acmutil.Address
 		for _, txOut := range wireTx.TxOut {
 			_, outAddresses, _, err :=
 				txscript.ExtractPkScriptAddrs(txOut.PkScript, chainParams)

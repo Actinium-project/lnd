@@ -140,7 +140,7 @@ func (c *CfFilteredChainView) Stop() error {
 // end of the main chain. Based on our current chain filter, the block may or
 // may not include any relevant transactions.
 func (c *CfFilteredChainView) onFilteredBlockConnected(height int32,
-	header *wire.BlockHeader, txns []*btcutil.Tx) {
+	header *wire.BlockHeader, txns []*acmutil.Tx) {
 
 	mtxs := make([]*wire.MsgTx, len(txns))
 	for i, tx := range txns {

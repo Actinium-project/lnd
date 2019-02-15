@@ -13,8 +13,8 @@ type AgentConstraints interface {
 	// the first return value will represent the amount of additional funds
 	// available towards creating channels. The second return value is the
 	// exact *number* of additional channels available.
-	ChannelBudget(chans []Channel, balance btcutil.Amount) (
-		btcutil.Amount, uint32)
+	ChannelBudget(chans []Channel, balance acmutil.Amount) (
+		acmutil.Amount, uint32)
 
 	// MaxPendingOpens returns the maximum number of pending channel
 	// establishment goroutines that can be lingering. We cap this value in
@@ -24,11 +24,11 @@ type AgentConstraints interface {
 
 	// MinChanSize returns the smallest channel that the autopilot agent
 	// should create.
-	MinChanSize() btcutil.Amount
+	MinChanSize() acmutil.Amount
 
 	// MaxChanSize returns largest channel that the autopilot agent should
 	// create.
-	MaxChanSize() btcutil.Amount
+	MaxChanSize() acmutil.Amount
 }
 
 // agenConstraints is an implementation of the AgentConstraints interface that
@@ -37,11 +37,11 @@ type AgentConstraints interface {
 type agentConstraints struct {
 	// minChanSize is the smallest channel that the autopilot agent should
 	// create.
-	minChanSize btcutil.Amount
+	minChanSize acmutil.Amount
 
 	// maxChanSize the largest channel that the autopilot agent should
 	// create.
-	maxChanSize btcutil.Amount
+	maxChanSize acmutil.Amount
 
 	// chanLimit the maximum number of channels that should be created.
 	chanLimit uint16
@@ -62,7 +62,7 @@ type agentConstraints struct {
 var _ AgentConstraints = (*agentConstraints)(nil)
 
 // NewConstraints returns a new AgentConstraints with the given limits.
-func NewConstraints(minChanSize, maxChanSize btcutil.Amount, chanLimit,
+func NewConstraints(minChanSize, maxChanSize acmutil.Amount, chanLimit,
 	maxPendingOpens uint16, allocation float64) AgentConstraints {
 
 	return &agentConstraints{
@@ -83,7 +83,7 @@ func NewConstraints(minChanSize, maxChanSize btcutil.Amount, chanLimit,
 //
 // Note: part of the AgentConstraints interface.
 func (h *agentConstraints) ChannelBudget(channels []Channel,
-	funds btcutil.Amount) (btcutil.Amount, uint32) {
+	funds acmutil.Amount) (acmutil.Amount, uint32) {
 
 	// If we're already over our maximum allowed number of channels, then
 	// we'll instruct the controller not to create any more channels.
@@ -98,7 +98,7 @@ func (h *agentConstraints) ChannelBudget(channels []Channel,
 
 	// First, we'll tally up the total amount of funds that are currently
 	// present within the set of active channels.
-	var totalChanAllocation btcutil.Amount
+	var totalChanAllocation acmutil.Amount
 	for _, channel := range channels {
 		totalChanAllocation += channel.Capacity
 	}
@@ -121,7 +121,7 @@ func (h *agentConstraints) ChannelBudget(channels []Channel,
 
 	// Now that we know we need more funds, we'll compute the amount of
 	// additional funds we should allocate towards channels.
-	targetAllocation := btcutil.Amount(float64(totalFunds) * h.allocation)
+	targetAllocation := acmutil.Amount(float64(totalFunds) * h.allocation)
 	fundsAvailable := targetAllocation - totalChanAllocation
 	return fundsAvailable, numAdditionalChans
 }
@@ -139,13 +139,13 @@ func (h *agentConstraints) MaxPendingOpens() uint16 {
 // create.
 //
 // Note: part of the AgentConstraints interface.
-func (h *agentConstraints) MinChanSize() btcutil.Amount {
+func (h *agentConstraints) MinChanSize() acmutil.Amount {
 	return h.minChanSize
 }
 
 // MaxChanSize returns largest channel that the autopilot agent should create.
 //
 // Note: part of the AgentConstraints interface.
-func (h *agentConstraints) MaxChanSize() btcutil.Amount {
+func (h *agentConstraints) MaxChanSize() acmutil.Amount {
 	return h.maxChanSize
 }

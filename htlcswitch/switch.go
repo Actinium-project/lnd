@@ -1509,8 +1509,8 @@ func (s *Switch) htlcForwarder() {
 	// TODO(roasbeef): cleared vs settled distinction
 	var (
 		totalNumUpdates uint64
-		totalSatSent    btcutil.Amount
-		totalSatRecv    btcutil.Amount
+		totalSatSent    acmutil.Amount
+		totalSatRecv    acmutil.Amount
 	)
 	s.cfg.LogEventTicker.Resume()
 	defer s.cfg.LogEventTicker.Stop()
@@ -1619,8 +1619,8 @@ out:
 
 			var (
 				newNumUpdates uint64
-				newSatSent    btcutil.Amount
-				newSatRecv    btcutil.Amount
+				newSatSent    acmutil.Amount
+				newSatRecv    acmutil.Amount
 			)
 
 			// Next, we'll run through all the registered links and
@@ -1638,8 +1638,8 @@ out:
 
 			var (
 				diffNumUpdates uint64
-				diffSatSent    btcutil.Amount
-				diffSatRecv    btcutil.Amount
+				diffSatSent    acmutil.Amount
+				diffSatRecv    acmutil.Amount
 			)
 
 			// If this is the first time we're computing these

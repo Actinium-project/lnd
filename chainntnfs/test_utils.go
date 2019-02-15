@@ -45,8 +45,8 @@ func randPubKeyHashScript() ([]byte, *btcec.PrivateKey, error) {
 		return nil, nil, err
 	}
 
-	pubKeyHash := btcutil.Hash160(privKey.PubKey().SerializeCompressed())
-	addrScript, err := btcutil.NewAddressPubKeyHash(pubKeyHash, NetParams)
+	pubKeyHash := acmutil.Hash160(privKey.PubKey().SerializeCompressed())
+	addrScript, err := acmutil.NewAddressPubKeyHash(pubKeyHash, NetParams)
 	if err != nil {
 		return nil, nil, err
 	}

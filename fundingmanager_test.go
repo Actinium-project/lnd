@@ -319,15 +319,15 @@ func createTestFundingManager(t *testing.T, privKey *btcec.PrivateKey,
 			FeeRate:       1000,
 			TimeLockDelta: 10,
 		},
-		NumRequiredConfs: func(chanAmt btcutil.Amount,
+		NumRequiredConfs: func(chanAmt acmutil.Amount,
 			pushAmt lnwire.MilliSatoshi) uint16 {
 			return 3
 		},
-		RequiredRemoteDelay: func(amt btcutil.Amount) uint16 {
+		RequiredRemoteDelay: func(amt acmutil.Amount) uint16 {
 			return 4
 		},
 		RequiredRemoteChanReserve: func(chanAmt,
-			dustLimit btcutil.Amount) btcutil.Amount {
+			dustLimit acmutil.Amount) acmutil.Amount {
 
 			reserve := chanAmt / 100
 			if reserve < dustLimit {
@@ -336,11 +336,11 @@ func createTestFundingManager(t *testing.T, privKey *btcec.PrivateKey,
 
 			return reserve
 		},
-		RequiredRemoteMaxValue: func(chanAmt btcutil.Amount) lnwire.MilliSatoshi {
+		RequiredRemoteMaxValue: func(chanAmt acmutil.Amount) lnwire.MilliSatoshi {
 			reserve := lnwire.NewMSatFromSatoshis(chanAmt / 100)
 			return lnwire.NewMSatFromSatoshis(chanAmt) - reserve
 		},
-		RequiredRemoteMaxHTLCs: func(chanAmt btcutil.Amount) uint16 {
+		RequiredRemoteMaxHTLCs: func(chanAmt acmutil.Amount) uint16 {
 			return uint16(input.MaxHTLCNumber / 2)
 		},
 		WatchNewChannel: func(*channeldb.OpenChannel, *btcec.PublicKey) error {
@@ -533,7 +533,7 @@ func tearDownFundingManagers(t *testing.T, a, b *testNode) {
 // openChannel takes the funding process to the point where the funding
 // transaction is confirmed on-chain. Returns the funding out point.
 func openChannel(t *testing.T, alice, bob *testNode, localFundingAmt,
-	pushAmt btcutil.Amount, numConfs uint32,
+	pushAmt acmutil.Amount, numConfs uint32,
 	updateChan chan *lnrpc.OpenStatusUpdate, announceChan bool) *wire.OutPoint {
 	// Create a funding request and start the workflow.
 	errChan := make(chan error, 1)
@@ -822,7 +822,7 @@ func assertAddedToRouterGraph(t *testing.T, alice, bob *testNode,
 // advertised value will be checked against the other node's default min_htlc
 // value.
 func assertChannelAnnouncements(t *testing.T, alice, bob *testNode,
-	capacity btcutil.Amount, customMinHtlc ...lnwire.MilliSatoshi) {
+	capacity acmutil.Amount, customMinHtlc ...lnwire.MilliSatoshi) {
 	t.Helper()
 
 	// After the FundingLocked message is sent, Alice and Bob will each
@@ -1027,8 +1027,8 @@ func TestFundingManagerNormalWorkflow(t *testing.T) {
 
 	// Run through the process of opening the channel, up until the funding
 	// transaction is broadcasted.
-	localAmt := btcutil.Amount(500000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(500000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 	fundingOutPoint := openChannel(t, alice, bob, localAmt, pushAmt, 1,
 		updateChan, true)
@@ -1097,8 +1097,8 @@ func TestFundingManagerRestartBehavior(t *testing.T) {
 
 	// Run through the process of opening the channel, up until the funding
 	// transaction is broadcasted.
-	localAmt := btcutil.Amount(500000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(500000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 	updateChan := make(chan *lnrpc.OpenStatusUpdate)
 	fundingOutPoint := openChannel(t, alice, bob, localAmt, pushAmt, 1,
@@ -1235,8 +1235,8 @@ func TestFundingManagerOfflinePeer(t *testing.T) {
 
 	// Run through the process of opening the channel, up until the funding
 	// transaction is broadcasted.
-	localAmt := btcutil.Amount(500000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(500000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 	updateChan := make(chan *lnrpc.OpenStatusUpdate)
 	fundingOutPoint := openChannel(t, alice, bob, localAmt, pushAmt, 1,
@@ -1687,8 +1687,8 @@ func TestFundingManagerReceiveFundingLockedTwice(t *testing.T) {
 
 	// Run through the process of opening the channel, up until the funding
 	// transaction is broadcasted.
-	localAmt := btcutil.Amount(500000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(500000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 	fundingOutPoint := openChannel(t, alice, bob, localAmt, pushAmt, 1,
 		updateChan, true)
@@ -1779,8 +1779,8 @@ func TestFundingManagerRestartAfterChanAnn(t *testing.T) {
 
 	// Run through the process of opening the channel, up until the funding
 	// transaction is broadcasted.
-	localAmt := btcutil.Amount(500000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(500000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 	fundingOutPoint := openChannel(t, alice, bob, localAmt, pushAmt, 1,
 		updateChan, true)
@@ -1856,8 +1856,8 @@ func TestFundingManagerRestartAfterReceivingFundingLocked(t *testing.T) {
 
 	// Run through the process of opening the channel, up until the funding
 	// transaction is broadcasted.
-	localAmt := btcutil.Amount(500000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(500000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 	fundingOutPoint := openChannel(t, alice, bob, localAmt, pushAmt, 1,
 		updateChan, true)
@@ -1929,8 +1929,8 @@ func TestFundingManagerPrivateChannel(t *testing.T) {
 
 	// Run through the process of opening the channel, up until the funding
 	// transaction is broadcasted.
-	localAmt := btcutil.Amount(500000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(500000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 	fundingOutPoint := openChannel(t, alice, bob, localAmt, pushAmt, 1,
 		updateChan, false)
@@ -2031,8 +2031,8 @@ func TestFundingManagerPrivateRestart(t *testing.T) {
 
 	// Run through the process of opening the channel, up until the funding
 	// transaction is broadcasted.
-	localAmt := btcutil.Amount(500000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(500000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 	fundingOutPoint := openChannel(t, alice, bob, localAmt, pushAmt, 1,
 		updateChan, false)
@@ -2156,8 +2156,8 @@ func TestFundingManagerCustomChannelParameters(t *testing.T) {
 	// needed.
 	updateChan := make(chan *lnrpc.OpenStatusUpdate)
 
-	localAmt := btcutil.Amount(5000000)
-	pushAmt := btcutil.Amount(0)
+	localAmt := acmutil.Amount(5000000)
+	pushAmt := acmutil.Amount(0)
 	capacity := localAmt + pushAmt
 
 	// Create a funding request with the custom parameters and start the

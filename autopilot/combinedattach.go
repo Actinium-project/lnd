@@ -71,7 +71,7 @@ func (c *WeightedCombAttachment) Name() string {
 //
 // NOTE: This is a part of the AttachmentHeuristic interface.
 func (c *WeightedCombAttachment) NodeScores(g ChannelGraph, chans []Channel,
-	chanSize btcutil.Amount, nodes map[NodeID]struct{}) (
+	chanSize acmutil.Amount, nodes map[NodeID]struct{}) (
 	map[NodeID]*NodeScore, error) {
 
 	// We now query each heuristic to determine the score they give to the

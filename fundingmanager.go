@@ -54,14 +54,14 @@ const (
 
 	// minChanFundingSize is the smallest channel that we'll allow to be
 	// created over the RPC interface.
-	minChanFundingSize = btcutil.Amount(20000)
+	minChanFundingSize = acmutil.Amount(20000)
 
 	// maxBtcFundingAmount is a soft-limit of the maximum channel size
 	// currently accepted on the Bitcoin chain within the Lightning
 	// Protocol. This limit is defined in BOLT-0002, and serves as an
 	// initial precautionary limit while implementations are battle tested
 	// in the real world.
-	maxBtcFundingAmount = btcutil.Amount(1<<24) - 1
+	maxBtcFundingAmount = acmutil.Amount(1<<24) - 1
 
 	// maxLtcFundingAmount is a soft-limit of the maximum channel size
 	// currently accepted on the Actinium chain within the Lightning
@@ -101,7 +101,7 @@ type reservationWithCtx struct {
 	reservation *lnwallet.ChannelReservation
 	peer        lnpeer.Peer
 
-	chanAmt btcutil.Amount
+	chanAmt acmutil.Amount
 
 	// Constraints we require for the remote.
 	remoteCsvDelay uint16
@@ -283,30 +283,30 @@ type fundingConfig struct {
 	// channel extended to it. The function is able to take into account
 	// the amount of the channel, and any funds we'll be pushed in the
 	// process to determine how many confirmations we'll require.
-	NumRequiredConfs func(btcutil.Amount, lnwire.MilliSatoshi) uint16
+	NumRequiredConfs func(acmutil.Amount, lnwire.MilliSatoshi) uint16
 
 	// RequiredRemoteDelay is a function that maps the total amount in a
 	// proposed channel to the CSV delay that we'll require for the remote
 	// party. Naturally a larger channel should require a higher CSV delay
 	// in order to give us more time to claim funds in the case of a
 	// contract breach.
-	RequiredRemoteDelay func(btcutil.Amount) uint16
+	RequiredRemoteDelay func(acmutil.Amount) uint16
 
 	// RequiredRemoteChanReserve is a function closure that, given the
 	// channel capacity and dust limit, will return an appropriate amount
 	// for the remote peer's required channel reserve that is to be adhered
 	// to at all times.
-	RequiredRemoteChanReserve func(capacity, dustLimit btcutil.Amount) btcutil.Amount
+	RequiredRemoteChanReserve func(capacity, dustLimit acmutil.Amount) acmutil.Amount
 
 	// RequiredRemoteMaxValue is a function closure that, given the channel
 	// capacity, returns the amount of MilliSatoshis that our remote peer
 	// can have in total outstanding HTLCs with us.
-	RequiredRemoteMaxValue func(btcutil.Amount) lnwire.MilliSatoshi
+	RequiredRemoteMaxValue func(acmutil.Amount) lnwire.MilliSatoshi
 
 	// RequiredRemoteMaxHTLCs is a function closure that, given the channel
 	// capacity, returns the number of maximum HTLCs the remote peer can
 	// offer us.
-	RequiredRemoteMaxHTLCs func(btcutil.Amount) uint16
+	RequiredRemoteMaxHTLCs func(acmutil.Amount) uint16
 
 	// WatchNewChannel is to be called once a new channel enters the final
 	// funding stage: waiting for on-chain confirmation. This method sends
@@ -332,7 +332,7 @@ type fundingConfig struct {
 	// inbound channel. We have such a parameter, as otherwise, nodes could
 	// flood us with very small channels that would never really be usable
 	// due to fees.
-	MinChanSize btcutil.Amount
+	MinChanSize acmutil.Amount
 
 	// NotifyOpenChannelEvent informs the ChannelNotifier when channels
 	// transition from pending open to open.
@@ -743,9 +743,9 @@ func (f *fundingManager) nextPendingChanID() [32]byte {
 type pendingChannel struct {
 	identityPub   *btcec.PublicKey
 	channelPoint  *wire.OutPoint
-	capacity      btcutil.Amount
-	localBalance  btcutil.Amount
-	remoteBalance btcutil.Amount
+	capacity      acmutil.Amount
+	localBalance  acmutil.Amount
+	remoteBalance acmutil.Amount
 }
 
 type pendingChansReq struct {
@@ -1032,7 +1032,7 @@ func (f *fundingManager) handleFundingOpen(fmsg *fundingOpenMsg) {
 	if amt < f.cfg.MinChanSize {
 		f.failFundingFlow(
 			fmsg.peer, fmsg.msg.PendingChannelID,
-			lnwallet.ErrChanTooSmall(amt, btcutil.Amount(f.cfg.MinChanSize)),
+			lnwallet.ErrChanTooSmall(amt, acmutil.Amount(f.cfg.MinChanSize)),
 		)
 		return
 	}
@@ -2715,7 +2715,7 @@ func (f *fundingManager) handleInitFundingMsg(msg *initFundingMsg) {
 	)
 
 	// We'll determine our dust limit depending on which chain is active.
-	var ourDustLimit btcutil.Amount
+	var ourDustLimit acmutil.Amount
 	switch registeredChains.PrimaryChain() {
 	case bitcoinChain:
 		ourDustLimit = lnwallet.DefaultDustLimit()

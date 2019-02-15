@@ -352,7 +352,7 @@ func (i *InvoiceRegistry) deliverSingleBacklogEvents(
 // by the passed preimage. Once this invoice is added, subsystems within the
 // daemon add/forward HTLCs that are able to obtain the proper preimage
 // required for redemption in the case that we're the final destination.
-func (i *InvoiceRegistry) AddDebugInvoice(amt btcutil.Amount,
+func (i *InvoiceRegistry) AddDebugInvoice(amt acmutil.Amount,
 	preimage lntypes.Preimage) {
 
 	paymentHash := preimage.Hash()

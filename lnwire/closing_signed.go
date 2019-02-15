@@ -23,14 +23,14 @@ type ClosingSigned struct {
 
 	// FeeSatoshis is the total fee in satoshis that the party to the
 	// channel would like to propose for the close transaction.
-	FeeSatoshis btcutil.Amount
+	FeeSatoshis acmutil.Amount
 
 	// Signature is for the proposed channel close transaction.
 	Signature Sig
 }
 
 // NewClosingSigned creates a new empty ClosingSigned message.
-func NewClosingSigned(cid ChannelID, fs btcutil.Amount,
+func NewClosingSigned(cid ChannelID, fs acmutil.Amount,
 	sig Sig) *ClosingSigned {
 
 	return &ClosingSigned{

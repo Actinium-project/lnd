@@ -125,7 +125,7 @@ func ValidateNodeAnn(a *lnwire.NodeAnnouncement) error {
 // checking (1) that the included signature covers the announcement and has been
 // signed by the node's private key, and (2) that the announcement's message
 // flags and optional fields are sane.
-func ValidateChannelUpdateAnn(pubKey *btcec.PublicKey, capacity btcutil.Amount,
+func ValidateChannelUpdateAnn(pubKey *btcec.PublicKey, capacity acmutil.Amount,
 	a *lnwire.ChannelUpdate) error {
 
 	if err := validateOptionalFields(capacity, a); err != nil {
@@ -153,7 +153,7 @@ func ValidateChannelUpdateAnn(pubKey *btcec.PublicKey, capacity btcutil.Amount,
 
 // validateOptionalFields validates a channel update's message flags and
 // corresponding update fields.
-func validateOptionalFields(capacity btcutil.Amount,
+func validateOptionalFields(capacity acmutil.Amount,
 	msg *lnwire.ChannelUpdate) error {
 
 	if msg.MessageFlags.HasMaxHtlc() {

@@ -124,8 +124,8 @@ func TestCircuitMapInit(t *testing.T) {
 
 var halfCircuitTests = []struct {
 	hash      [32]byte
-	inValue   btcutil.Amount
-	outValue  btcutil.Amount
+	inValue   acmutil.Amount
+	outValue  acmutil.Amount
 	chanID    lnwire.ShortChannelID
 	htlcID    uint64
 	encrypter htlcswitch.ErrorEncrypter

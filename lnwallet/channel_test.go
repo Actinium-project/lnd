@@ -79,7 +79,7 @@ func createHTLC(id int, amount lnwire.MilliSatoshi) (*lnwire.UpdateAddHTLC, [32]
 }
 
 func assertOutputExistsByValue(t *testing.T, commitTx *wire.MsgTx,
-	value btcutil.Amount) {
+	value acmutil.Amount) {
 
 	for _, txOut := range commitTx.TxOut {
 		if txOut.Value == int64(value) {
@@ -114,7 +114,7 @@ func TestSimpleAddSettleWorkflow(t *testing.T) {
 
 	paymentPreimage := bytes.Repeat([]byte{1}, 32)
 	paymentHash := sha256.Sum256(paymentPreimage)
-	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	htlc := &lnwire.UpdateAddHTLC{
 		PaymentHash: paymentHash,
 		Amount:      htlcAmt,
@@ -338,7 +338,7 @@ func TestSimpleAddSettleWorkflow(t *testing.T) {
 	// 4 ACM. Alice's channel should show 1 ACM sent and Bob's channel
 	// should show 1 ACM received. They should also be at commitment height
 	// two, with the revocation window extended by 1 (5).
-	mSatTransferred := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	mSatTransferred := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	if aliceChannel.channelState.TotalMSatSent != mSatTransferred {
 		t.Fatalf("alice satoshis sent incorrect %v vs %v expected",
 			aliceChannel.channelState.TotalMSatSent,
@@ -403,7 +403,7 @@ func TestCheckCommitTxSize(t *testing.T) {
 			t.Fatalf("unable to initiate alice force close: %v", err)
 		}
 
-		actualCost := blockchain.GetTransactionWeight(btcutil.NewTx(commitTx))
+		actualCost := blockchain.GetTransactionWeight(acmutil.NewTx(commitTx))
 		estimatedCost := input.EstimateCommitTxWeight(count, false)
 
 		diff := int(estimatedCost - actualCost)
@@ -1034,7 +1034,7 @@ func TestHTLCDustLimit(t *testing.T) {
 
 	// The amount of the HTLC should be above Alice's dust limit and below
 	// Bob's dust limit.
-	htlcSat := (btcutil.Amount(500) + htlcTimeoutFee(
+	htlcSat := (acmutil.Amount(500) + htlcTimeoutFee(
 		SatPerKWeight(aliceChannel.channelState.LocalCommitment.FeePerKw)))
 	htlcAmount := lnwire.NewMSatFromSatoshis(htlcSat)
 
@@ -1105,7 +1105,7 @@ func TestHTLCSigNumber(t *testing.T) {
 
 	// createChanWithHTLC is a helper method that sets ut two channels, and
 	// adds HTLCs with the passed values to the channels.
-	createChanWithHTLC := func(htlcValues ...btcutil.Amount) (
+	createChanWithHTLC := func(htlcValues ...acmutil.Amount) (
 		*LightningChannel, *LightningChannel, func()) {
 
 		// Create a test channel funded evenly with Alice having 5 ACM,
@@ -1139,8 +1139,8 @@ func TestHTLCSigNumber(t *testing.T) {
 		t.Fatalf("unable to get fee: %v", err)
 	}
 
-	belowDust := btcutil.Amount(500) + htlcTimeoutFee(feePerKw)
-	aboveDust := btcutil.Amount(1400) + htlcSuccessFee(feePerKw)
+	belowDust := acmutil.Amount(500) + htlcTimeoutFee(feePerKw)
+	aboveDust := acmutil.Amount(1400) + htlcSuccessFee(feePerKw)
 
 	// ===================================================================
 	// Test that Bob will reject a commitment if Alice doesn't send enough
@@ -1701,7 +1701,7 @@ func TestCancelHTLC(t *testing.T) {
 
 	// Add a new HTLC from Alice to Bob, then trigger a new state
 	// transition in order to include it in the latest state.
-	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 
 	var preImage [32]byte
 	copy(preImage[:], bytes.Repeat([]byte{0xaa}, 32))
@@ -1725,7 +1725,7 @@ func TestCancelHTLC(t *testing.T) {
 
 	// With the HTLC committed, Alice's balance should reflect the clearing
 	// of the new HTLC.
-	aliceExpectedBalance := btcutil.Amount(btcutil.SatoshiPerBitcoin*4) -
+	aliceExpectedBalance := acmutil.Amount(acmutil.SatoshiPerBitcoin*4) -
 		calcStaticFee(1)
 	if aliceChannel.channelState.LocalCommitment.LocalBalance.ToSatoshis() !=
 		aliceExpectedBalance {
@@ -1770,7 +1770,7 @@ func TestCancelHTLC(t *testing.T) {
 		t.Fatalf("htlc's still active from bob's POV")
 	}
 
-	expectedBalance := btcutil.Amount(btcutil.SatoshiPerBitcoin * 5)
+	expectedBalance := acmutil.Amount(acmutil.SatoshiPerBitcoin * 5)
 	if aliceChannel.channelState.LocalCommitment.LocalBalance.ToSatoshis() !=
 		expectedBalance-calcStaticFee(0) {
 
@@ -1816,7 +1816,7 @@ func TestCooperativeCloseDustAdherence(t *testing.T) {
 	aliceFeeRate := SatPerKWeight(aliceChannel.channelState.LocalCommitment.FeePerKw)
 	bobFeeRate := SatPerKWeight(bobChannel.channelState.LocalCommitment.FeePerKw)
 
-	setDustLimit := func(dustVal btcutil.Amount) {
+	setDustLimit := func(dustVal acmutil.Amount) {
 		aliceChannel.channelState.LocalChanCfg.DustLimit = dustVal
 		aliceChannel.channelState.RemoteChanCfg.DustLimit = dustVal
 		bobChannel.channelState.LocalChanCfg.DustLimit = dustVal
@@ -1840,13 +1840,13 @@ func TestCooperativeCloseDustAdherence(t *testing.T) {
 
 	// We'll start be initializing the limit of both Alice and Bob to 10k
 	// satoshis.
-	dustLimit := btcutil.Amount(10000)
+	dustLimit := acmutil.Amount(10000)
 	setDustLimit(dustLimit)
 
 	// Both sides currently have over 1 ACM settled as part of their
 	// balances. As a result, performing a cooperative closure now result
 	// in both sides having an output within the closure transaction.
-	aliceFee := btcutil.Amount(aliceChannel.CalcFee(aliceFeeRate)) + 1000
+	aliceFee := acmutil.Amount(aliceChannel.CalcFee(aliceFeeRate)) + 1000
 	aliceSig, _, _, err := aliceChannel.CreateCloseProposal(aliceFee,
 		aliceDeliveryScript, bobDeliveryScript)
 	if err != nil {
@@ -1854,7 +1854,7 @@ func TestCooperativeCloseDustAdherence(t *testing.T) {
 	}
 	aliceCloseSig := append(aliceSig, byte(txscript.SigHashAll))
 
-	bobFee := btcutil.Amount(bobChannel.CalcFee(bobFeeRate)) + 1000
+	bobFee := acmutil.Amount(bobChannel.CalcFee(bobFeeRate)) + 1000
 	bobSig, _, _, err := bobChannel.CreateCloseProposal(bobFee,
 		bobDeliveryScript, aliceDeliveryScript)
 	if err != nil {
@@ -1880,7 +1880,7 @@ func TestCooperativeCloseDustAdherence(t *testing.T) {
 
 	// Next we'll modify the current balances and dust limits such that
 	// Bob's current balance is above _below_ his dust limit.
-	aliceBal := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	aliceBal := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	bobBal := lnwire.NewMSatFromSatoshis(250)
 	setBalances(aliceBal, bobBal)
 
@@ -2065,7 +2065,7 @@ func TestUpdateFeeConcurrentSig(t *testing.T) {
 	paymentHash := sha256.Sum256(paymentPreimage)
 	htlc := &lnwire.UpdateAddHTLC{
 		PaymentHash: paymentHash,
-		Amount:      btcutil.SatoshiPerBitcoin,
+		Amount:      acmutil.SatoshiPerBitcoin,
 		Expiry:      uint32(5),
 	}
 
@@ -2151,7 +2151,7 @@ func TestUpdateFeeSenderCommits(t *testing.T) {
 	paymentHash := sha256.Sum256(paymentPreimage)
 	htlc := &lnwire.UpdateAddHTLC{
 		PaymentHash: paymentHash,
-		Amount:      btcutil.SatoshiPerBitcoin,
+		Amount:      acmutil.SatoshiPerBitcoin,
 		Expiry:      uint32(5),
 	}
 
@@ -2263,7 +2263,7 @@ func TestUpdateFeeReceiverCommits(t *testing.T) {
 	paymentHash := sha256.Sum256(paymentPreimage)
 	htlc := &lnwire.UpdateAddHTLC{
 		PaymentHash: paymentHash,
-		Amount:      btcutil.SatoshiPerBitcoin,
+		Amount:      acmutil.SatoshiPerBitcoin,
 		Expiry:      uint32(5),
 	}
 
@@ -2542,7 +2542,7 @@ func TestAddHTLCNegativeBalance(t *testing.T) {
 
 	// First, we'll add 3 HTLCs of 1 ACM each to Alice's commitment.
 	const numHTLCs = 3
-	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	for i := 0; i < numHTLCs; i++ {
 		htlc, _ := createHTLC(i, htlcAmt)
 		if _, err := aliceChannel.AddHTLC(htlc, nil); err != nil {
@@ -2553,7 +2553,7 @@ func TestAddHTLCNegativeBalance(t *testing.T) {
 	// Alice now has an available balance of 2 ACM. We'll add a new HTLC of
 	// value 2 ACM, which should make Alice's balance negative (since she
 	// has to pay a commitment fee).
-	htlcAmt = lnwire.NewMSatFromSatoshis(2 * btcutil.SatoshiPerBitcoin)
+	htlcAmt = lnwire.NewMSatFromSatoshis(2 * acmutil.SatoshiPerBitcoin)
 	htlc, _ := createHTLC(numHTLCs+1, htlcAmt)
 	_, err = aliceChannel.AddHTLC(htlc, nil)
 	if err != ErrBelowChanReserve {
@@ -2625,7 +2625,7 @@ func TestChanSyncFullySynced(t *testing.T) {
 	var paymentPreimage [32]byte
 	copy(paymentPreimage[:], bytes.Repeat([]byte{1}, 32))
 	paymentHash := sha256.Sum256(paymentPreimage[:])
-	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	htlc := &lnwire.UpdateAddHTLC{
 		PaymentHash: paymentHash,
 		Amount:      htlcAmt,
@@ -4112,7 +4112,7 @@ func TestFeeUpdateOldDiskFormat(t *testing.T) {
 	newFeeRate := startingFeeRate
 
 	// We will send a few HTLCs and a fee update.
-	htlcAmt := lnwire.NewMSatFromSatoshis(0.1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(0.1 * acmutil.SatoshiPerBitcoin)
 	const numHTLCs = 30
 	var htlcs []*lnwire.UpdateAddHTLC
 	for i := 0; i < numHTLCs; i++ {
@@ -4334,7 +4334,7 @@ func TestChanSyncInvalidLastSecret(t *testing.T) {
 	var paymentPreimage [32]byte
 	copy(paymentPreimage[:], bytes.Repeat([]byte{1}, 32))
 	paymentHash := sha256.Sum256(paymentPreimage[:])
-	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	htlc := &lnwire.UpdateAddHTLC{
 		PaymentHash: paymentHash,
 		Amount:      htlcAmt,
@@ -5209,7 +5209,7 @@ func TestDesyncHTLCs(t *testing.T) {
 	defer cleanUp()
 
 	// First add one HTLC of value 4.1 ACM.
-	htlcAmt := lnwire.NewMSatFromSatoshis(4.1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(4.1 * acmutil.SatoshiPerBitcoin)
 	htlc, _ := createHTLC(0, htlcAmt)
 	aliceIndex, err := aliceChannel.AddHTLC(htlc, nil)
 	if err != nil {
@@ -5242,7 +5242,7 @@ func TestDesyncHTLCs(t *testing.T) {
 	//
 	// We try adding an HTLC of value 1 ACM, which should fail because the
 	// balance is unavailable.
-	htlcAmt = lnwire.NewMSatFromSatoshis(1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt = lnwire.NewMSatFromSatoshis(1 * acmutil.SatoshiPerBitcoin)
 	htlc, _ = createHTLC(1, htlcAmt)
 	if _, err = aliceChannel.AddHTLC(htlc, nil); err != ErrBelowChanReserve {
 		t.Fatalf("expected ErrInsufficientBalance, instead received: %v",
@@ -5291,7 +5291,7 @@ func TestMaxAcceptedHTLCs(t *testing.T) {
 	bobChannel.localChanCfg.MaxAcceptedHtlcs = numHTLCsReceived
 
 	// Each HTLC amount is 0.1 ACM.
-	htlcAmt := lnwire.NewMSatFromSatoshis(0.1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(0.1 * acmutil.SatoshiPerBitcoin)
 
 	// Send the maximum allowed number of HTLCs.
 	for i := 0; i < numHTLCs; i++ {
@@ -5339,7 +5339,7 @@ func TestMaxPendingAmount(t *testing.T) {
 	// We set the remote required MaxPendingAmount to 3 ACM. We will
 	// attempt to overflow this value and see if it gives us the
 	// ErrMaxPendingAmount error.
-	maxPending := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin * 3)
+	maxPending := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin * 3)
 
 	// We set the max pending amount of Alice's config. This mean that she
 	// cannot offer Bob HTLCs with a total value above this limit at a given
@@ -5350,7 +5350,7 @@ func TestMaxPendingAmount(t *testing.T) {
 	// First, we'll add 2 HTLCs of 1.5 ACM each to Alice's commitment.
 	// This won't trigger Alice's ErrMaxPendingAmount error.
 	const numHTLCs = 2
-	htlcAmt := lnwire.NewMSatFromSatoshis(1.5 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(1.5 * acmutil.SatoshiPerBitcoin)
 	for i := 0; i < numHTLCs; i++ {
 		htlc, _ := createHTLC(i, htlcAmt)
 		if _, err := aliceChannel.AddHTLC(htlc, nil); err != nil {
@@ -5363,7 +5363,7 @@ func TestMaxPendingAmount(t *testing.T) {
 
 	// We finally add one more HTLC of 0.1 ACM to Alice's commitment. This
 	// SHOULD trigger Alice's ErrMaxPendingAmount error.
-	htlcAmt = lnwire.NewMSatFromSatoshis(0.1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt = lnwire.NewMSatFromSatoshis(0.1 * acmutil.SatoshiPerBitcoin)
 	htlc, _ := createHTLC(numHTLCs, htlcAmt)
 	_, err = aliceChannel.AddHTLC(htlc, nil)
 	if err != ErrMaxPendingAmount {
@@ -5382,7 +5382,7 @@ func TestMaxPendingAmount(t *testing.T) {
 }
 
 func assertChannelBalances(t *testing.T, alice, bob *LightningChannel,
-	aliceBalance, bobBalance btcutil.Amount) {
+	aliceBalance, bobBalance acmutil.Amount) {
 
 	_, _, line, _ := runtime.Caller(1)
 
@@ -5426,8 +5426,8 @@ func TestChanReserve(t *testing.T) {
 		// We set the remote required ChanReserve to 0.5 ACM. We will
 		// attempt to cause Alice's balance to dip below this amount
 		// and test whether it triggers the ErrBelowChanReserve error.
-		aliceMinReserve := btcutil.Amount(0.5 *
-			btcutil.SatoshiPerBitcoin)
+		aliceMinReserve := acmutil.Amount(0.5 *
+			acmutil.SatoshiPerBitcoin)
 
 		// Alice will need to keep her reserve above aliceMinReserve,
 		// so set this limit to here local config.
@@ -5442,7 +5442,7 @@ func TestChanReserve(t *testing.T) {
 		// his current balance in the channel. This will ensure that
 		// after a channel is first opened, Bob can still receive HTLCs
 		// even though his balance is less than his channel reserve.
-		bobMinReserve := btcutil.Amount(6 * btcutil.SatoshiPerBitcoin)
+		bobMinReserve := acmutil.Amount(6 * acmutil.SatoshiPerBitcoin)
 		bobChannel.localChanCfg.ChanReserve = bobMinReserve
 		aliceChannel.remoteChanCfg.ChanReserve = bobMinReserve
 
@@ -5461,7 +5461,7 @@ func TestChanReserve(t *testing.T) {
 	// Resulting balances:
 	//	Alice:	4.5
 	//	Bob:	5.0
-	htlcAmt := lnwire.NewMSatFromSatoshis(0.5 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(0.5 * acmutil.SatoshiPerBitcoin)
 	htlc, _ := createHTLC(aliceIndex, htlcAmt)
 	aliceIndex++
 	if _, err := aliceChannel.AddHTLC(htlc, nil); err != nil {
@@ -5480,7 +5480,7 @@ func TestChanReserve(t *testing.T) {
 	commitFee := aliceChannel.channelState.LocalCommitment.CommitFee
 	assertChannelBalances(
 		t, aliceChannel, bobChannel,
-		btcutil.SatoshiPerBitcoin*4.5-commitFee, btcutil.SatoshiPerBitcoin*5,
+		acmutil.SatoshiPerBitcoin*4.5-commitFee, acmutil.SatoshiPerBitcoin*5,
 	)
 
 	// Now let Bob try to add an HTLC. This should fail, since it will
@@ -5519,7 +5519,7 @@ func TestChanReserve(t *testing.T) {
 	// Resulting balances:
 	//	Alice:	1.5
 	//	Bob:	9.5
-	htlcAmt = lnwire.NewMSatFromSatoshis(3.5 * btcutil.SatoshiPerBitcoin)
+	htlcAmt = lnwire.NewMSatFromSatoshis(3.5 * acmutil.SatoshiPerBitcoin)
 
 	// The first HTLC should successfully be sent.
 	htlc, _ = createHTLC(aliceIndex, htlcAmt)
@@ -5535,7 +5535,7 @@ func TestChanReserve(t *testing.T) {
 	// Alice's balance all the way down to her channel reserve, but since
 	// she is the initiator the additional transaction fee makes her
 	// balance dip below.
-	htlcAmt = lnwire.NewMSatFromSatoshis(1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt = lnwire.NewMSatFromSatoshis(1 * acmutil.SatoshiPerBitcoin)
 	htlc, _ = createHTLC(aliceIndex, htlcAmt)
 	aliceIndex++
 	_, err = aliceChannel.AddHTLC(htlc, nil)
@@ -5565,7 +5565,7 @@ func TestChanReserve(t *testing.T) {
 	// Resulting balances:
 	//	Alice:	3.0
 	//	Bob:	7.0
-	htlcAmt = lnwire.NewMSatFromSatoshis(2 * btcutil.SatoshiPerBitcoin)
+	htlcAmt = lnwire.NewMSatFromSatoshis(2 * acmutil.SatoshiPerBitcoin)
 	htlc, preimage := createHTLC(aliceIndex, htlcAmt)
 	aliceIndex++
 	aliceHtlcIndex, err := aliceChannel.AddHTLC(htlc, nil)
@@ -5583,7 +5583,7 @@ func TestChanReserve(t *testing.T) {
 	commitFee = aliceChannel.channelState.LocalCommitment.CommitFee
 	assertChannelBalances(
 		t, aliceChannel, bobChannel,
-		btcutil.SatoshiPerBitcoin*3-commitFee, btcutil.SatoshiPerBitcoin*5,
+		acmutil.SatoshiPerBitcoin*3-commitFee, acmutil.SatoshiPerBitcoin*5,
 	)
 
 	if err := bobChannel.SettleHTLC(preimage, bobHtlcIndex, nil, nil, nil); err != nil {
@@ -5599,13 +5599,13 @@ func TestChanReserve(t *testing.T) {
 	commitFee = aliceChannel.channelState.LocalCommitment.CommitFee
 	assertChannelBalances(
 		t, aliceChannel, bobChannel,
-		btcutil.SatoshiPerBitcoin*3-commitFee, btcutil.SatoshiPerBitcoin*7,
+		acmutil.SatoshiPerBitcoin*3-commitFee, acmutil.SatoshiPerBitcoin*7,
 	)
 
 	// And now let Bob add an HTLC of 1 ACM. This will take Bob's balance
 	// all the way down to his channel reserve, but since he is not paying
 	// the fee this is okay.
-	htlcAmt = lnwire.NewMSatFromSatoshis(1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt = lnwire.NewMSatFromSatoshis(1 * acmutil.SatoshiPerBitcoin)
 	htlc, _ = createHTLC(bobIndex, htlcAmt)
 	bobIndex++
 	if _, err := bobChannel.AddHTLC(htlc, nil); err != nil {
@@ -5623,7 +5623,7 @@ func TestChanReserve(t *testing.T) {
 	commitFee = aliceChannel.channelState.LocalCommitment.CommitFee
 	assertChannelBalances(
 		t, aliceChannel, bobChannel,
-		btcutil.SatoshiPerBitcoin*3-commitFee, btcutil.SatoshiPerBitcoin*6,
+		acmutil.SatoshiPerBitcoin*3-commitFee, acmutil.SatoshiPerBitcoin*6,
 	)
 }
 
@@ -5642,7 +5642,7 @@ func TestMinHTLC(t *testing.T) {
 
 	// We set Alice's MinHTLC to 0.1 ACM. We will attempt to send an
 	// HTLC BELOW this value to trigger the ErrBelowMinHTLC error.
-	minValue := lnwire.NewMSatFromSatoshis(0.1 * btcutil.SatoshiPerBitcoin)
+	minValue := lnwire.NewMSatFromSatoshis(0.1 * acmutil.SatoshiPerBitcoin)
 
 	// Setting the min value in Alice's local config means that the
 	// remote will not accept any HTLCs of value less than specified.
@@ -5651,7 +5651,7 @@ func TestMinHTLC(t *testing.T) {
 
 	// First, we will add an HTLC of 0.5 ACM. This will not trigger
 	// ErrBelowMinHTLC.
-	htlcAmt := lnwire.NewMSatFromSatoshis(0.5 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(0.5 * acmutil.SatoshiPerBitcoin)
 	htlc, _ := createHTLC(0, htlcAmt)
 	if _, err := aliceChannel.AddHTLC(htlc, nil); err != nil {
 		t.Fatalf("unable to add htlc: %v", err)
@@ -5702,7 +5702,7 @@ func TestNewBreachRetributionSkipsDustHtlcs(t *testing.T) {
 
 	// We'll modify the dust settings on both channels to be a predictable
 	// value for the prurpose of the test.
-	dustValue := btcutil.Amount(200)
+	dustValue := acmutil.Amount(200)
 	aliceChannel.channelState.LocalChanCfg.DustLimit = dustValue
 	aliceChannel.channelState.RemoteChanCfg.DustLimit = dustValue
 	bobChannel.channelState.LocalChanCfg.DustLimit = dustValue

@@ -81,8 +81,8 @@ func TestJusticeDescriptor(t *testing.T) {
 
 func testJusticeDescriptor(t *testing.T, blobType blob.Type) {
 	const (
-		localAmount  = btcutil.Amount(100000)
-		remoteAmount = btcutil.Amount(200000)
+		localAmount  = acmutil.Amount(100000)
+		remoteAmount = acmutil.Amount(200000)
 		totalAmount  = localAmount + remoteAmount
 	)
 
@@ -237,7 +237,7 @@ func testJusticeDescriptor(t *testing.T, blobType blob.Type) {
 	}
 
 	// Verify that our test justice transaction is sane.
-	btx := btcutil.NewTx(justiceTxn)
+	btx := acmutil.NewTx(justiceTxn)
 	if err := blockchain.CheckTransactionSanity(btx); err != nil {
 		t.Fatalf("justice txn is not sane: %v", err)
 	}

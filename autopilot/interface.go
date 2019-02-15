@@ -40,13 +40,13 @@ type Channel struct {
 	ChanID lnwire.ShortChannelID
 
 	// Capacity is the capacity of the channel expressed in satoshis.
-	Capacity btcutil.Amount
+	Capacity acmutil.Amount
 
 	// FundedAmt is the amount the local node funded into the target
 	// channel.
 	//
 	// TODO(roasbeef): need this?
-	FundedAmt btcutil.Amount
+	FundedAmt acmutil.Amount
 
 	// Node is the peer that this channel has been established with.
 	Node NodeID
@@ -105,7 +105,7 @@ type AttachmentDirective struct {
 
 	// ChanAmt is the size of the channel that should be opened, expressed
 	// in satoshis.
-	ChanAmt btcutil.Amount
+	ChanAmt acmutil.Amount
 
 	// Addrs is a list of addresses that the target peer may be reachable
 	// at.
@@ -138,7 +138,7 @@ type AttachmentHeuristic interface {
 	// NOTE: A NodeID not found in the returned map is implicitly given a
 	// score of 0.
 	NodeScores(g ChannelGraph, chans []Channel,
-		chanSize btcutil.Amount, nodes map[NodeID]struct{}) (
+		chanSize acmutil.Amount, nodes map[NodeID]struct{}) (
 		map[NodeID]*NodeScore, error)
 }
 
@@ -187,7 +187,7 @@ type ChannelController interface {
 	// specified amount. This function should un-block immediately after
 	// the funding transaction that marks the channel open has been
 	// broadcast.
-	OpenChannel(target *btcec.PublicKey, amt btcutil.Amount) error
+	OpenChannel(target *btcec.PublicKey, amt acmutil.Amount) error
 
 	// CloseChannel attempts to close out the target channel.
 	//
@@ -197,10 +197,10 @@ type ChannelController interface {
 	// SpliceIn attempts to add additional funds to the target channel via
 	// a splice in mechanism. The new channel with an updated capacity
 	// should be returned.
-	SpliceIn(chanPoint *wire.OutPoint, amt btcutil.Amount) (*Channel, error)
+	SpliceIn(chanPoint *wire.OutPoint, amt acmutil.Amount) (*Channel, error)
 
 	// SpliceOut attempts to remove funds from an existing channels using a
 	// splice out mechanism. The removed funds from the channel should be
 	// returned to an output under the control of the backing wallet.
-	SpliceOut(chanPoint *wire.OutPoint, amt btcutil.Amount) (*Channel, error)
+	SpliceOut(chanPoint *wire.OutPoint, amt acmutil.Amount) (*Channel, error)
 }

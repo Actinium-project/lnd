@@ -93,7 +93,7 @@ var (
 
 	breachedOutputs = []breachedOutput{
 		{
-			amt:         btcutil.Amount(1e7),
+			amt:         acmutil.Amount(1e7),
 			outpoint:    breachOutPoints[0],
 			witnessType: input.CommitmentNoDelay,
 			signDesc: input.SignDescriptor{
@@ -137,7 +137,7 @@ var (
 			secondLevelWitnessScript: breachKeys[0],
 		},
 		{
-			amt:         btcutil.Amount(2e9),
+			amt:         acmutil.Amount(2e9),
 			outpoint:    breachOutPoints[1],
 			witnessType: input.CommitmentRevoke,
 			signDesc: input.SignDescriptor{
@@ -181,7 +181,7 @@ var (
 			secondLevelWitnessScript: breachKeys[0],
 		},
 		{
-			amt:         btcutil.Amount(3e4),
+			amt:         acmutil.Amount(3e4),
 			outpoint:    breachOutPoints[2],
 			witnessType: input.CommitmentDelayOutput,
 			signDesc: input.SignDescriptor{
@@ -1368,14 +1368,14 @@ func createInitChannels(revocationWindow int) (*lnwallet.LightningChannel, *lnwa
 	bobKeyPriv, bobKeyPub := btcec.PrivKeyFromBytes(btcec.S256(),
 		bobsPrivKey)
 
-	channelCapacity, err := btcutil.NewAmount(10)
+	channelCapacity, err := acmutil.NewAmount(10)
 	if err != nil {
 		return nil, nil, nil, err
 	}
 
 	channelBal := channelCapacity / 2
-	aliceDustLimit := btcutil.Amount(200)
-	bobDustLimit := btcutil.Amount(1300)
+	aliceDustLimit := acmutil.Amount(200)
+	bobDustLimit := acmutil.Amount(1300)
 	csvTimeoutAlice := uint32(5)
 	csvTimeoutBob := uint32(4)
 
@@ -1488,7 +1488,7 @@ func createInitChannels(revocationWindow int) (*lnwallet.LightningChannel, *lnwa
 		CommitHeight:  0,
 		LocalBalance:  lnwire.NewMSatFromSatoshis(channelBal),
 		RemoteBalance: lnwire.NewMSatFromSatoshis(channelBal),
-		FeePerKw:      btcutil.Amount(feePerKw),
+		FeePerKw:      acmutil.Amount(feePerKw),
 		CommitFee:     8688,
 		CommitTx:      aliceCommitTx,
 		CommitSig:     bytes.Repeat([]byte{1}, 71),
@@ -1497,7 +1497,7 @@ func createInitChannels(revocationWindow int) (*lnwallet.LightningChannel, *lnwa
 		CommitHeight:  0,
 		LocalBalance:  lnwire.NewMSatFromSatoshis(channelBal),
 		RemoteBalance: lnwire.NewMSatFromSatoshis(channelBal),
-		FeePerKw:      btcutil.Amount(feePerKw),
+		FeePerKw:      acmutil.Amount(feePerKw),
 		CommitFee:     8688,
 		CommitTx:      bobCommitTx,
 		CommitSig:     bytes.Repeat([]byte{1}, 71),
@@ -1696,12 +1696,12 @@ func forceStateTransition(chanA, chanB *lnwallet.LightningChannel) error {
 //
 // TODO(bvu): Refactor when dynamic fee estimation is added.
 // TODO(conner) remove code duplication
-func calcStaticFee(numHTLCs int) btcutil.Amount {
+func calcStaticFee(numHTLCs int) acmutil.Amount {
 	const (
-		commitWeight = btcutil.Amount(724)
+		commitWeight = acmutil.Amount(724)
 		htlcWeight   = 172
-		feePerKw     = btcutil.Amount(24/4) * 1000
+		feePerKw     = acmutil.Amount(24/4) * 1000
 	)
 	return feePerKw * (commitWeight +
-		btcutil.Amount(htlcWeight*numHTLCs)) / 1000
+		acmutil.Amount(htlcWeight*numHTLCs)) / 1000
 }

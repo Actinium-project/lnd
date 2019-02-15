@@ -650,7 +650,7 @@ func TestParseFallbackAddr(t *testing.T) {
 		data   []byte
 		net    *chaincfg.Params
 		valid  bool
-		result btcutil.Address
+		result acmutil.Address
 	}{
 		{
 			data:  []byte{},

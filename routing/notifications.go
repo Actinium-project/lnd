@@ -192,7 +192,7 @@ type ClosedChanSummary struct {
 	ChanID uint64
 
 	// Capacity was the total capacity of the channel before it was closed.
-	Capacity btcutil.Amount
+	Capacity acmutil.Amount
 
 	// ClosedHeight is the height in the chain that the channel was closed
 	// at.
@@ -261,7 +261,7 @@ type ChannelEdgeUpdate struct {
 	ChanPoint wire.OutPoint
 
 	// Capacity is the capacity of the newly created channel.
-	Capacity btcutil.Amount
+	Capacity acmutil.Amount
 
 	// MinHTLC is the minimum HTLC amount that this channel will forward.
 	MinHTLC lnwire.MilliSatoshi

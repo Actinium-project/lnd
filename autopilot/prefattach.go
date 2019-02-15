@@ -69,7 +69,7 @@ func (p *PrefAttachment) Name() string {
 //
 // NOTE: This is a part of the AttachmentHeuristic interface.
 func (p *PrefAttachment) NodeScores(g ChannelGraph, chans []Channel,
-	chanSize btcutil.Amount, nodes map[NodeID]struct{}) (
+	chanSize acmutil.Amount, nodes map[NodeID]struct{}) (
 	map[NodeID]*NodeScore, error) {
 
 	// Count the number of channels for each particular node in the graph.

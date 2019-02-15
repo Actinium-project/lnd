@@ -15,12 +15,12 @@ const (
 )
 
 // SatPerKVByte represents a fee rate in sat/kb.
-type SatPerKVByte btcutil.Amount
+type SatPerKVByte acmutil.Amount
 
 // FeeForVSize calculates the fee resulting from this fee rate and the given
 // vsize in vbytes.
-func (s SatPerKVByte) FeeForVSize(vbytes int64) btcutil.Amount {
-	return btcutil.Amount(s) * btcutil.Amount(vbytes) / 1000
+func (s SatPerKVByte) FeeForVSize(vbytes int64) acmutil.Amount {
+	return acmutil.Amount(s) * acmutil.Amount(vbytes) / 1000
 }
 
 // FeePerKWeight converts the current fee rate from sat/kb to sat/kw.
@@ -29,13 +29,13 @@ func (s SatPerKVByte) FeePerKWeight() SatPerKWeight {
 }
 
 // SatPerKWeight represents a fee rate in sat/kw.
-type SatPerKWeight btcutil.Amount
+type SatPerKWeight acmutil.Amount
 
 // FeeForWeight calculates the fee resulting from this fee rate and the given
 // weight in weight units (wu).
-func (s SatPerKWeight) FeeForWeight(wu int64) btcutil.Amount {
+func (s SatPerKWeight) FeeForWeight(wu int64) acmutil.Amount {
 	// The resulting fee is rounded down, as specified in BOLT#03.
-	return btcutil.Amount(s) * btcutil.Amount(wu) / 1000
+	return acmutil.Amount(s) * acmutil.Amount(wu) / 1000
 }
 
 // FeePerKVByte converts the current fee rate from sat/kw to sat/kb.
@@ -180,7 +180,7 @@ func (b *BtcdFeeEstimator) Start() error {
 		return err
 	}
 
-	relayFee, err := btcutil.NewAmount(info.RelayFee)
+	relayFee, err := acmutil.NewAmount(info.RelayFee)
 	if err != nil {
 		return err
 	}
@@ -253,7 +253,7 @@ func (b *BtcdFeeEstimator) fetchEstimate(confTarget uint32) (SatPerKWeight, erro
 
 	// Next, we'll convert the returned value to satoshis, as it's
 	// currently returned in ACM.
-	satPerKB, err := btcutil.NewAmount(btcPerKB)
+	satPerKB, err := acmutil.NewAmount(btcPerKB)
 	if err != nil {
 		return 0, err
 	}
@@ -343,7 +343,7 @@ func (b *BitcoindFeeEstimator) Start() error {
 		return err
 	}
 
-	relayFee, err := btcutil.NewAmount(info.RelayFee)
+	relayFee, err := acmutil.NewAmount(info.RelayFee)
 	if err != nil {
 		return err
 	}
@@ -431,7 +431,7 @@ func (b *BitcoindFeeEstimator) fetchEstimate(confTarget uint32) (SatPerKWeight, 
 
 	// Next, we'll convert the returned value to satoshis, as it's currently
 	// returned in ACM.
-	satPerKB, err := btcutil.NewAmount(feeEstimate.FeeRate)
+	satPerKB, err := acmutil.NewAmount(feeEstimate.FeeRate)
 	if err != nil {
 		return 0, err
 	}

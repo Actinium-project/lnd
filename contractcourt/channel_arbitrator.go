@@ -143,7 +143,7 @@ type ContractReport struct {
 	Incoming bool
 
 	// Amount is the final value that will be swept in back to the wallet.
-	Amount btcutil.Amount
+	Amount acmutil.Amount
 
 	// MaturityHeight is the absolute block height that this output will
 	// mature at.
@@ -157,11 +157,11 @@ type ContractReport struct {
 
 	// LimboBalance is the total number of frozen coins within this
 	// contract.
-	LimboBalance btcutil.Amount
+	LimboBalance acmutil.Amount
 
 	// RecoveredBalance is the total value that has been successfully swept
 	// back to the user's wallet.
-	RecoveredBalance btcutil.Amount
+	RecoveredBalance acmutil.Amount
 }
 
 // htlcSet represents the set of active HTLCs on a given commitment

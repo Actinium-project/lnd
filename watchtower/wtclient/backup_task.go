@@ -42,7 +42,7 @@ type backupTask struct {
 
 	toLocalInput  input.Input
 	toRemoteInput input.Input
-	totalAmt      btcutil.Amount
+	totalAmt      acmutil.Amount
 	sweepPkScript []byte
 
 	// session-dependent variables
@@ -101,7 +101,7 @@ func newBackupTask(chanID *lnwire.ChannelID,
 		breachInfo:    breachInfo,
 		toLocalInput:  toLocalInput,
 		toRemoteInput: toRemoteInput,
-		totalAmt:      btcutil.Amount(totalAmt),
+		totalAmt:      acmutil.Amount(totalAmt),
 		sweepPkScript: sweepPkScript,
 	}
 }
@@ -220,7 +220,7 @@ func (t *backupTask) craftSessionPayload(
 
 	// Check that the justice transaction meets basic validity requirements
 	// before attempting to attach the witnesses.
-	btx := btcutil.NewTx(justiceTxn)
+	btx := acmutil.NewTx(justiceTxn)
 	if err := blockchain.CheckTransactionSanity(btx); err != nil {
 		return hint, nil, err
 	}

@@ -86,7 +86,7 @@ func (b *BtcWallet) GetUtxo(op *wire.OutPoint, pkScript []byte,
 
 		// We'll ensure we properly convert the amount given in ACM to
 		// satoshis.
-		amt, err := btcutil.NewAmount(txout.Value)
+		amt, err := acmutil.NewAmount(txout.Value)
 		if err != nil {
 			return nil, err
 		}
@@ -111,7 +111,7 @@ func (b *BtcWallet) GetUtxo(op *wire.OutPoint, pkScript []byte,
 
 		// Sadly, gettxout returns the output value in ACM instead of
 		// satoshis.
-		amt, err := btcutil.NewAmount(txout.Value)
+		amt, err := acmutil.NewAmount(txout.Value)
 		if err != nil {
 			return nil, err
 		}

@@ -15,12 +15,12 @@ import (
 
 type moreChansResp struct {
 	numMore uint32
-	amt     btcutil.Amount
+	amt     acmutil.Amount
 }
 
 type moreChanArg struct {
 	chans   []Channel
-	balance btcutil.Amount
+	balance acmutil.Amount
 }
 
 type mockConstraints struct {
@@ -30,7 +30,7 @@ type mockConstraints struct {
 }
 
 func (m *mockConstraints) ChannelBudget(chans []Channel,
-	balance btcutil.Amount) (btcutil.Amount, uint32) {
+	balance acmutil.Amount) (acmutil.Amount, uint32) {
 
 	if m.moreChanArgs != nil {
 		moreChan := moreChanArg{
@@ -57,10 +57,10 @@ func (m *mockConstraints) MaxPendingOpens() uint16 {
 	return 10
 }
 
-func (m *mockConstraints) MinChanSize() btcutil.Amount {
+func (m *mockConstraints) MinChanSize() acmutil.Amount {
 	return 0
 }
-func (m *mockConstraints) MaxChanSize() btcutil.Amount {
+func (m *mockConstraints) MaxChanSize() acmutil.Amount {
 	return 1e8
 }
 
@@ -75,7 +75,7 @@ type mockHeuristic struct {
 
 type directiveArg struct {
 	graph ChannelGraph
-	amt   btcutil.Amount
+	amt   acmutil.Amount
 	chans []Channel
 	nodes map[NodeID]struct{}
 }
@@ -85,7 +85,7 @@ func (m *mockHeuristic) Name() string {
 }
 
 func (m *mockHeuristic) NodeScores(g ChannelGraph, chans []Channel,
-	fundsAvailable btcutil.Amount, nodes map[NodeID]struct{}) (
+	fundsAvailable acmutil.Amount, nodes map[NodeID]struct{}) (
 	map[NodeID]*NodeScore, error) {
 
 	if m.nodeScoresArgs != nil {
@@ -115,7 +115,7 @@ var _ AttachmentHeuristic = (*mockHeuristic)(nil)
 
 type openChanIntent struct {
 	target  *btcec.PublicKey
-	amt     btcutil.Amount
+	amt     acmutil.Amount
 	private bool
 }
 
@@ -125,7 +125,7 @@ type mockChanController struct {
 }
 
 func (m *mockChanController) OpenChannel(target *btcec.PublicKey,
-	amt btcutil.Amount) error {
+	amt acmutil.Amount) error {
 
 	m.openChanSignals <- openChanIntent{
 		target:  target,
@@ -140,11 +140,11 @@ func (m *mockChanController) CloseChannel(chanPoint *wire.OutPoint) error {
 	return nil
 }
 func (m *mockChanController) SpliceIn(chanPoint *wire.OutPoint,
-	amt btcutil.Amount) (*Channel, error) {
+	amt acmutil.Amount) (*Channel, error) {
 	return nil, nil
 }
 func (m *mockChanController) SpliceOut(chanPoint *wire.OutPoint,
-	amt btcutil.Amount) (*Channel, error) {
+	amt acmutil.Amount) (*Channel, error) {
 	return nil, nil
 }
 
@@ -183,7 +183,7 @@ func TestAgentChannelOpenSignal(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return 0, nil
 		},
 		ConnectToPeer: func(*btcec.PublicKey, []net.Addr) (bool, error) {
@@ -229,7 +229,7 @@ func TestAgentChannelOpenSignal(t *testing.T) {
 	// with a capacity of 1 ACM.
 	newChan := Channel{
 		ChanID:   randChanID(),
-		Capacity: btcutil.SatoshiPerBitcoin,
+		Capacity: acmutil.SatoshiPerBitcoin,
 	}
 	agent.OnChannelOpen(newChan)
 
@@ -267,7 +267,7 @@ type mockFailingChanController struct {
 }
 
 func (m *mockFailingChanController) OpenChannel(target *btcec.PublicKey,
-	amt btcutil.Amount) error {
+	amt acmutil.Amount) error {
 	return errors.New("failure")
 }
 
@@ -275,11 +275,11 @@ func (m *mockFailingChanController) CloseChannel(chanPoint *wire.OutPoint) error
 	return nil
 }
 func (m *mockFailingChanController) SpliceIn(chanPoint *wire.OutPoint,
-	amt btcutil.Amount) (*Channel, error) {
+	amt acmutil.Amount) (*Channel, error) {
 	return nil, nil
 }
 func (m *mockFailingChanController) SpliceOut(chanPoint *wire.OutPoint,
-	amt btcutil.Amount) (*Channel, error) {
+	amt acmutil.Amount) (*Channel, error) {
 	return nil, nil
 }
 
@@ -320,7 +320,7 @@ func TestAgentChannelFailureSignal(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return 0, nil
 		},
 		// TODO: move address check to agent.
@@ -359,7 +359,7 @@ func TestAgentChannelFailureSignal(t *testing.T) {
 	// First ensure the agent will attempt to open a new channel. Return
 	// that we need more channels, and have 5BTC to use.
 	select {
-	case constraints.moreChansResps <- moreChansResp{1, 5 * btcutil.SatoshiPerBitcoin}:
+	case constraints.moreChansResps <- moreChansResp{1, 5 * acmutil.SatoshiPerBitcoin}:
 	case <-time.After(time.Second * 10):
 		t.Fatal("heuristic wasn't queried in time")
 	}
@@ -384,7 +384,7 @@ func TestAgentChannelFailureSignal(t *testing.T) {
 
 	// Now ensure that the controller loop is re-executed.
 	select {
-	case constraints.moreChansResps <- moreChansResp{1, 5 * btcutil.SatoshiPerBitcoin}:
+	case constraints.moreChansResps <- moreChansResp{1, 5 * acmutil.SatoshiPerBitcoin}:
 	case <-time.After(time.Second * 10):
 		t.Fatal("heuristic wasn't queried in time")
 	}
@@ -430,7 +430,7 @@ func TestAgentChannelCloseSignal(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return 0, nil
 		},
 		ConnectToPeer: func(*btcec.PublicKey, []net.Addr) (bool, error) {
@@ -447,11 +447,11 @@ func TestAgentChannelCloseSignal(t *testing.T) {
 	initialChans := []Channel{
 		{
 			ChanID:   randChanID(),
-			Capacity: btcutil.SatoshiPerBitcoin,
+			Capacity: acmutil.SatoshiPerBitcoin,
 		},
 		{
 			ChanID:   randChanID(),
-			Capacity: btcutil.SatoshiPerBitcoin * 2,
+			Capacity: acmutil.SatoshiPerBitcoin * 2,
 		},
 	}
 	agent, err := New(testCfg, initialChans)
@@ -546,7 +546,7 @@ func TestAgentBalanceUpdate(t *testing.T) {
 
 	// The wallet will start with 2 ACM available.
 	var walletBalanceMtx sync.Mutex
-	walletBalance := btcutil.Amount(btcutil.SatoshiPerBitcoin * 2)
+	walletBalance := acmutil.Amount(acmutil.SatoshiPerBitcoin * 2)
 
 	// With the dependencies we created, we can now create the initial
 	// agent itself.
@@ -554,7 +554,7 @@ func TestAgentBalanceUpdate(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			walletBalanceMtx.Lock()
 			defer walletBalanceMtx.Unlock()
 			return walletBalance, nil
@@ -601,7 +601,7 @@ func TestAgentBalanceUpdate(t *testing.T) {
 	// Next we'll send a new balance update signal to the agent, adding 5
 	// ACM to the amount of available funds.
 	walletBalanceMtx.Lock()
-	walletBalance += btcutil.SatoshiPerBitcoin * 5
+	walletBalance += acmutil.SatoshiPerBitcoin * 5
 	walletBalanceMtx.Unlock()
 
 	agent.OnBalanceChange()
@@ -665,7 +665,7 @@ func TestAgentImmediateAttach(t *testing.T) {
 	memGraph, _, _ := newMemChanGraph()
 
 	// The wallet will start with 10 ACM available.
-	const walletBalance = btcutil.SatoshiPerBitcoin * 10
+	const walletBalance = acmutil.SatoshiPerBitcoin * 10
 
 	// With the dependencies we created, we can now create the initial
 	// agent itself.
@@ -673,7 +673,7 @@ func TestAgentImmediateAttach(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return walletBalance, nil
 		},
 		ConnectToPeer: func(*btcec.PublicKey, []net.Addr) (bool, error) {
@@ -734,7 +734,7 @@ func TestAgentImmediateAttach(t *testing.T) {
 	// so.
 	case constraints.moreChansResps <- moreChansResp{
 		numMore: numChans,
-		amt:     5 * btcutil.SatoshiPerBitcoin,
+		amt:     5 * acmutil.SatoshiPerBitcoin,
 	}:
 	case <-time.After(time.Second * 10):
 		t.Fatalf("heuristic wasn't queried in time")
@@ -756,9 +756,9 @@ func TestAgentImmediateAttach(t *testing.T) {
 	for i := 0; i < numChans; i++ {
 		select {
 		case openChan := <-chanController.openChanSignals:
-			if openChan.amt != btcutil.SatoshiPerBitcoin {
+			if openChan.amt != acmutil.SatoshiPerBitcoin {
 				t.Fatalf("invalid chan amt: expected %v, got %v",
-					btcutil.SatoshiPerBitcoin, openChan.amt)
+					acmutil.SatoshiPerBitcoin, openChan.amt)
 			}
 			nodeID := NewNodeID(openChan.target)
 			_, ok := nodeKeys[nodeID]
@@ -805,7 +805,7 @@ func TestAgentPrivateChannels(t *testing.T) {
 	memGraph, _, _ := newMemChanGraph()
 
 	// The wallet will start with 10 ACM available.
-	const walletBalance = btcutil.SatoshiPerBitcoin * 10
+	const walletBalance = acmutil.SatoshiPerBitcoin * 10
 
 	// With the dependencies we created, we can now create the initial
 	// agent itself.
@@ -813,7 +813,7 @@ func TestAgentPrivateChannels(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return walletBalance, nil
 		},
 		ConnectToPeer: func(*btcec.PublicKey, []net.Addr) (bool, error) {
@@ -869,7 +869,7 @@ func TestAgentPrivateChannels(t *testing.T) {
 	// budget of 5 ACM to do so.
 	resp := moreChansResp{
 		numMore: numChans,
-		amt:     5 * btcutil.SatoshiPerBitcoin,
+		amt:     5 * acmutil.SatoshiPerBitcoin,
 	}
 	select {
 	case constraints.moreChansResps <- resp:
@@ -930,7 +930,7 @@ func TestAgentPendingChannelState(t *testing.T) {
 
 	// The wallet will start with 6 ACM available.
 	var walletBalanceMtx sync.Mutex
-	walletBalance := btcutil.Amount(btcutil.SatoshiPerBitcoin * 6)
+	walletBalance := acmutil.Amount(acmutil.SatoshiPerBitcoin * 6)
 
 	// With the dependencies we created, we can now create the initial
 	// agent itself.
@@ -938,7 +938,7 @@ func TestAgentPendingChannelState(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			walletBalanceMtx.Lock()
 			defer walletBalanceMtx.Unlock()
 
@@ -993,7 +993,7 @@ func TestAgentPendingChannelState(t *testing.T) {
 	select {
 	case constraints.moreChansResps <- moreChansResp{
 		numMore: 1,
-		amt:     btcutil.SatoshiPerBitcoin,
+		amt:     acmutil.SatoshiPerBitcoin,
 	}:
 	case <-time.After(time.Second * 10):
 		t.Fatalf("heuristic wasn't queried in time")
@@ -1032,7 +1032,7 @@ func TestAgentPendingChannelState(t *testing.T) {
 	// we'll trigger a balance update in order to trigger a query to the
 	// heuristic.
 	walletBalanceMtx.Lock()
-	walletBalance += 0.4 * btcutil.SatoshiPerBitcoin
+	walletBalance += 0.4 * acmutil.SatoshiPerBitcoin
 	walletBalanceMtx.Unlock()
 
 	agent.OnBalanceChange()
@@ -1065,7 +1065,7 @@ func TestAgentPendingChannelState(t *testing.T) {
 	// We'll send across a response indicating that it *does* need more
 	// channels.
 	select {
-	case constraints.moreChansResps <- moreChansResp{1, btcutil.SatoshiPerBitcoin}:
+	case constraints.moreChansResps <- moreChansResp{1, acmutil.SatoshiPerBitcoin}:
 	case <-time.After(time.Second * 10):
 		t.Fatalf("need more chans wasn't queried in time")
 	}
@@ -1116,7 +1116,7 @@ func TestAgentPendingOpenChannel(t *testing.T) {
 	memGraph, _, _ := newMemChanGraph()
 
 	// The wallet will start with 6 ACM available.
-	const walletBalance = btcutil.SatoshiPerBitcoin * 6
+	const walletBalance = acmutil.SatoshiPerBitcoin * 6
 
 	// With the dependencies we created, we can now create the initial
 	// agent itself.
@@ -1124,7 +1124,7 @@ func TestAgentPendingOpenChannel(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return walletBalance, nil
 		},
 		Graph:       memGraph,
@@ -1211,7 +1211,7 @@ func TestAgentOnNodeUpdates(t *testing.T) {
 	memGraph, _, _ := newMemChanGraph()
 
 	// The wallet will start with 6 ACM available.
-	const walletBalance = btcutil.SatoshiPerBitcoin * 6
+	const walletBalance = acmutil.SatoshiPerBitcoin * 6
 
 	// With the dependencies we created, we can now create the initial
 	// agent itself.
@@ -1219,7 +1219,7 @@ func TestAgentOnNodeUpdates(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return walletBalance, nil
 		},
 		Graph:       memGraph,
@@ -1325,7 +1325,7 @@ func TestAgentSkipPendingConns(t *testing.T) {
 	memGraph, _, _ := newMemChanGraph()
 
 	// The wallet will start with 6 ACM available.
-	const walletBalance = btcutil.SatoshiPerBitcoin * 6
+	const walletBalance = acmutil.SatoshiPerBitcoin * 6
 
 	connect := make(chan chan error)
 
@@ -1335,7 +1335,7 @@ func TestAgentSkipPendingConns(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return walletBalance, nil
 		},
 		ConnectToPeer: func(*btcec.PublicKey, []net.Addr) (bool, error) {
@@ -1578,7 +1578,7 @@ func TestAgentQuitWhenPendingConns(t *testing.T) {
 	memGraph, _, _ := newMemChanGraph()
 
 	// The wallet will start with 6 BTC available.
-	const walletBalance = btcutil.SatoshiPerBitcoin * 6
+	const walletBalance = acmutil.SatoshiPerBitcoin * 6
 
 	connect := make(chan chan error)
 
@@ -1588,7 +1588,7 @@ func TestAgentQuitWhenPendingConns(t *testing.T) {
 		Self:           self,
 		Heuristic:      heuristic,
 		ChanController: chanController,
-		WalletBalance: func() (btcutil.Amount, error) {
+		WalletBalance: func() (acmutil.Amount, error) {
 			return walletBalance, nil
 		},
 		ConnectToPeer: func(*btcec.PublicKey, []net.Addr) (bool, error) {

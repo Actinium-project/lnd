@@ -37,7 +37,7 @@ func generateInputPartitionings(sweepableInputs []input.Input,
 	// txes.
 	dustLimit := txrules.GetDustThreshold(
 		input.P2WPKHSize,
-		btcutil.Amount(relayFeePerKW.FeePerKVByte()),
+		acmutil.Amount(relayFeePerKW.FeePerKVByte()),
 	)
 
 	// Sort input by yield. We will start constructing input sets starting
@@ -115,14 +115,14 @@ func generateInputPartitionings(sweepableInputs []input.Input,
 // minimizing any negative externalities we cause for the Bitcoin system as a
 // whole.
 func getPositiveYieldInputs(sweepableInputs []input.Input, maxInputs int,
-	feePerKW lnwallet.SatPerKWeight) (int, btcutil.Amount) {
+	feePerKW lnwallet.SatPerKWeight) (int, acmutil.Amount) {
 
 	var weightEstimate input.TxWeightEstimator
 
 	// Add the sweep tx output to the weight estimate.
 	weightEstimate.AddP2WKHOutput()
 
-	var total, outputValue btcutil.Amount
+	var total, outputValue acmutil.Amount
 	for idx, input := range sweepableInputs {
 		// Can ignore error, because it has already been checked when
 		// calculating the yields.
@@ -135,7 +135,7 @@ func getPositiveYieldInputs(sweepableInputs []input.Input, maxInputs int,
 			weightEstimate.AddWitnessInput(size)
 		}
 
-		newTotal := total + btcutil.Amount(input.SignDesc().Output.Value)
+		newTotal := total + acmutil.Amount(input.SignDesc().Output.Value)
 
 		weight := weightEstimate.Weight()
 		fee := feePerKW.FeeForWeight(int64(weight))
@@ -180,9 +180,9 @@ func createSweepTx(inputs []input.Input, outputPkScript []byte,
 	txFee := feePerKw.FeeForWeight(txWeight)
 
 	// Sum up the total value contained in the inputs.
-	var totalSum btcutil.Amount
+	var totalSum acmutil.Amount
 	for _, o := range inputs {
-		totalSum += btcutil.Amount(o.SignDesc().Output.Value)
+		totalSum += acmutil.Amount(o.SignDesc().Output.Value)
 	}
 
 	// Sweep as much possible, after subtracting txn fees.
@@ -214,7 +214,7 @@ func createSweepTx(inputs []input.Input, outputPkScript []byte,
 	// TODO(conner): add more control to sanity checks, allowing us to
 	// delay spending "problem" outputs, e.g. possibly batching with other
 	// classes if fees are too low.
-	btx := btcutil.NewTx(sweepTx)
+	btx := acmutil.NewTx(sweepTx)
 	if err := blockchain.CheckTransactionSanity(btx); err != nil {
 		return nil, err
 	}

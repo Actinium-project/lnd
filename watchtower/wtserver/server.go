@@ -51,7 +51,7 @@ type Config struct {
 
 	// NewAddress is used to generate reward addresses, where a cut of
 	// successfully sent funds can be received.
-	NewAddress func() (btcutil.Address, error)
+	NewAddress func() (acmutil.Address, error)
 
 	// ChainHash identifies the network that the server is watching.
 	ChainHash chainhash.Hash

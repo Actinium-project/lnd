@@ -65,7 +65,7 @@ type backupTaskTest struct {
 	breachInfo       *lnwallet.BreachRetribution
 	expToLocalInput  input.Input
 	expToRemoteInput input.Input
-	expTotalAmt      btcutil.Amount
+	expTotalAmt      acmutil.Amount
 	expSweepAmt      int64
 	expRewardAmt     int64
 	expRewardScript  []byte
@@ -201,7 +201,7 @@ func genTaskTest(
 		breachInfo:       breachInfo,
 		expToLocalInput:  toLocalInput,
 		expToRemoteInput: toRemoteInput,
-		expTotalAmt:      btcutil.Amount(toLocalAmt + toRemoteAmt),
+		expTotalAmt:      acmutil.Amount(toLocalAmt + toRemoteAmt),
 		expSweepAmt:      expSweepAmt,
 		expRewardAmt:     expRewardAmt,
 		expRewardScript:  rewardScript,
@@ -224,7 +224,7 @@ var (
 
 	blobTypeCommitReward = (blob.FlagCommitOutputs | blob.FlagReward).Type()
 
-	addr, _ = btcutil.DecodeAddress(
+	addr, _ = acmutil.DecodeAddress(
 		"mrX9vMRYLfVy1BnZbc5gZjuyaqH3ZW2ZHz", &chaincfg.TestNet3Params,
 	)
 

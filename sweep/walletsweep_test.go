@@ -188,7 +188,7 @@ var sweepScript = []byte{
 	0xe, 0x6e, 0xf8, 0xef,
 }
 
-var deliveryAddr = func() btcutil.Address {
+var deliveryAddr = func() acmutil.Address {
 	_, addrs, _, err := txscript.ExtractPkScriptAddrs(
 		sweepScript, &chaincfg.TestNet3Params,
 	)

@@ -51,7 +51,7 @@ var (
 // original output.
 type Utxo struct {
 	AddressType   AddressType
-	Value         btcutil.Amount
+	Value         acmutil.Amount
 	Confirmations int64
 	PkScript      []byte
 	RedeemScript  []byte
@@ -69,7 +69,7 @@ type TransactionDetail struct {
 	// PoV of the wallet. If this transaction purely spends from the
 	// wallet's funds, then this value will be negative. Similarly, if this
 	// transaction credits the wallet, then this value will be positive.
-	Value btcutil.Amount
+	Value acmutil.Amount
 
 	// NumConfirmations is the number of confirmations this transaction
 	// has. If the transaction is unconfirmed, then this value will be
@@ -94,7 +94,7 @@ type TransactionDetail struct {
 	TotalFees int64
 
 	// DestAddresses are the destinations for a transaction
-	DestAddresses []btcutil.Address
+	DestAddresses []acmutil.Address
 }
 
 // TransactionSubscription is an interface which describes an object capable of
@@ -139,7 +139,7 @@ type WalletController interface {
 	// NOTE: Only witness outputs should be included in the computation of
 	// the total spendable balance of the wallet. We require this as only
 	// witness inputs can be used for funding channels.
-	ConfirmedBalance(confs int32) (btcutil.Amount, error)
+	ConfirmedBalance(confs int32) (acmutil.Amount, error)
 
 	// NewAddress returns the next external or internal address for the
 	// wallet dictated by the value of the `change` parameter. If change is
@@ -147,10 +147,10 @@ type WalletController interface {
 	// address should be returned. The type of address returned is dictated
 	// by the wallet's capabilities, and may be of type: p2sh, p2wkh,
 	// p2wsh, etc.
-	NewAddress(addrType AddressType, change bool) (btcutil.Address, error)
+	NewAddress(addrType AddressType, change bool) (acmutil.Address, error)
 
 	// IsOurAddress checks if the passed address belongs to this wallet
-	IsOurAddress(a btcutil.Address) bool
+	IsOurAddress(a acmutil.Address) bool
 
 	// SendOutputs funds, signs, and broadcasts a Bitcoin transaction paying
 	// out to the specified outputs. In the case the wallet has insufficient

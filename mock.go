@@ -195,7 +195,7 @@ func (*mockChainIO) GetBlock(blockHash *chainhash.Hash) (*wire.MsgBlock, error) 
 // interaction with the bitcoin network.
 type mockWalletController struct {
 	rootKey               *btcec.PrivateKey
-	prevAddres            btcutil.Address
+	prevAddres            acmutil.Address
 	publishedTransactions chan *wire.MsgTx
 	index                 uint32
 }
@@ -210,23 +210,23 @@ func (*mockWalletController) BackEnd() string {
 func (*mockWalletController) FetchInputInfo(
 	prevOut *wire.OutPoint) (*wire.TxOut, error) {
 	txOut := &wire.TxOut{
-		Value:    int64(10 * btcutil.SatoshiPerBitcoin),
+		Value:    int64(10 * acmutil.SatoshiPerBitcoin),
 		PkScript: []byte("dummy"),
 	}
 	return txOut, nil
 }
-func (*mockWalletController) ConfirmedBalance(confs int32) (btcutil.Amount, error) {
+func (*mockWalletController) ConfirmedBalance(confs int32) (acmutil.Amount, error) {
 	return 0, nil
 }
 
 // NewAddress is called to get new addresses for delivery, change etc.
 func (m *mockWalletController) NewAddress(addrType lnwallet.AddressType,
-	change bool) (btcutil.Address, error) {
-	addr, _ := btcutil.NewAddressPubKey(
+	change bool) (acmutil.Address, error) {
+	addr, _ := acmutil.NewAddressPubKey(
 		m.rootKey.PubKey().SerializeCompressed(), &chaincfg.MainNetParams)
 	return addr, nil
 }
-func (*mockWalletController) IsOurAddress(a btcutil.Address) bool {
+func (*mockWalletController) IsOurAddress(a acmutil.Address) bool {
 	return false
 }
 
@@ -242,7 +242,7 @@ func (m *mockWalletController) ListUnspentWitness(minconfirms,
 	maxconfirms int32) ([]*lnwallet.Utxo, error) {
 	utxo := &lnwallet.Utxo{
 		AddressType: lnwallet.WitnessPubKey,
-		Value:       btcutil.Amount(10 * btcutil.SatoshiPerBitcoin),
+		Value:       acmutil.Amount(10 * acmutil.SatoshiPerBitcoin),
 		PkScript:    make([]byte, 22),
 		OutPoint: wire.OutPoint{
 			Hash:  chainhash.Hash{},

@@ -59,7 +59,7 @@ func (m *MockSigner) SignOutputRaw(tx *wire.MsgTx, signDesc *SignDescriptor) ([]
 		pubkey = DeriveRevocationPubkey(pubkey, signDesc.DoubleTweak.PubKey())
 	}
 
-	hash160 := btcutil.Hash160(pubkey.SerializeCompressed())
+	hash160 := acmutil.Hash160(pubkey.SerializeCompressed())
 	privKey := m.findKey(hash160, signDesc.SingleTweak, signDesc.DoubleTweak)
 	if privKey == nil {
 		return nil, fmt.Errorf("Mock signer does not have key")
@@ -136,7 +136,7 @@ func (m *MockSigner) findKey(needleHash160 []byte, singleTweak []byte,
 
 	for _, privkey := range m.Privkeys {
 		// First check whether public key is directly derived from private key.
-		hash160 := btcutil.Hash160(privkey.PubKey().SerializeCompressed())
+		hash160 := acmutil.Hash160(privkey.PubKey().SerializeCompressed())
 		if bytes.Equal(hash160, needleHash160) {
 			return privkey
 		}
@@ -150,7 +150,7 @@ func (m *MockSigner) findKey(needleHash160 []byte, singleTweak []byte,
 		default:
 			continue
 		}
-		hash160 = btcutil.Hash160(privkey.PubKey().SerializeCompressed())
+		hash160 = acmutil.Hash160(privkey.PubKey().SerializeCompressed())
 		if bytes.Equal(hash160, needleHash160) {
 			return privkey
 		}

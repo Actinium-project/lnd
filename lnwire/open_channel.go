@@ -37,7 +37,7 @@ type OpenChannel struct {
 	// channel wishes to use as the total capacity of the channel. The
 	// initial balance of the funding will be this value minus the push
 	// amount (if set).
-	FundingAmount btcutil.Amount
+	FundingAmount acmutil.Amount
 
 	// PushAmount is the value that the initiating party wishes to "push"
 	// to the responding as part of the first commitment state. If the
@@ -48,7 +48,7 @@ type OpenChannel struct {
 	// would like enforced on their version of the commitment transaction.
 	// Any output below this value will be "trimmed" from the commitment
 	// transaction, with the amount of the HTLC going to dust.
-	DustLimit btcutil.Amount
+	DustLimit acmutil.Amount
 
 	// MaxValueInFlight represents the maximum amount of coins that can be
 	// pending within the channel at any given time. If the amount of funds
@@ -59,7 +59,7 @@ type OpenChannel struct {
 	// maintain a balance above at all times. This is a safety mechanism to
 	// ensure that both sides always have skin in the game during the
 	// channel's lifetime.
-	ChannelReserve btcutil.Amount
+	ChannelReserve acmutil.Amount
 
 	// HtlcMinimum is the smallest HTLC that the sender of this message
 	// will accept.

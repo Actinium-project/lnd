@@ -396,7 +396,7 @@ out:
 					continue
 				}
 
-				tx := btcutil.NewTx(&item.TxRecord.MsgTx)
+				tx := acmutil.NewTx(&item.TxRecord.MsgTx)
 				err := b.txNotifier.ProcessRelevantSpendTx(
 					tx, uint32(item.Block.Height),
 				)
@@ -622,7 +622,7 @@ func (b *BitcoindNotifier) handleBlockConnected(block chainntnfs.BlockEpoch) err
 	if err != nil {
 		return fmt.Errorf("unable to get block: %v", err)
 	}
-	txns := btcutil.NewBlock(rawBlock).Transactions()
+	txns := acmutil.NewBlock(rawBlock).Transactions()
 
 	// We'll then extend the txNotifier's height with the information of
 	// this new block, which will handle all of the notification logic for
@@ -712,7 +712,7 @@ func (b *BitcoindNotifier) RegisterSpendNtfn(outpoint *wire.OutPoint,
 		if err != nil {
 			return nil, err
 		}
-		addrs := []btcutil.Address{addr}
+		addrs := []acmutil.Address{addr}
 		if err := b.chainConn.NotifyReceived(addrs); err != nil {
 			return nil, err
 		}

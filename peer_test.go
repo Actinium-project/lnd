@@ -271,7 +271,7 @@ func TestPeerChannelClosureFeeNegotiationsResponder(t *testing.T) {
 
 	// We don't agree with the fee, and will send back one that's 2.5x.
 	preferredRespFee := responderClosingSigned.FeeSatoshis
-	increasedFee := btcutil.Amount(float64(preferredRespFee) * 2.5)
+	increasedFee := acmutil.Amount(float64(preferredRespFee) * 2.5)
 	initiatorSig, _, _, err := initiatorChan.CreateCloseProposal(
 		increasedFee, dummyDeliveryScript, respDeliveryScript,
 	)
@@ -315,7 +315,7 @@ func TestPeerChannelClosureFeeNegotiationsResponder(t *testing.T) {
 	lastFeeResponder := peerFee
 
 	// We try negotiating a 2.1x fee, which should also be rejected.
-	increasedFee = btcutil.Amount(float64(preferredRespFee) * 2.1)
+	increasedFee = acmutil.Amount(float64(preferredRespFee) * 2.1)
 	initiatorSig, _, _, err = initiatorChan.CreateCloseProposal(
 		increasedFee, dummyDeliveryScript, respDeliveryScript,
 	)
@@ -452,7 +452,7 @@ func TestPeerChannelClosureFeeNegotiationsInitiator(t *testing.T) {
 		t.Fatalf("unable to query fee estimator: %v", err)
 	}
 	initiatorIdealFee := responderChan.CalcFee(initiatorIdealFeeRate)
-	increasedFee := btcutil.Amount(float64(initiatorIdealFee) * 2.5)
+	increasedFee := acmutil.Amount(float64(initiatorIdealFee) * 2.5)
 	closeSig, _, _, err := responderChan.CreateCloseProposal(
 		increasedFee, dummyDeliveryScript, initiatorDeliveryScript,
 	)
@@ -517,7 +517,7 @@ func TestPeerChannelClosureFeeNegotiationsInitiator(t *testing.T) {
 	lastFeeSent = closingSignedMsg.FeeSatoshis
 
 	// We try negotiating a 2.1x fee, which should also be rejected.
-	increasedFee = btcutil.Amount(float64(initiatorIdealFee) * 2.1)
+	increasedFee = acmutil.Amount(float64(initiatorIdealFee) * 2.1)
 	responderSig, _, _, err := responderChan.CreateCloseProposal(
 		increasedFee, dummyDeliveryScript, initiatorDeliveryScript,
 	)

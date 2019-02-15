@@ -114,12 +114,12 @@ type channelCloser struct {
 
 	// idealFeeSat is the ideal fee that the state machine should initially
 	// offer when starting negotiation. This will be used as a baseline.
-	idealFeeSat btcutil.Amount
+	idealFeeSat acmutil.Amount
 
 	// lastFeeProposal is the last fee that we proposed to the remote
 	// party. We'll use this as a pivot point to rachet our next offer up,
 	// or down, or simply accept the remote party's prior offer.
-	lastFeeProposal btcutil.Amount
+	lastFeeProposal acmutil.Amount
 
 	// priorFeeOffers is a map that keeps track of all the proposed fees
 	// that we've offered during the fee negotiation. We use this map to
@@ -129,7 +129,7 @@ type channelCloser struct {
 	//
 	// TODO(roasbeef): need to ensure if they broadcast w/ any of our prior
 	// sigs, we are aware of
-	priorFeeOffers map[btcutil.Amount]*lnwire.ClosingSigned
+	priorFeeOffers map[acmutil.Amount]*lnwire.ClosingSigned
 
 	// closeReq is the initial closing request. This will only be populated
 	// if we're the initiator of this closing negotiation.
@@ -186,7 +186,7 @@ func newChannelCloser(cfg chanCloseCfg, deliveryScript []byte,
 		negotiationHeight:   negotiationHeight,
 		idealFeeSat:         idealFeeSat,
 		localDeliveryScript: deliveryScript,
-		priorFeeOffers:      make(map[btcutil.Amount]*lnwire.ClosingSigned),
+		priorFeeOffers:      make(map[acmutil.Amount]*lnwire.ClosingSigned),
 	}
 }
 
@@ -482,7 +482,7 @@ func (c *channelCloser) ProcessCloseMsg(msg lnwire.Message) ([]lnwire.Message, b
 // proposeCloseSigned attempts to propose a new signature for the closing
 // transaction for a channel based on the prior fee negotiations and our
 // current compromise fee.
-func (c *channelCloser) proposeCloseSigned(fee btcutil.Amount) (*lnwire.ClosingSigned, error) {
+func (c *channelCloser) proposeCloseSigned(fee acmutil.Amount) (*lnwire.ClosingSigned, error) {
 
 	rawSig, _, _, err := c.cfg.channel.CreateCloseProposal(
 		fee, c.localDeliveryScript, c.remoteDeliveryScript,
@@ -519,7 +519,7 @@ func (c *channelCloser) proposeCloseSigned(fee btcutil.Amount) (*lnwire.ClosingS
 // in an "acceptable" range to our local fee. This is an attempt at a
 // compromise and to ensure that the fee negotiation has a stopping point. We
 // consider their fee acceptable if it's within 30% of our fee.
-func feeInAcceptableRange(localFee, remoteFee btcutil.Amount) bool {
+func feeInAcceptableRange(localFee, remoteFee acmutil.Amount) bool {
 	// If our offer is lower than theirs, then we'll accept their
 	// offer if it's no more than 30% *greater* than our current
 	// offer.
@@ -538,7 +538,7 @@ func feeInAcceptableRange(localFee, remoteFee btcutil.Amount) bool {
 // both sides can agree on. If up is true, then we'll attempt to increase our
 // offered fee. Otherwise, if up is false, then we'll attempt to decrease our
 // offered fee.
-func rachetFee(fee btcutil.Amount, up bool) btcutil.Amount {
+func rachetFee(fee acmutil.Amount, up bool) acmutil.Amount {
 	// If we need to rachet up, then we'll increase our fee by 10%.
 	if up {
 		return fee + ((fee * 1) / 10)
@@ -552,7 +552,7 @@ func rachetFee(fee btcutil.Amount, up bool) btcutil.Amount {
 // into consideration our ideal fee based on current fee environment, the fee
 // we last proposed (if any), and the fee proposed by the peer.
 func calcCompromiseFee(chanPoint wire.OutPoint,
-	ourIdealFee, lastSentFee, remoteFee btcutil.Amount) btcutil.Amount {
+	ourIdealFee, lastSentFee, remoteFee acmutil.Amount) acmutil.Amount {
 
 	// TODO(roasbeef): take in number of rounds as well?
 

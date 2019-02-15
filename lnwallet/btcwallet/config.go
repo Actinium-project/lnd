@@ -20,14 +20,14 @@ import (
 )
 
 var (
-	lnwalletHomeDir = btcutil.AppDataDir("lnwallet", false)
+	lnwalletHomeDir = acmutil.AppDataDir("lnwallet", false)
 	defaultDataDir  = lnwalletHomeDir
 
 	defaultLogFilename = "lnwallet.log"
 	defaultLogDirname  = "logs"
 	defaultLogDir      = filepath.Join(lnwalletHomeDir, defaultLogDirname)
 
-	btcdHomeDir        = btcutil.AppDataDir("btcd", false)
+	btcdHomeDir        = acmutil.AppDataDir("btcd", false)
 	btcdHomedirCAFile  = filepath.Join(btcdHomeDir, "rpc.cert")
 	defaultRPCKeyFile  = filepath.Join(lnwalletHomeDir, "rpc.key")
 	defaultRPCCertFile = filepath.Join(lnwalletHomeDir, "rpc.cert")

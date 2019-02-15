@@ -1058,11 +1058,11 @@ func (u *utxoNursery) waitForPreschoolConf(kid *kidOutput,
 type contractMaturityReport struct {
 	// limboBalance is the total number of frozen coins within this
 	// contract.
-	limboBalance btcutil.Amount
+	limboBalance acmutil.Amount
 
 	// recoveredBalance is the total value that has been successfully swept
 	// back to the user's wallet.
-	recoveredBalance btcutil.Amount
+	recoveredBalance acmutil.Amount
 
 	// maturityHeight is the absolute block height that this output will
 	// mature at.
@@ -1079,7 +1079,7 @@ type htlcMaturityReport struct {
 	outpoint wire.OutPoint
 
 	// amount is the final value that will be swept in back to the wallet.
-	amount btcutil.Amount
+	amount acmutil.Amount
 
 	// maturityHeight is the absolute block height that this output will
 	// mature at.
@@ -1445,7 +1445,7 @@ func (k *kidOutput) Decode(r io.Reader) error {
 	if _, err := r.Read(scratch[:]); err != nil {
 		return err
 	}
-	k.amt = btcutil.Amount(byteOrder.Uint64(scratch[:]))
+	k.amt = acmutil.Amount(byteOrder.Uint64(scratch[:]))
 
 	if err := readOutpoint(io.LimitReader(r, 40), &k.outpoint); err != nil {
 		return err
