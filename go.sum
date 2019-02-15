@@ -2,12 +2,6 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 git.schwanenlied.me/yawning/bsaes.git v0.0.0-20180720073208-c0276d75487e h1:F2x1bq7RaNCIuqYpswggh1+c1JmwdnkHNC9wy1KDip0=
 git.schwanenlied.me/yawning/bsaes.git v0.0.0-20180720073208-c0276d75487e/go.mod h1:BWqTsj8PgcPriQJGl7el20J/7TuT1d/hSyFDXMEpoEo=
 github.com/Actinium-project/acmd v0.0.1/go.mod h1:RREw7W7bfdLfXwD58nMiV+eoXZK1vVNCDrp3/epaUOk=
-github.com/Actinium-project/acmd v0.0.2 h1:L247EPPxmryZaJ4WBSOdKloxKKdBp3ZY8BbcG0GFxLs=
-github.com/Actinium-project/acmd v0.0.2/go.mod h1:AwJgOXb56V8xPt0cwQXjV+jhBTRGAfhUbrdgVC5wRyw=
-github.com/Actinium-project/acmd v0.0.3 h1:un9iLxG/jSa9z9wiYTmu+y7xL/ZwtCwexauJTQYGd68=
-github.com/Actinium-project/acmd v0.0.3/go.mod h1:AwJgOXb56V8xPt0cwQXjV+jhBTRGAfhUbrdgVC5wRyw=
-github.com/Actinium-project/acmd v0.0.4 h1:vex/867rJ39st6tMEZJvdIBbJe5bpJ1+EUl7BrwIbno=
-github.com/Actinium-project/acmd v0.0.4/go.mod h1:eyGchHNtNdu0lPt2dZwSrqiWRGJIsdP6VrsR+NccPWo=
 github.com/Actinium-project/acmd v0.0.5 h1:ICzXOlfPUxpngDckx4flMmc7fs1I8m916s7qJ47d44g=
 github.com/Actinium-project/acmd v0.0.5/go.mod h1:eyGchHNtNdu0lPt2dZwSrqiWRGJIsdP6VrsR+NccPWo=
 github.com/Actinium-project/acmlog v0.0.1/go.mod h1:mYHeT//qvzCG6xv5MKbfyyy6bMchkZIH2aQ7LkTOnys=
@@ -21,7 +15,6 @@ github.com/Actinium-project/actrino v0.0.2 h1:+0GQBQ77OSQRuZdyN7n8l0Xn4NJJxMqO13
 github.com/Actinium-project/actrino v0.0.2/go.mod h1:zFRfMbcZ0XDloU4JV7XYegg0Qw90JQ2tVi7RcsP8I6Y=
 github.com/Actinium-project/lightning-onion v0.0.1 h1:XvOoMWtiDc0K7ffdt2EpKtF3wnrOn0mDIeIN/A637yQ=
 github.com/Actinium-project/lightning-onion v0.0.1/go.mod h1:vwGJUBPKnTSJLNAtTmgXmMABtmJf5YL+HXmpPkzCuW8=
-github.com/Actinium-project/lnd v0.0.2/go.mod h1:3NNzac6SHnTxwWM8s6MNAoe66JuErU6rWgHXFcywO1g=
 github.com/NebulousLabs/fastrand v0.0.0-20180208210444-3cf7173006a0 h1:g/ETZwHx5wN2fqKWS3gCUrEU7dLko+DvVs3hakQCfyE=
 github.com/NebulousLabs/fastrand v0.0.0-20180208210444-3cf7173006a0/go.mod h1:Bdzq+51GR4/0DIhaICZEOm+OHvXGwwB2trKZ8B4Y6eQ=
 github.com/NebulousLabs/go-upnp v0.0.0-20180202185039-29b680b06c82 h1:MG93+PZYs9PyEsj/n5/haQu2gK0h4tUtSy9ejtMwWa0=
@@ -33,8 +26,6 @@ github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da/go.mod h1:eHEWzANqSi
 github.com/aead/siphash v1.0.1 h1:FwHfE/T45KPKYuuSAKyyvE+oPWcaQ+CUmFW0bPlM+kg=
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=
 github.com/boltdb/bolt v1.3.1/go.mod h1:clJnj/oiGkjum5o1McbSZDSLxVThjynRyGBgiAx27Ps=
-github.com/btcsuite/acmutil v0.0.0-20190207003914-4c204d697803 h1:j3AgPKKZtZStM2nyhrDSLSYgT7YHrZKdSkq1OYeLjvM=
-github.com/btcsuite/acmutil v0.0.0-20190207003914-4c204d697803/go.mod h1:+5NJ2+qvTyV9exUAL/rxXi3DcLg2Ts+ymUAY5y4NvMg=
 github.com/btcsuite/btcd v0.0.0-20190213025234-306aecffea32 h1:qkOC5Gd33k54tobS36cXdAzJbeHaduLtnLQQwNoIi78=
 github.com/btcsuite/btcd v0.0.0-20190213025234-306aecffea32/go.mod h1:DrZx5ec/dmnfpw9KyYoQyYo7d0KEvTkk/5M/vbZjAr8=
 github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f h1:bAs4lUbRJpnnkd9VhRV3jjAVU7DJVjMaK+IsvSeZvFo=
@@ -109,7 +100,6 @@ github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af h1:gu+uRPtBe88sK
 github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af/go.mod h1:XWv6SoW27p1b0cqNHllgS5HIMJraePCO15w5zCzIWYg=
 github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02 h1:tcJ6OjwOMvExLlzrAVZute09ocAGa7KqOON60++Gz4E=
 github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02/go.mod h1:tHlrkM198S068ZqfrO6S8HsoJq2bF3ETfTL+kt4tInY=
-github.com/urfave/cli v1.18.0 h1:m9MfmZWX7bwr9kUcs/Asr95j0IVXzGNNc+/5ku2m26Q=
 github.com/urfave/cli v1.18.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 golang.org/x/crypto v0.0.0-20170930174604-9419663f5a44/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20181127143415-eb0de9b17e85/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
@@ -126,7 +116,6 @@ golang.org/x/net v0.0.0-20190206173232-65e2d4e15006 h1:bfLnR+k0tq5Lqt6dflRLcZiz6
 golang.org/x/net v0.0.0-20190206173232-65e2d4e15006/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
-golang.org/x/sys v0.0.0-20180830151530-49385e6e1522 h1:Ve1ORMCxvRmSXBwJK+t3Oy+V2vRW2OetUQBq4rJIkZE=
 golang.org/x/sys v0.0.0-20180830151530-49385e6e1522/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e h1:o3PsSEY8E4eXWkXrIP9YJALUkVZqzHJT5DOasTyn8Vs=
 golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
