@@ -36,9 +36,9 @@ require (
 	github.com/lightningnetwork/lnd v0.0.2
 	github.com/lightningnetwork/lnd/queue v1.0.0
 	github.com/miekg/dns v0.0.0-20171125082028-79bfde677fa8
-	github.com/roasbeef/btcd v0.0.0-20180418012700-a03db407e40d // indirect
-	github.com/roasbeef/btcutil v0.0.0-20180406014609-dfb640c57141 // indirect
-	github.com/roasbeef/btcwallet v0.0.0-20180426223453-30affec83c18 // indirect
+	github.com/Actinium-project/acmd v0.0.2 // indirect
+	github.com/Actinium-project/acmutil v0.0.2 // indirect
+	github.com/Actinium-project/acmwallet v0.0.4 // indirect
 	github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af // indirect
 	github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02
 	github.com/urfave/cli v1.18.0
