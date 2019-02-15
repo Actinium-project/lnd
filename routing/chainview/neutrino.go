@@ -10,7 +10,7 @@ import (
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/acmutil/gcs/builder"
-	"github.com/Actinium-project/actrino"
+	neutrino "github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lnd/channeldb"
 )
 
