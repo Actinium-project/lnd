@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/Actinium-project/acmd/btcec"
-	"github.com/Actinium-project/acmd/btcjson"
+	"github.com/Actinium-project/acmd/acmjson"
 	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/integration/rpctest"

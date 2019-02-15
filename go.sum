@@ -14,6 +14,9 @@ github.com/Actinium-project/acmutil v0.0.0-20190207003914-4c204d697803 h1:j3AgPK
 github.com/Actinium-project/acmutil v0.0.0-20190207003914-4c204d697803/go.mod h1:+5NJ2+qvTyV9exUAL/rxXi3DcLg2Ts+ymUAY5y4NvMg=
 github.com/Actinium-project/acmutil v0.0.2 h1:0I6Ajh4oktijDYDdC02jZ0cbFhu60zfqYZPGNx4SGYU=
 github.com/Actinium-project/acmutil v0.0.2/go.mod h1:8yj6Xo5JtGIeu5FN9M2bL8+YkbWNmxI/K0zlGMyAZPE=
+github.com/Actinium-project/acmwallet v0.0.0-20180904010540-284e2e0e696e33d5be388f7f3d9a26db703e0c06/go.mod h1:/d7QHZsfUAruXuBhyPITqoYOmJ+nq35qPsJjz/aSpCg=
+github.com/Actinium-project/acmwallet v0.0.0-20190213034619-b51c1adeee55 h1:uqSp3UVNrKl01OSHOAk1JtKcaPNAAW6wpWk3eKm18Yk=
+github.com/Actinium-project/acmwallet v0.0.0-20190213034619-b51c1adeee55/go.mod h1:mkOYY8/psBiL5E+Wb0V7M0o+N7NXi2SZJz6+RKkncIc=
 github.com/Actinium-project/acmwallet v0.0.3/go.mod h1:IQGKZI4+6cETS2mQs3Asq/ZHNrTq+XXnMnZqBGVexdA=
 github.com/Actinium-project/acmwallet v0.0.4 h1:KVup8VCwzXlP3zT7pyoOXSqb1vfmoqQ1ONvaH3r3YQM=
 github.com/Actinium-project/acmwallet v0.0.4/go.mod h1:7cBUBOJRQwxRqm2+1tMZbyJ7Em/hgtbU+lQ+DlTBmFk=
@@ -48,9 +51,6 @@ github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f/go.mod h1:TdznJufo
 github.com/btcsuite/btcutil v0.0.0-20180706230648-ab6388e0c60a/go.mod h1:+5NJ2+qvTyV9exUAL/rxXi3DcLg2Ts+ymUAY5y4NvMg=
 github.com/btcsuite/btcutil v0.0.0-20190207003914-4c204d697803 h1:j3AgPKKZtZStM2nyhrDSLSYgT7YHrZKdSkq1OYeLjvM=
 github.com/btcsuite/btcutil v0.0.0-20190207003914-4c204d697803/go.mod h1:+5NJ2+qvTyV9exUAL/rxXi3DcLg2Ts+ymUAY5y4NvMg=
-github.com/Actinium-project/acmwallet v0.0.0-20180904010540-284e2e0e696e33d5be388f7f3d9a26db703e0c06/go.mod h1:/d7QHZsfUAruXuBhyPITqoYOmJ+nq35qPsJjz/aSpCg=
-github.com/Actinium-project/acmwallet v0.0.0-20190213034619-b51c1adeee55 h1:uqSp3UVNrKl01OSHOAk1JtKcaPNAAW6wpWk3eKm18Yk=
-github.com/Actinium-project/acmwallet v0.0.0-20190213034619-b51c1adeee55/go.mod h1:mkOYY8/psBiL5E+Wb0V7M0o+N7NXi2SZJz6+RKkncIc=
 github.com/btcsuite/fastsha256 v0.0.0-20160815193821-637e65642941 h1:kij1x2aL7VE6gtx8KMIt8PGPgI5GV9LgtHFG5KaEMPY=
 github.com/btcsuite/fastsha256 v0.0.0-20160815193821-637e65642941/go.mod h1:QcFA8DZHtuIAdYKCq/BzELOaznRsCvwf4zTPmaYwaig=
 github.com/btcsuite/go-socks v0.0.0-20170105172521-4720035b7bfd h1:R/opQEbFEy9JGkIguV40SvRY1uliPX8ifOvi6ICsFCw=

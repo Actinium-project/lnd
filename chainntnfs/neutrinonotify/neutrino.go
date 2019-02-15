@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/Actinium-project/acmd/btcjson"
+	"github.com/Actinium-project/acmd/acmjson"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/rpcclient"
 	"github.com/Actinium-project/acmd/txscript"
