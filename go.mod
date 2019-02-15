@@ -3,7 +3,7 @@ module github.com/Actinium-project/lnd
 require (
 	git.schwanenlied.me/yawning/bsaes.git v0.0.0-20180720073208-c0276d75487e // indirect
 	github.com/Actinium-project/acmd v0.0.5
-	github.com/Actinium-project/acmutil v0.0.2
+	github.com/Actinium-project/acmutil v0.0.3
 	github.com/Actinium-project/acmwallet v0.0.4
 	github.com/Actinium-project/actrino v0.0.2
 	github.com/Actinium-project/lightning-onion v0.0.1
