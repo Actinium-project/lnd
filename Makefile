@@ -1,7 +1,7 @@
 PKG := github.com/Actinium-project/lnd
-ESCPKG := github.com\/lightningnetwork\/lnd
+ESCPKG := github.com\/Actinium-project\/lnd
 
-BTCD_PKG := github.com/btcsuite/btcd
+BTCD_PKG := github.com/Actinium-project/acmd
 GOVERALLS_PKG := github.com/mattn/goveralls
 LINT_PKG := gopkg.in/alecthomas/gometalinter.v2
 GOACC_PKG := github.com/ory/go-acc
