@@ -43,7 +43,7 @@ type chainUpdate struct {
 // unbounded queue in order to avoid blocking the main rpc dispatch rule.
 type txUpdate struct {
 	tx      *acmutil.Tx
-	details *btcjson.BlockDetails
+	details *acmjson.BlockDetails
 }
 
 // TODO(roasbeef): generalize struct below:
@@ -248,7 +248,7 @@ func (b *BtcdNotifier) onBlockDisconnected(hash *chainhash.Hash, height int32, t
 }
 
 // onRedeemingTx implements on OnRedeemingTx callback for rpcclient.
-func (b *BtcdNotifier) onRedeemingTx(tx *acmutil.Tx, details *btcjson.BlockDetails) {
+func (b *BtcdNotifier) onRedeemingTx(tx *acmutil.Tx, details *acmjson.BlockDetails) {
 	// Append this new transaction update to the end of the queue of new
 	// chain updates.
 	b.txUpdates.ChanIn() <- &txUpdate{tx, details}
@@ -533,8 +533,8 @@ func (b *BtcdNotifier) confDetailsFromTxIndex(txid *chainhash.Hash,
 		// need to look at the error message returned as the error code
 		// is used for multiple errors.
 		txNotFoundErr := "No information available about transaction"
-		jsonErr, ok := err.(*btcjson.RPCError)
-		if ok && jsonErr.Code == btcjson.ErrRPCNoTxInfo &&
+		jsonErr, ok := err.(*acmjson.RPCError)
+		if ok && jsonErr.Code == acmjson.ErrRPCNoTxInfo &&
 			strings.Contains(jsonErr.Message, txNotFoundErr) {
 
 			return nil, chainntnfs.TxNotFoundIndex, nil
@@ -864,8 +864,8 @@ func (b *BtcdNotifier) RegisterSpendNtfn(outpoint *wire.OutPoint,
 	if err != nil {
 		// Avoid returning an error if the transaction was not found to
 		// proceed with fallback methods.
-		jsonErr, ok := err.(*btcjson.RPCError)
-		if !ok || jsonErr.Code != btcjson.ErrRPCNoTxInfo {
+		jsonErr, ok := err.(*acmjson.RPCError)
+		if !ok || jsonErr.Code != acmjson.ErrRPCNoTxInfo {
 			return nil, fmt.Errorf("unable to query for txid %v: %v",
 				spendRequest.OutPoint.Hash, err)
 		}

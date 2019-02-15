@@ -1649,7 +1649,7 @@ func testOpenChannelAfterReorg(net *lntest.NetworkHarness, t *harnessTest) {
 	// We start by connecting the new miner to our original miner,
 	// such that it will sync to our original chain.
 	err = net.Miner.Node.Node(
-		btcjson.NConnect, tempMiner.P2PAddress(), &temp,
+		acmjson.NConnect, tempMiner.P2PAddress(), &temp,
 	)
 	if err != nil {
 		t.Fatalf("unable to remove node: %v", err)
@@ -1665,7 +1665,7 @@ func testOpenChannelAfterReorg(net *lntest.NetworkHarness, t *harnessTest) {
 	// We disconnect the two miners, such that we can mine two different
 	// chains and can cause a reorg later.
 	err = net.Miner.Node.Node(
-		btcjson.NDisconnect, tempMiner.P2PAddress(), &temp,
+		acmjson.NDisconnect, tempMiner.P2PAddress(), &temp,
 	)
 	if err != nil {
 		t.Fatalf("unable to remove node: %v", err)
@@ -1770,7 +1770,7 @@ func testOpenChannelAfterReorg(net *lntest.NetworkHarness, t *harnessTest) {
 	// connect the two miners together. Since the temporary miner knows
 	// about a longer chain, both miners should sync to that chain.
 	err = net.Miner.Node.Node(
-		btcjson.NRemove, net.BackendCfg.P2PAddr(), &perm,
+		acmjson.NRemove, net.BackendCfg.P2PAddr(), &perm,
 	)
 	if err != nil {
 		t.Fatalf("unable to remove node: %v", err)
@@ -1779,7 +1779,7 @@ func testOpenChannelAfterReorg(net *lntest.NetworkHarness, t *harnessTest) {
 	// Connecting to the temporary miner should now cause our original
 	// chain to be re-orged out.
 	err = net.Miner.Node.Node(
-		btcjson.NConnect, tempMiner.P2PAddress(), &temp,
+		acmjson.NConnect, tempMiner.P2PAddress(), &temp,
 	)
 	if err != nil {
 		t.Fatalf("unable to remove node: %v", err)
@@ -1796,14 +1796,14 @@ func testOpenChannelAfterReorg(net *lntest.NetworkHarness, t *harnessTest) {
 	// Now we disconnect the two miners, and connect our original miner to
 	// our chain backend once again.
 	err = net.Miner.Node.Node(
-		btcjson.NDisconnect, tempMiner.P2PAddress(), &temp,
+		acmjson.NDisconnect, tempMiner.P2PAddress(), &temp,
 	)
 	if err != nil {
 		t.Fatalf("unable to remove node: %v", err)
 	}
 
 	err = net.Miner.Node.Node(
-		btcjson.NConnect, net.BackendCfg.P2PAddr(), &perm,
+		acmjson.NConnect, net.BackendCfg.P2PAddr(), &perm,
 	)
 	if err != nil {
 		t.Fatalf("unable to remove node: %v", err)

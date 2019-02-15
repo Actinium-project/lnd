@@ -83,8 +83,8 @@ func WaitForMempoolTx(miner *rpctest.Harness, txid *chainhash.Hash) error {
 		// Check for the harness' knowledge of the txid.
 		tx, err := miner.Node.GetRawTransaction(txid)
 		if err != nil {
-			jsonErr, ok := err.(*btcjson.RPCError)
-			if ok && jsonErr.Code == btcjson.ErrRPCNoTxInfo {
+			jsonErr, ok := err.(*acmjson.RPCError)
+			if ok && jsonErr.Code == acmjson.ErrRPCNoTxInfo {
 				continue
 			}
 			return err

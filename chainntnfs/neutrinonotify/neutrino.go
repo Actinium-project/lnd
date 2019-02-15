@@ -253,12 +253,12 @@ func (n *NeutrinoNotifier) onFilteredBlockDisconnected(height int32,
 // any outstanding spend requests.
 type relevantTx struct {
 	tx      *acmutil.Tx
-	details *btcjson.BlockDetails
+	details *acmjson.BlockDetails
 }
 
 // onRelevantTx is a callback that proxies relevant transaction notifications
 // from the backend to the notifier's main event handler.
-func (n *NeutrinoNotifier) onRelevantTx(tx *acmutil.Tx, details *btcjson.BlockDetails) {
+func (n *NeutrinoNotifier) onRelevantTx(tx *acmutil.Tx, details *acmjson.BlockDetails) {
 	select {
 	case n.txUpdates.ChanIn() <- &relevantTx{tx, details}:
 	case <-n.quit:
@@ -1016,14 +1016,14 @@ func (n *NeutrinoChainConn) GetBlockHeader(blockHash *chainhash.Hash) (*wire.Blo
 // GetBlockHeaderVerbose returns a verbose block header result for a hash. This
 // result only contains the height with a nil hash.
 func (n *NeutrinoChainConn) GetBlockHeaderVerbose(blockHash *chainhash.Hash) (
-	*btcjson.GetBlockHeaderVerboseResult, error) {
+	*acmjson.GetBlockHeaderVerboseResult, error) {
 
 	height, err := n.p2pNode.GetBlockHeight(blockHash)
 	if err != nil {
 		return nil, err
 	}
 	// Since only the height is used from the result, leave the hash nil.
-	return &btcjson.GetBlockHeaderVerboseResult{Height: int32(height)}, nil
+	return &acmjson.GetBlockHeaderVerboseResult{Height: int32(height)}, nil
 }
 
 // GetBlockHash returns the hash from a block height.

@@ -484,8 +484,8 @@ func (b *BitcoindNotifier) confDetailsFromTxIndex(txid *chainhash.Hash,
 		// need to look at the error message returned as the error code
 		// is used for multiple errors.
 		txNotFoundErr := "No such mempool or blockchain transaction"
-		jsonErr, ok := err.(*btcjson.RPCError)
-		if ok && jsonErr.Code == btcjson.ErrRPCNoTxInfo &&
+		jsonErr, ok := err.(*acmjson.RPCError)
+		if ok && jsonErr.Code == acmjson.ErrRPCNoTxInfo &&
 			strings.Contains(jsonErr.Message, txNotFoundErr) {
 
 			return nil, chainntnfs.TxNotFoundIndex, nil
@@ -781,8 +781,8 @@ func (b *BitcoindNotifier) RegisterSpendNtfn(outpoint *wire.OutPoint,
 	if err != nil {
 		// Avoid returning an error if the transaction was not found to
 		// proceed with fallback methods.
-		jsonErr, ok := err.(*btcjson.RPCError)
-		if !ok || jsonErr.Code != btcjson.ErrRPCNoTxInfo {
+		jsonErr, ok := err.(*acmjson.RPCError)
+		if !ok || jsonErr.Code != acmjson.ErrRPCNoTxInfo {
 			return nil, fmt.Errorf("unable to query for txid %v: %v",
 				spendRequest.OutPoint.Hash, err)
 		}

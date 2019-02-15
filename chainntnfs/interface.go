@@ -389,7 +389,7 @@ type ChainConn interface {
 
 	// GetBlockHeaderVerbose returns the verbose block header for a hash.
 	GetBlockHeaderVerbose(blockHash *chainhash.Hash) (
-		*btcjson.GetBlockHeaderVerboseResult, error)
+		*acmjson.GetBlockHeaderVerboseResult, error)
 
 	// GetBlockHash returns the hash from a block height.
 	GetBlockHash(blockHeight int64) (*chainhash.Hash, error)

@@ -285,7 +285,7 @@ func (b *BtcdFilteredChainView) chainFilterer() {
 		return filteredTxns
 	}
 
-	decodeJSONBlock := func(block *btcjson.RescannedBlock,
+	decodeJSONBlock := func(block *acmjson.RescannedBlock,
 		height uint32) (*FilteredBlock, error) {
 		hash, err := chainhash.NewHashFromStr(block.Hash)
 		if err != nil {

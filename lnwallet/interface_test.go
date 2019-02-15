@@ -2006,7 +2006,7 @@ func testReorgWalletBalance(r *rpctest.Harness, w *lnwallet.LightningWallet,
 		// Wait for disconnection
 		timeout := time.After(30 * time.Second)
 		stillConnected := true
-		var peers []btcjson.GetPeerInfoResult
+		var peers []acmjson.GetPeerInfoResult
 		for stillConnected {
 			// Allow for timeout
 			time.Sleep(100 * time.Millisecond)
@@ -2047,7 +2047,7 @@ func testReorgWalletBalance(r *rpctest.Harness, w *lnwallet.LightningWallet,
 		err = r2.Node.AddNode(r.P2PAddress(), rpcclient.ANAdd)
 		if err != nil {
 			switch err := err.(type) {
-			case *btcjson.RPCError:
+			case *acmjson.RPCError:
 				if err.Code != -8 {
 					t.Fatalf("unable to connect mining "+
 						"nodes together: %v", err)
@@ -2254,8 +2254,8 @@ func waitForMempoolTx(r *rpctest.Harness, txid *chainhash.Hash) error {
 		tx, err = r.Node.GetRawTransaction(txid)
 		if err != nil {
 			switch e := err.(type) {
-			case *btcjson.RPCError:
-				if e.Code == btcjson.ErrRPCNoTxInfo {
+			case *acmjson.RPCError:
+				if e.Code == acmjson.ErrRPCNoTxInfo {
 					continue
 				}
 			default:

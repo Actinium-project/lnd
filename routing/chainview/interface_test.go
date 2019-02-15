@@ -65,8 +65,8 @@ func waitForMempoolTx(r *rpctest.Harness, txid *chainhash.Hash) error {
 		tx, err = r.Node.GetRawTransaction(txid)
 		if err != nil {
 			switch e := err.(type) {
-			case *btcjson.RPCError:
-				if e.Code == btcjson.ErrRPCNoTxInfo {
+			case *acmjson.RPCError:
+				if e.Code == acmjson.ErrRPCNoTxInfo {
 					continue
 				}
 			default:
