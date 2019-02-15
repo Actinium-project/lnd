@@ -3,7 +3,7 @@ package chanbackup
 import (
 	"net"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/Actinium-project/acmd/btcec"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/keychain"
 )

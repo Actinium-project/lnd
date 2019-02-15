@@ -1,8 +1,8 @@
 package input
 
 import (
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/blockchain"
+	"github.com/Actinium-project/acmd/wire"
 )
 
 const (

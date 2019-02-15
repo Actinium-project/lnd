@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/integration/rpctest"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/integration/rpctest"
 	"github.com/btcsuite/btcwallet/chain"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/channeldb"

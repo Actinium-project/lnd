@@ -3,7 +3,7 @@ package lnwire
 import (
 	"testing"
 
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmutil"
 )
 
 func TestMilliSatoshiConversion(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/input"

@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/coreos/bbolt"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/lnwire"

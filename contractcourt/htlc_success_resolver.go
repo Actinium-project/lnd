@@ -9,7 +9,7 @@ import (
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/lnwire"
 
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/lnwallet"
 	"github.com/Actinium-project/lnd/sweep"

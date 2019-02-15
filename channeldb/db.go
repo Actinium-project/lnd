@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/coreos/bbolt"
 	"github.com/go-errors/errors"
 	"github.com/Actinium-project/lnd/lnwire"

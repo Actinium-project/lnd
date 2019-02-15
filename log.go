@@ -6,15 +6,16 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/btcsuite/btcd/connmgr"
+	"github.com/Actinium-project/acmd/connmgr"
 	"github.com/btcsuite/btclog"
 	"github.com/jrick/logrotate/rotator"
-	"github.com/lightninglabs/neutrino"
+	"github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/autopilot"
 	"github.com/Actinium-project/lnd/build"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/channelnotifier"
 	"github.com/Actinium-project/lnd/contractcourt"
 	"github.com/Actinium-project/lnd/discovery"
 	"github.com/Actinium-project/lnd/htlcswitch"
@@ -80,6 +81,7 @@ var (
 	wtwrLog = build.NewSubLogger("WTWR", backendLog.Logger)
 	ntfrLog = build.NewSubLogger("NTFR", backendLog.Logger)
 	irpcLog = build.NewSubLogger("IRPC", backendLog.Logger)
+	chnfLog = build.NewSubLogger("CHNF", backendLog.Logger)
 )
 
 // Initialize package-global logger variables.
@@ -105,6 +107,7 @@ func init() {
 	watchtower.UseLogger(wtwrLog)
 	chainrpc.UseLogger(ntfrLog)
 	invoicesrpc.UseLogger(irpcLog)
+	channelnotifier.UseLogger(chnfLog)
 }
 
 // subsystemLoggers maps each subsystem identifier to its associated logger.
@@ -136,6 +139,7 @@ var subsystemLoggers = map[string]btclog.Logger{
 	"WTWR": wtwrLog,
 	"NTFR": ntfnLog,
 	"IRPC": irpcLog,
+	"CHNF": chnfLog,
 }
 
 // initLogRotator initializes the logging rotator to write logs to logFile and

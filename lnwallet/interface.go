@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 )
 
 // AddressType is an enum-like type which denotes the possible address types

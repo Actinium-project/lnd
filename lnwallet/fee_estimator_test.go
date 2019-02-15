@@ -3,7 +3,7 @@ package lnwallet_test
 import (
 	"testing"
 
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/lnd/lnwallet"
 )
 

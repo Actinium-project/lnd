@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/btcsuite/btcd/chaincfg"
-	bitcoinCfg "github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	bitcoinWire "github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/chaincfg"
+	bitcoinCfg "github.com/Actinium-project/acmd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	bitcoinWire "github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/keychain"
 	actiniumCfg "github.com/Actinium-project/acmd/chaincfg"
 	actiniumWire "github.com/Actinium-project/acmd/wire"

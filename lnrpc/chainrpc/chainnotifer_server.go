@@ -11,8 +11,8 @@ import (
 	"path/filepath"
 	"sync/atomic"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/lnrpc"
 	"google.golang.org/grpc"

@@ -1,8 +1,8 @@
 package input
 
 import (
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/txscript"
+	"github.com/Actinium-project/acmd/wire"
 )
 
 // Input represents an abstract UTXO which is to be spent using a sweeping
@@ -93,6 +93,18 @@ func MakeBaseInput(outpoint *wire.OutPoint, witnessType WitnessType,
 			heightHint:  heightHint,
 		},
 	}
+}
+
+// NewBaseInput allocates and assembles a new *BaseInput that can be used to
+// construct a sweep transaction.
+func NewBaseInput(outpoint *wire.OutPoint, witnessType WitnessType,
+	signDescriptor *SignDescriptor, heightHint uint32) *BaseInput {
+
+	input := MakeBaseInput(
+		outpoint, witnessType, signDescriptor, heightHint,
+	)
+
+	return &input
 }
 
 // CraftInputScript returns a valid set of input scripts allowing this output

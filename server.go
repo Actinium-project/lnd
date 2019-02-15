@@ -17,13 +17,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/connmgr"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/connmgr"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/coreos/bbolt"
 	"github.com/go-errors/errors"
+<<<<<<< HEAD
 	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/autopilot"
 	"github.com/Actinium-project/lnd/brontide"
@@ -44,6 +45,29 @@ import (
 	"github.com/Actinium-project/lnd/sweep"
 	"github.com/Actinium-project/lnd/ticker"
 	"github.com/Actinium-project/lnd/tor"
+=======
+	sphinx "github.com/lightningnetwork/lightning-onion"
+	"github.com/lightningnetwork/lnd/autopilot"
+	"github.com/lightningnetwork/lnd/brontide"
+	"github.com/lightningnetwork/lnd/channeldb"
+	"github.com/lightningnetwork/lnd/channelnotifier"
+	"github.com/lightningnetwork/lnd/contractcourt"
+	"github.com/lightningnetwork/lnd/discovery"
+	"github.com/lightningnetwork/lnd/htlcswitch"
+	"github.com/lightningnetwork/lnd/input"
+	"github.com/lightningnetwork/lnd/invoices"
+	"github.com/lightningnetwork/lnd/lncfg"
+	"github.com/lightningnetwork/lnd/lnpeer"
+	"github.com/lightningnetwork/lnd/lnrpc"
+	"github.com/lightningnetwork/lnd/lnwallet"
+	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/lightningnetwork/lnd/nat"
+	"github.com/lightningnetwork/lnd/netann"
+	"github.com/lightningnetwork/lnd/routing"
+	"github.com/lightningnetwork/lnd/sweep"
+	"github.com/lightningnetwork/lnd/ticker"
+	"github.com/lightningnetwork/lnd/tor"
+>>>>>>> 81783a60dc87f275d415be2e55c8f03688cd63ae
 )
 
 const (
@@ -144,6 +168,8 @@ type server struct {
 	htlcSwitch *htlcswitch.Switch
 
 	invoices *invoices.InvoiceRegistry
+
+	channelNotifier *channelnotifier.ChannelNotifier
 
 	witnessBeacon contractcourt.WitnessBeacon
 
@@ -274,6 +300,8 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB, cc *chainControl,
 
 		invoices: invoices.NewRegistry(chanDB, activeNetParams.Params),
 
+		channelNotifier: channelnotifier.New(chanDB),
+
 		identityPriv: privKey,
 		nodeSigner:   netann.NewNodeSigner(privKey),
 
@@ -357,6 +385,8 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB, cc *chainControl,
 			htlcswitch.DefaultFwdEventInterval),
 		LogEventTicker: ticker.New(
 			htlcswitch.DefaultLogInterval),
+		NotifyActiveChannel:   s.channelNotifier.NotifyActiveChannelEvent,
+		NotifyInactiveChannel: s.channelNotifier.NotifyInactiveChannelEvent,
 	}, uint32(currentHeight))
 	if err != nil {
 		return nil, err
@@ -735,8 +765,9 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB, cc *chainControl,
 		DisableChannel: func(op wire.OutPoint) error {
 			return s.announceChanStatus(op, true)
 		},
-		Sweeper:       s.sweeper,
-		SettleInvoice: s.invoices.SettleInvoice,
+		Sweeper:             s.sweeper,
+		SettleInvoice:       s.invoices.SettleInvoice,
+		NotifyClosedChannel: s.channelNotifier.NotifyClosedChannelEvent,
 	}, chanDB)
 
 	s.breachArbiter = newBreachArbiter(&BreachConfig{
@@ -922,9 +953,10 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB, cc *chainControl,
 			// channel bandwidth.
 			return uint16(input.MaxHTLCNumber / 2)
 		},
-		ZombieSweeperInterval: 1 * time.Minute,
-		ReservationTimeout:    10 * time.Minute,
-		MinChanSize:           btcutil.Amount(cfg.MinChanSize),
+		ZombieSweeperInterval:  1 * time.Minute,
+		ReservationTimeout:     10 * time.Minute,
+		MinChanSize:            btcutil.Amount(cfg.MinChanSize),
+		NotifyOpenChannelEvent: s.channelNotifier.NotifyOpenChannelEvent,
 	})
 	if err != nil {
 		return nil, err
@@ -984,6 +1016,9 @@ func (s *server) Start() error {
 		return err
 	}
 	if err := s.cc.chainNotifier.Start(); err != nil {
+		return err
+	}
+	if err := s.channelNotifier.Start(); err != nil {
 		return err
 	}
 	if err := s.sphinx.Start(); err != nil {
@@ -1083,6 +1118,7 @@ func (s *server) Stop() error {
 	s.authGossiper.Stop()
 	s.chainArb.Stop()
 	s.sweeper.Stop()
+	s.channelNotifier.Stop()
 	s.cc.wallet.Shutdown()
 	s.cc.chainView.Stop()
 	s.connMgr.Stop()
@@ -1680,19 +1716,39 @@ func (s *server) establishPersistentConnections() error {
 	if err != nil {
 		return err
 	}
+
 	// TODO(roasbeef): instead iterate over link nodes and query graph for
 	// each of the nodes.
+	selfPub := s.identityPriv.PubKey().SerializeCompressed()
 	err = sourceNode.ForEachChannel(nil, func(
-		_ *bbolt.Tx,
-		_ *channeldb.ChannelEdgeInfo,
+		tx *bbolt.Tx,
+		chanInfo *channeldb.ChannelEdgeInfo,
 		policy, _ *channeldb.ChannelEdgePolicy) error {
 
-		pubStr := string(policy.Node.PubKeyBytes[:])
+		// If the remote party has announced the channel to us, but we
+		// haven't yet, then we won't have a policy. However, we don't
+		// need this to connect to the peer, so we'll log it and move on.
+		if policy == nil {
+			srvrLog.Warnf("No channel policy found for "+
+				"ChannelPoint(%v): ", chanInfo.ChannelPoint)
+		}
 
-		// Add all unique addresses from channel graph/NodeAnnouncements
-		// to the list of addresses we'll connect to for this peer.
+		// We'll now fetch the peer opposite from us within this
+		// channel so we can queue up a direct connection to them.
+		channelPeer, err := chanInfo.FetchOtherNode(tx, selfPub)
+		if err != nil {
+			return fmt.Errorf("unable to fetch channel peer for "+
+				"ChannelPoint(%v): %v", chanInfo.ChannelPoint,
+				err)
+		}
+
+		pubStr := string(channelPeer.PubKeyBytes[:])
+
+		// Add all unique addresses from channel
+		// graph/NodeAnnouncements to the list of addresses we'll
+		// connect to for this peer.
 		addrSet := make(map[string]net.Addr)
-		for _, addr := range policy.Node.Addresses {
+		for _, addr := range channelPeer.Addresses {
 			switch addr.(type) {
 			case *net.TCPAddr:
 				addrSet[addr.String()] = addr
@@ -1734,7 +1790,7 @@ func (s *server) establishPersistentConnections() error {
 		n := &nodeAddresses{
 			addresses: addrs,
 		}
-		n.pubKey, err = policy.Node.PubKey()
+		n.pubKey, err = channelPeer.PubKey()
 		if err != nil {
 			return err
 		}

@@ -11,14 +11,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/integration/rpctest"
-	"github.com/btcsuite/btcd/rpcclient"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/integration/rpctest"
+	"github.com/Actinium-project/acmd/rpcclient"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/btcsuite/btcwallet/chain"
 	_ "github.com/btcsuite/btcwallet/walletdb/bdb" // Required to auto-register the boltdb walletdb implementation.
-	"github.com/lightninglabs/neutrino"
+	"github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/chainntnfs/bitcoindnotify"
 	"github.com/Actinium-project/lnd/chainntnfs/btcdnotify"
@@ -1566,6 +1566,13 @@ func testCatchUpOnMissedBlocks(miner *rpctest.Harness,
 // out of the chain.
 func testCatchUpOnMissedBlocksWithReorg(miner1 *rpctest.Harness,
 	notifier chainntnfs.TestChainNotifier, t *testing.T) {
+
+	// If this is the neutrino notifier, then we'll skip this test for now
+	// as we're missing functionality required to ensure the test passes
+	// reliably.
+	if _, ok := notifier.(*neutrinonotify.NeutrinoNotifier); ok {
+		t.Skip("skipping re-org test for neutrino")
+	}
 
 	const numBlocks = 10
 	const numClients = 5

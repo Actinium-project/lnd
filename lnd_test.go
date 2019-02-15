@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -18,13 +19,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/btcjson"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/integration/rpctest"
-	"github.com/btcsuite/btcd/rpcclient"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcjson"
+	"github.com/Actinium-project/acmd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/integration/rpctest"
+	"github.com/Actinium-project/acmd/rpcclient"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-errors/errors"
 	"github.com/Actinium-project/lnd/lnrpc"
@@ -643,8 +644,8 @@ func testOnchainFundRecovery(net *lntest.NetworkHarness, t *harnessTest) {
 	// method takes the expected value of Carol's balance when using the
 	// given recovery window. Additionally, the caller can specify an action
 	// to perform on the restored node before the node is shutdown.
-	restoreCheckBalance := func(expAmount int64, recoveryWindow int32,
-		fn func(*lntest.HarnessNode)) {
+	restoreCheckBalance := func(expAmount int64, expectedNumUTXOs int,
+		recoveryWindow int32, fn func(*lntest.HarnessNode)) {
 
 		// Restore Carol, passing in the password, mnemonic, and
 		// desired recovery window.
@@ -655,8 +656,12 @@ func testOnchainFundRecovery(net *lntest.NetworkHarness, t *harnessTest) {
 			t.Fatalf("unable to restore node: %v", err)
 		}
 
-		// Query carol for her current wallet balance.
-		var currBalance int64
+		// Query carol for her current wallet balance, and also that we
+		// gain the expected number of UTXOs.
+		var (
+			currBalance  int64
+			currNumUTXOs uint32
+		)
 		err = lntest.WaitPredicate(func() bool {
 			req := &lnrpc.WalletBalanceRequest{}
 			ctxt, _ := context.WithTimeout(ctxb, defaultTimeout)
@@ -673,12 +678,27 @@ func testOnchainFundRecovery(net *lntest.NetworkHarness, t *harnessTest) {
 				return false
 			}
 
+			utxoReq := &lnrpc.ListUnspentRequest{
+				MaxConfs: math.MaxInt32,
+			}
+			ctxt, _ = context.WithTimeout(ctxb, defaultTimeout)
+			utxoResp, err := node.ListUnspent(ctxt, utxoReq)
+			if err != nil {
+				t.Fatalf("unable to query utxos: %v", err)
+			}
+
+			currNumUTXOs := len(utxoResp.Utxos)
+			if currNumUTXOs != expectedNumUTXOs {
+				return false
+			}
+
 			return true
 		}, 15*time.Second)
 		if err != nil {
 			t.Fatalf("expected restored node to have %d satoshis, "+
-				"instead has %d satoshis", expAmount,
-				currBalance)
+				"instead has %d satoshis, expected %d utxos "+
+				"instead has %d", expAmount, currBalance,
+				expectedNumUTXOs, currNumUTXOs)
 		}
 
 		// If the user provided a callback, execute the commands against
@@ -750,37 +770,40 @@ func testOnchainFundRecovery(net *lntest.NetworkHarness, t *harnessTest) {
 	//
 	// After, one ACM is sent to both her first external P2WKH and NP2WKH
 	// addresses.
-	restoreCheckBalance(0, 0, skipAndSend(0))
+	restoreCheckBalance(0, 0, 0, skipAndSend(0))
 
 	// Check that restoring without a look-ahead results in having no funds
 	// in the wallet, even though they exist on-chain.
-	restoreCheckBalance(0, 0, nil)
+	restoreCheckBalance(0, 0, 0, nil)
 
-	// Now, check that using a look-ahead of 1 recovers the balance from the
-	// two transactions above.
+	// Now, check that using a look-ahead of 1 recovers the balance from
+	// the two transactions above. We should also now have 2 UTXOs in the
+	// wallet at the end of the recovery attempt.
 	//
 	// After, we will generate and skip 9 P2WKH and NP2WKH addresses, and
 	// send another ACM to the subsequent 10th address in each derivation
 	// path.
-	restoreCheckBalance(2*btcutil.SatoshiPerBitcoin, 1, skipAndSend(9))
+	restoreCheckBalance(2*btcutil.SatoshiPerBitcoin, 2, 1, skipAndSend(9))
 
 	// Check that using a recovery window of 9 does not find the two most
 	// recent txns.
-	restoreCheckBalance(2*btcutil.SatoshiPerBitcoin, 9, nil)
+	restoreCheckBalance(2*btcutil.SatoshiPerBitcoin, 2, 9, nil)
 
 	// Extending our recovery window to 10 should find the most recent
-	// transactions, leaving the wallet with 4 ACM total.
+	// transactions, leaving the wallet with 4 ACM total. We should also
+	// learn of the two additional UTXOs created above.
 	//
 	// After, we will skip 19 more addrs, sending to the 20th address past
 	// our last found address, and repeat the same checks.
-	restoreCheckBalance(4*btcutil.SatoshiPerBitcoin, 10, skipAndSend(19))
+	restoreCheckBalance(4*btcutil.SatoshiPerBitcoin, 4, 10, skipAndSend(19))
 
 	// Check that recovering with a recovery window of 19 fails to find the
 	// most recent transactions.
-	restoreCheckBalance(4*btcutil.SatoshiPerBitcoin, 19, nil)
+	restoreCheckBalance(4*btcutil.SatoshiPerBitcoin, 4, 19, nil)
 
-	// Ensure that using a recovery window of 20 succeeds.
-	restoreCheckBalance(6*btcutil.SatoshiPerBitcoin, 20, nil)
+	// Ensure that using a recovery window of 20 succeeds with all UTXOs
+	// found and the final balance reflected.
+	restoreCheckBalance(6*btcutil.SatoshiPerBitcoin, 6, 20, nil)
 }
 
 // testBasicChannelFunding performs a test exercising expected behavior from a
@@ -5694,14 +5717,136 @@ func testInvoiceSubscriptions(net *lntest.NetworkHarness, t *harnessTest) {
 	closeChannelAndAssert(ctxt, t, net, net.Alice, chanPoint, false)
 }
 
-// testBasicChannelCreation test multiple channel opening and closing.
-func testBasicChannelCreation(net *lntest.NetworkHarness, t *harnessTest) {
-	ctxb := context.Background()
+// channelSubscription houses the proxied update and error chans for a node's
+// channel subscriptions.
+type channelSubscription struct {
+	updateChan chan *lnrpc.ChannelEventUpdate
+	errChan    chan error
+	quit       chan struct{}
+}
 
+// subscribeChannelNotifications subscribes to channel updates and launches a
+// goroutine that forwards these to the returned channel.
+func subscribeChannelNotifications(ctxb context.Context, t *harnessTest,
+	node *lntest.HarnessNode) channelSubscription {
+
+	// We'll first start by establishing a notification client which will
+	// send us notifications upon channels becoming active, inactive or
+	// closed.
+	req := &lnrpc.ChannelEventSubscription{}
+	ctx, cancelFunc := context.WithCancel(ctxb)
+
+	chanUpdateClient, err := node.SubscribeChannelEvents(ctx, req)
+	if err != nil {
+		t.Fatalf("unable to create channel update client: %v", err)
+	}
+
+	// We'll launch a goroutine that will be responsible for proxying all
+	// notifications recv'd from the client into the channel below.
+	errChan := make(chan error, 1)
+	quit := make(chan struct{})
+	chanUpdates := make(chan *lnrpc.ChannelEventUpdate, 20)
+	go func() {
+		defer cancelFunc()
+		for {
+			select {
+			case <-quit:
+				return
+			default:
+				chanUpdate, err := chanUpdateClient.Recv()
+				select {
+				case <-quit:
+					return
+				default:
+				}
+
+				if err == io.EOF {
+					return
+				} else if err != nil {
+					select {
+					case errChan <- err:
+					case <-quit:
+					}
+					return
+				}
+
+				select {
+				case chanUpdates <- chanUpdate:
+				case <-quit:
+					return
+				}
+			}
+		}
+	}()
+
+	return channelSubscription{
+		updateChan: chanUpdates,
+		errChan:    errChan,
+		quit:       quit,
+	}
+}
+
+// verifyCloseUpdate is used to verify that a closed channel update is of the
+// expected type.
+func verifyCloseUpdate(chanUpdate *lnrpc.ChannelEventUpdate,
+	force bool, forceType lnrpc.ChannelCloseSummary_ClosureType) error {
+
+	// We should receive one inactive and one closed notification
+	// for each channel.
+	switch update := chanUpdate.Channel.(type) {
+	case *lnrpc.ChannelEventUpdate_InactiveChannel:
+		if chanUpdate.Type != lnrpc.ChannelEventUpdate_INACTIVE_CHANNEL {
+			return fmt.Errorf("update type mismatch: expected %v, got %v",
+				lnrpc.ChannelEventUpdate_INACTIVE_CHANNEL,
+				chanUpdate.Type)
+		}
+	case *lnrpc.ChannelEventUpdate_ClosedChannel:
+		if chanUpdate.Type !=
+			lnrpc.ChannelEventUpdate_CLOSED_CHANNEL {
+			return fmt.Errorf("update type mismatch: expected %v, got %v",
+				lnrpc.ChannelEventUpdate_CLOSED_CHANNEL,
+				chanUpdate.Type)
+		}
+
+		switch force {
+		case true:
+			if update.ClosedChannel.CloseType != forceType {
+				return fmt.Errorf("channel closure type mismatch: "+
+					"expected %v, got %v",
+					forceType,
+					update.ClosedChannel.CloseType)
+			}
+		case false:
+			if update.ClosedChannel.CloseType !=
+				lnrpc.ChannelCloseSummary_COOPERATIVE_CLOSE {
+				return fmt.Errorf("channel closure type "+
+					"mismatch: expected %v, got %v",
+					lnrpc.ChannelCloseSummary_COOPERATIVE_CLOSE,
+					update.ClosedChannel.CloseType)
+			}
+		}
+	default:
+		return fmt.Errorf("channel update channel of wrong type, "+
+			"expected closed channel, got %T",
+			update)
+	}
+
+	return nil
+}
+
+// testBasicChannelCreationAndUpdates tests multiple channel opening and closing,
+// and ensures that if a node is subscribed to channel updates they will be
+// received correctly for both cooperative and force closed channels.
+func testBasicChannelCreationAndUpdates(net *lntest.NetworkHarness, t *harnessTest) {
+	ctxb := context.Background()
 	const (
 		numChannels = 2
 		amount      = maxBtcFundingAmount
 	)
+
+	// Let Bob subscribe to channel notifications.
+	bobChanSub := subscribeChannelNotifications(ctxb, t, net.Bob)
+	defer close(bobChanSub.quit)
 
 	// Open the channel between Alice and Bob, asserting that the
 	// channel has been properly open on-chain.
@@ -5716,11 +5861,89 @@ func testBasicChannelCreation(net *lntest.NetworkHarness, t *harnessTest) {
 		)
 	}
 
-	// Close the channel between Alice and Bob, asserting that the
-	// channel has been properly closed on-chain.
-	for _, chanPoint := range chanPoints {
-		ctxt, _ := context.WithTimeout(ctxb, channelCloseTimeout)
-		closeChannelAndAssert(ctxt, t, net, net.Alice, chanPoint, false)
+	// Since each of the channels just became open, Bob should we receive an
+	// open and an active notification for each channel.
+	var numChannelUpds int
+	for numChannelUpds < 2*numChannels {
+		select {
+		case update := <-bobChanSub.updateChan:
+			switch update.Type {
+			case lnrpc.ChannelEventUpdate_ACTIVE_CHANNEL:
+			case lnrpc.ChannelEventUpdate_OPEN_CHANNEL:
+			default:
+				t.Fatalf("update type mismatch: expected open or active "+
+					"channel notification, got: %v", update.Type)
+			}
+			numChannelUpds++
+		case <-time.After(time.Second * 10):
+			t.Fatalf("timeout waiting for channel notifications, "+
+				"only received %d/%d chanupds", numChannelUpds,
+				numChannels)
+		}
+	}
+
+	// Subscribe Alice to channel updates so we can test that both remote
+	// and local force close notifications are received correctly.
+	aliceChanSub := subscribeChannelNotifications(ctxb, t, net.Alice)
+	defer close(aliceChanSub.quit)
+
+	// Close the channel between Alice and Bob, asserting that the channel
+	// has been properly closed on-chain.
+	for i, chanPoint := range chanPoints {
+		ctx, _ := context.WithTimeout(context.Background(), defaultTimeout)
+
+		// Force close half of the channels.
+		force := i%2 == 0
+		closeChannelAndAssert(ctx, t, net, net.Alice, chanPoint, force)
+		if force {
+			cleanupForceClose(t, net, net.Alice, chanPoint)
+		}
+	}
+
+	// verifyCloseUpdatesReceived is used to verify that Alice and Bob
+	// receive the correct channel updates in order.
+	verifyCloseUpdatesReceived := func(sub channelSubscription,
+		forceType lnrpc.ChannelCloseSummary_ClosureType) error {
+
+		// Ensure one inactive and one closed notification is received for each
+		// closed channel.
+		numChannelUpds := 0
+		for numChannelUpds < 2*numChannels {
+			// Every other channel should be force closed.
+			force := (numChannelUpds/2)%2 == 0
+
+			select {
+			case chanUpdate := <-sub.updateChan:
+				err := verifyCloseUpdate(chanUpdate, force, forceType)
+				if err != nil {
+					return err
+				}
+
+				numChannelUpds++
+			case err := <-sub.errChan:
+				return err
+			case <-time.After(time.Second * 10):
+				return fmt.Errorf("timeout waiting for channel "+
+					"notifications, only received %d/%d "+
+					"chanupds", numChannelUpds, 2*numChannels)
+			}
+		}
+
+		return nil
+	}
+
+	// Verify Bob receives all closed channel notifications. He should
+	// receive a remote force close notification for force closed channels.
+	if err := verifyCloseUpdatesReceived(bobChanSub,
+		lnrpc.ChannelCloseSummary_REMOTE_FORCE_CLOSE); err != nil {
+		t.Fatalf("errored verifying close updates: %v", err)
+	}
+
+	// Verify Alice receives all closed channel notifications. She should
+	// receive a remote force close notification for force closed channels.
+	if err := verifyCloseUpdatesReceived(aliceChanSub,
+		lnrpc.ChannelCloseSummary_LOCAL_FORCE_CLOSE); err != nil {
+		t.Fatalf("errored verifying close updates: %v", err)
 	}
 }
 
@@ -12943,8 +13166,8 @@ var testsCases = []*testCase{
 		test: testMultiHopOverPrivateChannels,
 	},
 	{
-		name: "multiple channel creation",
-		test: testBasicChannelCreation,
+		name: "multiple channel creation and update subscription",
+		test: testBasicChannelCreationAndUpdates,
 	},
 	{
 		name: "invoice update subscription",

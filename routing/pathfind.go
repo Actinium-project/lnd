@@ -8,10 +8,10 @@ import (
 
 	"container/heap"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/Actinium-project/acmd/btcec"
 	"github.com/coreos/bbolt"
 
-	"github.com/Actinium-project/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/lnwire"
 )
@@ -154,15 +154,6 @@ type Route struct {
 	// Hops contains details concerning the specific forwarding details at
 	// each hop.
 	Hops []*Hop
-
-	// nodeIndex is a map that allows callers to quickly look up if a node
-	// is present in this computed route or not.
-	nodeIndex map[Vertex]struct{}
-
-	// chanIndex is an index that allows callers to determine if a channel
-	// is present in this route or not. Channels are identified by the
-	// uint64 version of the short channel ID.
-	chanIndex map[uint64]struct{}
 }
 
 // HopFee returns the fee charged by the route hop indicated by hopIndex.
@@ -176,21 +167,6 @@ func (r *Route) HopFee(hopIndex int) lnwire.MilliSatoshi {
 
 	// Fee is calculated as difference between incoming and outgoing amount.
 	return incomingAmt - r.Hops[hopIndex].AmtToForward
-}
-
-// containsNode returns true if a node is present in the target route, and
-// false otherwise.
-func (r *Route) containsNode(v Vertex) bool {
-	_, ok := r.nodeIndex[v]
-	return ok
-}
-
-// containsChannel returns true if a channel is present in the target route,
-// and false otherwise. The passed chanID should be the converted uint64 form
-// of lnwire.ShortChannelID.
-func (r *Route) containsChannel(chanID uint64) bool {
-	_, ok := r.chanIndex[chanID]
-	return ok
 }
 
 // ToHopPayloads converts a complete route into the series of per-hop payloads
@@ -365,16 +341,6 @@ func NewRouteFromHops(amtToSend lnwire.MilliSatoshi, timeLock uint32,
 		TotalTimeLock: timeLock,
 		TotalAmount:   amtToSend,
 		TotalFees:     amtToSend - hops[len(hops)-1].AmtToForward,
-		nodeIndex:     make(map[Vertex]struct{}),
-		chanIndex:     make(map[uint64]struct{}),
-	}
-
-	// Then we'll update the node and channel index, to indicate that this
-	// Vertex and incoming channel link are present within this route.
-	for _, hop := range hops {
-		v := Vertex(hop.PubKeyBytes)
-		route.nodeIndex[v] = struct{}{}
-		route.chanIndex[hop.ChannelID] = struct{}{}
 	}
 
 	return route, nil
@@ -453,6 +419,10 @@ type restrictParams struct {
 	// feeLimit is a maximum fee amount allowed to be used on the path from
 	// the source to the target.
 	feeLimit lnwire.MilliSatoshi
+
+	// outgoingChannelID is the channel that needs to be taken to the first
+	// hop. If nil, any channel may be used.
+	outgoingChannelID *uint64
 }
 
 // findPath attempts to find a path from the source node within the
@@ -563,10 +533,19 @@ func findPath(g *graphParams, r *restrictParams,
 		// TODO(halseth): also ignore disable flags for non-local
 		// channels if bandwidth hint is set?
 		isSourceChan := fromVertex == sourceVertex
+
 		edgeFlags := edge.ChannelFlags
 		isDisabled := edgeFlags&lnwire.ChanUpdateDisabled != 0
 
 		if !isSourceChan && isDisabled {
+			return
+		}
+
+		// If we have an outgoing channel restriction and this is not
+		// the specified channel, skip it.
+		if isSourceChan && r.outgoingChannelID != nil &&
+			*r.outgoingChannelID != edge.ChannelID {
+
 			return
 		}
 
@@ -585,7 +564,7 @@ func findPath(g *graphParams, r *restrictParams,
 
 		amountToSend := toNodeDist.amountToReceive
 
-		// If the estimated band width of the channel edge is not able
+		// If the estimated bandwidth of the channel edge is not able
 		// to carry the amount that needs to be send, return.
 		if bandwidth < amountToSend {
 			return

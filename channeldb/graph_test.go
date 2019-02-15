@@ -14,9 +14,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/coreos/bbolt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/lnwire"
@@ -729,6 +729,14 @@ func TestEdgeInfoUpdates(t *testing.T) {
 
 	// Create an edge and add it to the db.
 	edgeInfo, edge1, edge2 := createChannelEdge(db, node1, node2)
+
+	// Make sure inserting the policy at this point, before the edge info
+	// is added, will fail.
+	if err := graph.UpdateEdgePolicy(edge1); err != ErrEdgeNotFound {
+		t.Fatalf("expected ErrEdgeNotFound, got: %v", err)
+	}
+
+	// Add the edge info.
 	if err := graph.AddChannelEdge(edgeInfo); err != nil {
 		t.Fatalf("unable to create channel edge: %v", err)
 	}

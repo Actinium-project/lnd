@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcutil/bech32"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmutil/bech32"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/autopilot"
 	"github.com/Actinium-project/lnd/lnwire"

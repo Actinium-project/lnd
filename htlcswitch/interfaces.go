@@ -19,6 +19,10 @@ type InvoiceDatabase interface {
 	// SettleInvoice attempts to mark an invoice corresponding to the
 	// passed payment hash as fully settled.
 	SettleInvoice(payHash lntypes.Hash, paidAmount lnwire.MilliSatoshi) error
+
+	// CancelInvoice attempts to cancel the invoice corresponding to the
+	// passed payment hash.
+	CancelInvoice(payHash lntypes.Hash) error
 }
 
 // ChannelLink is an interface which represents the subsystem for managing the
@@ -57,6 +61,9 @@ type ChannelLink interface {
 	// NOTE: This function MUST be non-blocking (or block as little as
 	// possible).
 	HandleChannelUpdate(lnwire.Message)
+
+	// ChannelPoint returns the channel outpoint for the channel link.
+	ChannelPoint() *wire.OutPoint
 
 	// ChanID returns the channel ID for the channel link. The channel ID
 	// is a more compact representation of a channel's full outpoint.

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/lnd/lnwire"
 )
 

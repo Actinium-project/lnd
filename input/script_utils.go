@@ -8,10 +8,10 @@ import (
 
 	"golang.org/x/crypto/ripemd160"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/txscript"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 )
 
 var (

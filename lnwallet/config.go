@@ -1,7 +1,7 @@
 package lnwallet
 
 import (
-	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/input"

@@ -645,5 +645,5 @@ the same license as all of the code found within lnd.
 
 ## Acknowledgements
 This document was heavily inspired by a [similar document outlining the code
-contribution](https://github.com/btcsuite/btcd/blob/master/docs/code_contribution_guidelines.md)
+contribution](https://github.com/Actinium-project/acmd/blob/master/docs/code_contribution_guidelines.md)
 guidelines for btcd. 

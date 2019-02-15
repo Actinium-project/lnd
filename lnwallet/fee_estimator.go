@@ -3,9 +3,9 @@ package lnwallet
 import (
 	"encoding/json"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/rpcclient"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/blockchain"
+	"github.com/Actinium-project/acmd/rpcclient"
+	"github.com/Actinium-project/acmutil"
 )
 
 const (

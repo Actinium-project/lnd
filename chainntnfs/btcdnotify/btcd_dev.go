@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/lnd/chainntnfs"
 )
 

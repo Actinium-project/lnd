@@ -19,7 +19,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmutil"
 	flags "github.com/jessevdk/go-flags"
 	"github.com/Actinium-project/lnd/build"
 	"github.com/Actinium-project/lnd/htlcswitch/hodl"

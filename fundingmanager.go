@@ -8,10 +8,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/coreos/bbolt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-errors/errors"
@@ -333,6 +333,10 @@ type fundingConfig struct {
 	// flood us with very small channels that would never really be usable
 	// due to fees.
 	MinChanSize btcutil.Amount
+
+	// NotifyOpenChannelEvent informs the ChannelNotifier when channels
+	// transition from pending open to open.
+	NotifyOpenChannelEvent func(wire.OutPoint)
 }
 
 // fundingManager acts as an orchestrator/bridge between the wallet's
@@ -1939,6 +1943,10 @@ func (f *fundingManager) waitForFundingConfirmation(completeChan *channeldb.Open
 		return
 	}
 
+	// Inform the ChannelNotifier that the channel has transitioned from
+	// pending open to open.
+	f.cfg.NotifyOpenChannelEvent(completeChan.FundingOutpoint)
+
 	// TODO(roasbeef): ideally persistent state update for chan above
 	// should be abstracted
 
@@ -2279,7 +2287,7 @@ func (f *fundingManager) annAfterSixConfs(completeChan *channeldb.OpenChannel,
 		chanID := lnwire.NewChanIDFromOutPoint(&fundingPoint)
 
 		fndgLog.Infof("Announcing ChannelPoint(%v), short_chan_id=%v",
-			&fundingPoint, spew.Sdump(shortChanID))
+			&fundingPoint, shortChanID)
 
 		// We'll obtain the min HTLC value we can forward in our
 		// direction, as we'll use this value within our ChannelUpdate.
@@ -2311,7 +2319,7 @@ func (f *fundingManager) annAfterSixConfs(completeChan *channeldb.OpenChannel,
 		}
 
 		fndgLog.Debugf("Channel with ChannelPoint(%v), short_chan_id=%v "+
-			"announced", &fundingPoint, spew.Sdump(shortChanID))
+			"announced", &fundingPoint, shortChanID)
 	}
 
 	// We delete the channel opening state from our internal database

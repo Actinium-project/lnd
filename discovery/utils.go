@@ -1,7 +1,7 @@
 package discovery
 
 import (
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/Actinium-project/acmd/btcec"
 	"github.com/go-errors/errors"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/lnwallet"

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmutil"
 )
 
 // htlcIncomingContestResolver is a ContractResolver that's able to resolve an

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/lnd/autopilot"
 	"github.com/Actinium-project/lnd/invoices"
 	"github.com/Actinium-project/lnd/lnrpc/autopilotrpc"

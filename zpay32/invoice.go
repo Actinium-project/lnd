@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcutil/bech32"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmutil"
+	"github.com/Actinium-project/acmutil/bech32"
 	"github.com/Actinium-project/lnd/lnwire"
 	"github.com/Actinium-project/lnd/routing"
 )

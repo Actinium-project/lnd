@@ -10,14 +10,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/coreos/bbolt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-errors/errors"
 
-	"github.com/Actinium-project/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/htlcswitch"
 	"github.com/Actinium-project/lnd/input"
@@ -1125,8 +1125,6 @@ func (r *ChannelRouter) processUpdate(msg interface{}) error {
 		}
 		r.rejectMtx.RUnlock()
 
-		channelID := lnwire.NewShortChanIDFromInt(msg.ChannelID)
-
 		// We make sure to hold the mutex for this channel ID,
 		// such that no other goroutine is concurrently doing
 		// database accesses for the same channel ID.
@@ -1140,6 +1138,15 @@ func (r *ChannelRouter) processUpdate(msg interface{}) error {
 			return errors.Errorf("unable to check for edge "+
 				"existence: %v", err)
 
+		}
+
+		// If the channel doesn't exist in our database, we cannot
+		// apply the updated policy.
+		if !exists {
+			return newErrf(ErrIgnored, "Ignoring update "+
+				"(flags=%v|%v) for unknown chan_id=%v",
+				msg.MessageFlags, msg.ChannelFlags,
+				msg.ChannelID)
 		}
 
 		// As edges are directional edge node has a unique policy for
@@ -1171,36 +1178,6 @@ func (r *ChannelRouter) processUpdate(msg interface{}) error {
 					"outdated update (flags=%v|%v) for "+
 					"known chan_id=%v", msg.MessageFlags,
 					msg.ChannelFlags, msg.ChannelID)
-			}
-		}
-
-		if !exists && !r.cfg.AssumeChannelValid {
-			// Before we can update the channel information, we'll
-			// ensure that the target channel is still open by
-			// querying the utxo-set for its existence.
-			chanPoint, fundingTxOut, err := r.fetchChanPoint(
-				&channelID,
-			)
-			if err != nil {
-				r.rejectMtx.Lock()
-				r.rejectCache[msg.ChannelID] = struct{}{}
-				r.rejectMtx.Unlock()
-
-				return errors.Errorf("unable to fetch chan "+
-					"point for chan_id=%v: %v",
-					msg.ChannelID, err)
-			}
-			_, err = r.cfg.Chain.GetUtxo(
-				chanPoint, fundingTxOut.PkScript,
-				channelID.BlockHeight,
-			)
-			if err != nil {
-				r.rejectMtx.Lock()
-				r.rejectCache[msg.ChannelID] = struct{}{}
-				r.rejectMtx.Unlock()
-
-				return errors.Errorf("unable to fetch utxo for "+
-					"chan_id=%v: %v", msg.ChannelID, err)
 			}
 		}
 
@@ -1281,45 +1258,6 @@ func (r *ChannelRouter) fetchChanPoint(
 type routingMsg struct {
 	msg interface{}
 	err chan error
-}
-
-// pruneNodeFromRoutes accepts set of routes, and returns a new set of routes
-// with the target node filtered out.
-func pruneNodeFromRoutes(routes []*Route, skipNode Vertex) []*Route {
-
-	// TODO(roasbeef): pass in slice index?
-
-	prunedRoutes := make([]*Route, 0, len(routes))
-	for _, route := range routes {
-		if route.containsNode(skipNode) {
-			continue
-		}
-
-		prunedRoutes = append(prunedRoutes, route)
-	}
-
-	log.Tracef("Filtered out %v routes with node %x",
-		len(routes)-len(prunedRoutes), skipNode[:])
-
-	return prunedRoutes
-}
-
-// pruneChannelFromRoutes accepts a set of routes, and returns a new set of
-// routes with the target channel filtered out.
-func pruneChannelFromRoutes(routes []*Route, skipChan uint64) []*Route {
-	prunedRoutes := make([]*Route, 0, len(routes))
-	for _, route := range routes {
-		if route.containsChannel(skipChan) {
-			continue
-		}
-
-		prunedRoutes = append(prunedRoutes, route)
-	}
-
-	log.Tracef("Filtered out %v routes with channel %v",
-		len(routes)-len(prunedRoutes), skipChan)
-
-	return prunedRoutes
 }
 
 // pathsToFeeSortedRoutes takes a set of paths, and returns a corresponding set
@@ -1611,6 +1549,10 @@ type LightningPayment struct {
 	// together and sorted in forward order in order to reach the
 	// destination successfully.
 	RouteHints [][]HopHint
+
+	// OutgoingChannelID is the channel that needs to be taken to the first
+	// hop. If nil, any channel may be used.
+	OutgoingChannelID *uint64
 
 	// TODO(roasbeef): add e2e message?
 }

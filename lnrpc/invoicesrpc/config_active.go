@@ -3,7 +3,7 @@
 package invoicesrpc
 
 import (
-	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/lnd/invoices"
 	"github.com/Actinium-project/lnd/macaroons"
 )

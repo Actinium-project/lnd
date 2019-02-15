@@ -5,9 +5,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/lnd/tor"
 	"github.com/Actinium-project/lnd/watchtower/lookout"
 )
@@ -35,6 +36,11 @@ var (
 // All nil-able elements with the Config must be set in order for the Watchtower
 // to function properly.
 type Config struct {
+	// ChainHash identifies the chain that the watchtower will be monitoring
+	// for breaches and that will be advertised in the server's Init message
+	// to inbound clients.
+	ChainHash chainhash.Hash
+
 	// BlockFetcher supports the ability to fetch blocks from the network by
 	// hash.
 	BlockFetcher lookout.BlockFetcher

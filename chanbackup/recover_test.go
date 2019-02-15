@@ -6,7 +6,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/Actinium-project/acmd/btcec"
 )
 
 type mockChannelRestorer struct {

@@ -4,18 +4,18 @@ package walletrpc
 
 import (
 	"bytes"
-	fmt "fmt"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	"github.com/btcsuite/btcd/wire"
 	"github.com/Actinium-project/lnd/keychain"
 	"github.com/Actinium-project/lnd/lnrpc"
-	signrpc "github.com/Actinium-project/lnd/lnrpc/signrpc"
+	"github.com/Actinium-project/lnd/lnrpc/signrpc"
 	"github.com/Actinium-project/lnd/lnwallet"
-	context "golang.org/x/net/context"
-	grpc "google.golang.org/grpc"
+	"github.com/Actinium-project/acmd/wire"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
 	"gopkg.in/macaroon-bakery.v2/bakery"
 )
 

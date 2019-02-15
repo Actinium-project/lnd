@@ -4,8 +4,8 @@ import (
 	prand "math/rand"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmutil"
 )
 
 // PrefAttachment is an implementation of the AttachmentHeuristic interface

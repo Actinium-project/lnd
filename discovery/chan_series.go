@@ -3,7 +3,7 @@ package discovery
 import (
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/lnwire"
 	"github.com/Actinium-project/lnd/routing"

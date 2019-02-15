@@ -3,7 +3,7 @@ package shachain
 import (
 	"io"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 )
 
 // Producer is an interface which serves as an abstraction over the data

@@ -13,10 +13,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/txscript"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/go-errors/errors"
 	"github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/chainntnfs"
@@ -162,9 +162,11 @@ func initSwitchWithDB(startingHeight uint32, db *channeldb.DB) (*Switch, error) 
 		FetchLastChannelUpdate: func(lnwire.ShortChannelID) (*lnwire.ChannelUpdate, error) {
 			return nil, nil
 		},
-		Notifier:       &mockNotifier{},
-		FwdEventTicker: ticker.MockNew(DefaultFwdEventInterval),
-		LogEventTicker: ticker.MockNew(DefaultLogInterval),
+		Notifier:              &mockNotifier{},
+		FwdEventTicker:        ticker.MockNew(DefaultFwdEventInterval),
+		LogEventTicker:        ticker.MockNew(DefaultLogInterval),
+		NotifyActiveChannel:   func(wire.OutPoint) {},
+		NotifyInactiveChannel: func(wire.OutPoint) {},
 	}
 
 	return New(cfg, startingHeight)
@@ -673,6 +675,7 @@ func (f *mockChannelLink) ChanID() lnwire.ChannelID                     { return
 func (f *mockChannelLink) ShortChanID() lnwire.ShortChannelID           { return f.shortChanID }
 func (f *mockChannelLink) Bandwidth() lnwire.MilliSatoshi               { return 99999999 }
 func (f *mockChannelLink) Peer() lnpeer.Peer                            { return f.peer }
+func (f *mockChannelLink) ChannelPoint() *wire.OutPoint                 { return &wire.OutPoint{} }
 func (f *mockChannelLink) Stop()                                        {}
 func (f *mockChannelLink) EligibleToForward() bool                      { return f.eligible }
 func (f *mockChannelLink) setLiveShortChanID(sid lnwire.ShortChannelID) { f.shortChanID = sid }
@@ -728,6 +731,25 @@ func (i *mockInvoiceRegistry) SettleInvoice(rhash lntypes.Hash,
 	invoice.Terms.State = channeldb.ContractSettled
 	invoice.AmtPaid = amt
 	i.invoices[rhash] = invoice
+
+	return nil
+}
+
+func (i *mockInvoiceRegistry) CancelInvoice(payHash lntypes.Hash) error {
+	i.Lock()
+	defer i.Unlock()
+
+	invoice, ok := i.invoices[payHash]
+	if !ok {
+		return channeldb.ErrInvoiceNotFound
+	}
+
+	if invoice.Terms.State == channeldb.ContractCanceled {
+		return nil
+	}
+
+	invoice.Terms.State = channeldb.ContractCanceled
+	i.invoices[payHash] = invoice
 
 	return nil
 }

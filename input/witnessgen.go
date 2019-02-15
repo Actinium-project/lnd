@@ -3,8 +3,8 @@ package input
 import (
 	"fmt"
 
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/txscript"
+	"github.com/Actinium-project/acmd/wire"
 )
 
 // WitnessType determines how an output's witness will be generated. The

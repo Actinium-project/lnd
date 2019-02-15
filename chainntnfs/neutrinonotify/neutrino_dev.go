@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/rpcclient"
-	"github.com/lightninglabs/neutrino"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/rpcclient"
+	"github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lnd/chainntnfs"
 )
 

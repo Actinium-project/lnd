@@ -1127,11 +1127,22 @@
       ],
       "default": "COOPERATIVE_CLOSE"
     },
+    "ChannelEventUpdateUpdateType": {
+      "type": "string",
+      "enum": [
+        "OPEN_CHANNEL",
+        "CLOSED_CHANNEL",
+        "ACTIVE_CHANNEL",
+        "INACTIVE_CHANNEL"
+      ],
+      "default": "OPEN_CHANNEL"
+    },
     "InvoiceInvoiceState": {
       "type": "string",
       "enum": [
         "OPEN",
-        "SETTLED"
+        "SETTLED",
+        "CANCELED"
       ],
       "default": "OPEN"
     },
@@ -1545,6 +1556,26 @@
         },
         "connecting_node": {
           "type": "string"
+        }
+      }
+    },
+    "lnrpcChannelEventUpdate": {
+      "type": "object",
+      "properties": {
+        "open_channel": {
+          "$ref": "#/definitions/lnrpcChannel"
+        },
+        "closed_channel": {
+          "$ref": "#/definitions/lnrpcChannelCloseSummary"
+        },
+        "active_channel": {
+          "$ref": "#/definitions/lnrpcChannelPoint"
+        },
+        "inactive_channel": {
+          "$ref": "#/definitions/lnrpcChannelPoint"
+        },
+        "type": {
+          "$ref": "#/definitions/ChannelEventUpdateUpdateType"
         }
       }
     },
@@ -2872,6 +2903,11 @@
         "fee_limit": {
           "$ref": "#/definitions/lnrpcFeeLimit",
           "description": "*\nThe maximum number of satoshis that will be paid as a fee of the payment.\nThis value can be represented either as a percentage of the amount being\nsent, or as a fixed amount of the maximum fee the user is willing the pay to\nsend the payment."
+        },
+        "outgoing_chan_id": {
+          "type": "string",
+          "format": "uint64",
+          "description": "*\nThe channel id of the channel that must be taken to the first hop. If zero,\nany channel may be used."
         }
       }
     },
@@ -2911,7 +2947,11 @@
           "items": {
             "$ref": "#/definitions/lnrpcRoute"
           },
-          "description": "/ The set of routes that should be used to attempt to complete the payment."
+          "description": "*\nDeprecated. The set of routes that should be used to attempt to complete the\npayment. The possibility to pass in multiple routes is deprecated and \ninstead the single route field below should be used in combination with the \nstreaming variant of SendToRoute."
+        },
+        "route": {
+          "$ref": "#/definitions/lnrpcRoute",
+          "description": "/ Route that should be used to attempt to complete the payment."
         }
       }
     },
@@ -3028,9 +3068,9 @@
           "format": "int64",
           "title": "/ The value of the unspent coin in satoshis"
         },
-        "script_pubkey": {
+        "pk_script": {
           "type": "string",
-          "title": "/ The scriptpubkey in hex"
+          "title": "/ The pkscript in hex"
         },
         "outpoint": {
           "$ref": "#/definitions/lnrpcOutPoint",

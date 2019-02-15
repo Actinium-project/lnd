@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/lnwire"
 )

@@ -9,6 +9,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-errors/errors"
 	"github.com/Actinium-project/lnd/channeldb"
@@ -1743,6 +1744,12 @@ func (l *channelLink) Peer() lnpeer.Peer {
 	return l.cfg.Peer
 }
 
+// ChannelPoint returns the channel outpoint for the channel link.
+// NOTE: Part of the ChannelLink interface.
+func (l *channelLink) ChannelPoint() *wire.OutPoint {
+	return l.channel.ChannelPoint()
+}
+
 // ShortChanID returns the short channel ID for the channel link. The short
 // channel ID encodes the exact location in the main chain that the original
 // funding output can be found.
@@ -2324,6 +2331,23 @@ func (l *channelLink) processRemoteAdds(fwdPkg *channeldb.FwdPkg,
 				)
 				l.sendHTLCError(
 					pd.HtlcIndex, failure, obfuscator, pd.SourceRef,
+				)
+
+				needUpdate = true
+				continue
+			}
+
+			// Reject htlcs for canceled invoices.
+			if invoice.Terms.State == channeldb.ContractCanceled {
+				l.errorf("Rejecting htlc due to canceled " +
+					"invoice")
+
+				failure := lnwire.NewFailUnknownPaymentHash(
+					pd.Amount,
+				)
+				l.sendHTLCError(
+					pd.HtlcIndex, failure, obfuscator,
+					pd.SourceRef,
 				)
 
 				needUpdate = true

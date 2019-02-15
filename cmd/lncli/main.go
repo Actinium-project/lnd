@@ -14,7 +14,7 @@ import (
 
 	macaroon "gopkg.in/macaroon.v2"
 
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/lnd/build"
 	"github.com/Actinium-project/lnd/lncfg"
 	"github.com/Actinium-project/lnd/lnrpc"
@@ -298,6 +298,7 @@ func main() {
 
 	// Add any extra autopilot commands determined by build flags.
 	app.Commands = append(app.Commands, autopilotCommands()...)
+	app.Commands = append(app.Commands, invoicesCommands()...)
 
 	if err := app.Run(os.Args); err != nil {
 		fatal(err)

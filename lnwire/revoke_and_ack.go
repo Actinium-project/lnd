@@ -3,7 +3,7 @@ package lnwire
 import (
 	"io"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/Actinium-project/acmd/btcec"
 )
 
 // RevokeAndAck is sent by either side once a CommitSig message has been

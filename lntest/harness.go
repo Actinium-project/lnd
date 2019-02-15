@@ -1,6 +1,7 @@
 package lntest
 
 import (
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -13,12 +14,12 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/grpclog"
 
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/integration/rpctest"
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/integration/rpctest"
+	"github.com/Actinium-project/acmd/txscript"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/lnd/lnrpc"
 	"github.com/Actinium-project/lnd/lnwire"
 )
@@ -1295,6 +1296,41 @@ func (n *NetworkHarness) sendCoins(ctx context.Context, amt btcutil.Amount,
 	_, err = n.Miner.SendOutputs([]*wire.TxOut{output}, 7500)
 	if err != nil {
 		return err
+	}
+
+	// Encode the pkScript in hex as this the format that it will be
+	// returned via rpc.
+	expPkScriptStr := hex.EncodeToString(addrScript)
+
+	// Now, wait for ListUnspent to show the unconfirmed transaction
+	// containing the correct pkscript.
+	err = WaitNoError(func() error {
+		req := &lnrpc.ListUnspentRequest{}
+		resp, err := target.ListUnspent(ctx, req)
+		if err != nil {
+			return err
+		}
+
+		// When using this method, there should only ever be on
+		// unconfirmed transaction.
+		if len(resp.Utxos) != 1 {
+			return fmt.Errorf("number of unconfirmed utxos "+
+				"should be 1, found %d", len(resp.Utxos))
+		}
+
+		// Assert that the lone unconfirmed utxo contains the same
+		// pkscript as the output generated above.
+		pkScriptStr := resp.Utxos[0].PkScript
+		if strings.Compare(pkScriptStr, expPkScriptStr) != 0 {
+			return fmt.Errorf("pkscript mismatch, want: %s, "+
+				"found: %s", expPkScriptStr, pkScriptStr)
+		}
+
+		return nil
+	}, 15*time.Second)
+	if err != nil {
+		return fmt.Errorf("unconfirmed utxo was not found in "+
+			"ListUnspent: %v", err)
 	}
 
 	// If the transaction should remain unconfirmed, then we'll wait until

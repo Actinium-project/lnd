@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/btcsuite/btcwallet/wallet"
 	"github.com/Actinium-project/lnd/aezeed"
 	"github.com/Actinium-project/lnd/keychain"

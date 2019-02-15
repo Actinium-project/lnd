@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/watchtower/blob"
 	"github.com/Actinium-project/lnd/watchtower/lookout"

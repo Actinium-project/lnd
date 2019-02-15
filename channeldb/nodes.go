@@ -6,8 +6,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/coreos/bbolt"
 )
 

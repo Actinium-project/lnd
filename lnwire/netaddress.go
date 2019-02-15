@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/wire"
 )
 
 // NetAddress represents information pertaining to the identity and network

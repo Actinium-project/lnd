@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
 	"github.com/Actinium-project/lnd/watchtower/blob"
 )
 
@@ -83,6 +85,20 @@ func WriteElement(w io.Writer, element interface{}) error {
 		var b [2]byte
 		binary.BigEndian.PutUint16(b[:], uint16(e))
 		if _, err := w.Write(b[:]); err != nil {
+			return err
+		}
+
+	case chainhash.Hash:
+		if _, err := w.Write(e[:]); err != nil {
+			return err
+		}
+
+	case *lnwire.RawFeatureVector:
+		if e == nil {
+			return fmt.Errorf("cannot write nil feature vector")
+		}
+
+		if err := e.Encode(w); err != nil {
 			return err
 		}
 
@@ -191,6 +207,20 @@ func ReadElement(r io.Reader, element interface{}) error {
 			return err
 		}
 		*e = ErrorCode(binary.BigEndian.Uint16(b[:]))
+
+	case *chainhash.Hash:
+		if _, err := io.ReadFull(r, e[:]); err != nil {
+			return err
+		}
+
+	case **lnwire.RawFeatureVector:
+		f := lnwire.NewRawFeatureVector()
+		err := f.Decode(r)
+		if err != nil {
+			return err
+		}
+
+		*e = f
 
 	case **btcec.PublicKey:
 		var b [btcec.PubKeyBytesLenCompressed]byte

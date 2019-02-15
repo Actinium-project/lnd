@@ -6,9 +6,9 @@ import (
 	"io"
 	"net"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/keychain"
 	"github.com/Actinium-project/lnd/lnwire"

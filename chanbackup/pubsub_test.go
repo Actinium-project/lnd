@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/keychain"
 )

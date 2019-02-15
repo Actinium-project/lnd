@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/integration/rpctest"
-	"github.com/btcsuite/btcd/rpcclient"
+	"github.com/Actinium-project/acmd/chaincfg"
+	"github.com/Actinium-project/acmd/integration/rpctest"
+	"github.com/Actinium-project/acmd/rpcclient"
 )
 
 // logDir is the name of the temporary log directory.

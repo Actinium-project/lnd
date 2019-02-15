@@ -7,7 +7,7 @@ import (
 
 	"github.com/Actinium-project/lnd/input"
 
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/lnwallet"
 )
 

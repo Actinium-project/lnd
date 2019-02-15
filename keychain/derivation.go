@@ -3,7 +3,7 @@ package keychain
 import (
 	"fmt"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/Actinium-project/acmd/btcec"
 )
 
 const (

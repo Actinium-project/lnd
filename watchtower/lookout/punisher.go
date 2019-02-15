@@ -1,7 +1,7 @@
 package lookout
 
 import (
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/lnwallet"
 )
 

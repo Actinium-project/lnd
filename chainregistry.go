@@ -12,13 +12,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/rpcclient"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcwallet/chain"
-	"github.com/btcsuite/btcwallet/wallet"
-	"github.com/btcsuite/btcwallet/walletdb"
-	"github.com/lightninglabs/neutrino"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/chainntnfs/bitcoindnotify"
 	"github.com/Actinium-project/lnd/chainntnfs/btcdnotify"
@@ -31,6 +24,13 @@ import (
 	"github.com/Actinium-project/lnd/lnwallet/btcwallet"
 	"github.com/Actinium-project/lnd/lnwire"
 	"github.com/Actinium-project/lnd/routing/chainview"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/rpcclient"
+	"github.com/Actinium-project/acmutil"
+	"github.com/btcsuite/btcwallet/chain"
+	"github.com/btcsuite/btcwallet/wallet"
+	"github.com/btcsuite/btcwallet/walletdb"
+	"github.com/Actinium-project/actrino"
 )
 
 const (
@@ -250,9 +250,14 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 		neutrino.BanDuration = 5 * time.Second
 		svc, err := neutrino.NewChainService(config)
 		if err != nil {
+			nodeDatabase.Close()
 			return nil, nil, fmt.Errorf("unable to create neutrino: %v", err)
 		}
 		svc.Start()
+		cleanUp = func() {
+			svc.Stop()
+			nodeDatabase.Close()
+		}
 
 		// Next we'll create the instances of the ChainNotifier and
 		// FilteredChainView interface which is backed by the neutrino
@@ -260,6 +265,7 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 		cc.chainNotifier = neutrinonotify.New(svc, hintCache, hintCache)
 		cc.chainView, err = chainview.NewCfFilteredChainView(svc)
 		if err != nil {
+			cleanUp()
 			return nil, nil, err
 		}
 
@@ -269,10 +275,6 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 		walletConfig.ChainSource = chain.NewNeutrinoClient(
 			activeNetParams.Params, svc,
 		)
-		cleanUp = func() {
-			svc.Stop()
-			nodeDatabase.Close()
-		}
 	case "bitcoind", "actiniumd":
 		var bitcoindMode *bitcoindConfig
 		switch {
@@ -496,6 +498,9 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 	wc, err := btcwallet.New(*walletConfig)
 	if err != nil {
 		fmt.Printf("unable to create wallet controller: %v\n", err)
+		if cleanUp != nil {
+			cleanUp()
+		}
 		return nil, nil, err
 	}
 
@@ -531,10 +536,16 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 	lnWallet, err := lnwallet.NewLightningWallet(walletCfg)
 	if err != nil {
 		fmt.Printf("unable to create wallet: %v\n", err)
+		if cleanUp != nil {
+			cleanUp()
+		}
 		return nil, nil, err
 	}
 	if err := lnWallet.Startup(); err != nil {
 		fmt.Printf("unable to start wallet: %v\n", err)
+		if cleanUp != nil {
+			cleanUp()
+		}
 		return nil, nil, err
 	}
 

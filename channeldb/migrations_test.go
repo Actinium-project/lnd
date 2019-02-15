@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmutil"
 	"github.com/coreos/bbolt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-errors/errors"

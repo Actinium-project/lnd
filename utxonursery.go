@@ -8,9 +8,9 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/txscript"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/acmutil"
 	"github.com/davecgh/go-spew/spew"
 
 	"github.com/Actinium-project/lnd/chainntnfs"
@@ -457,7 +457,7 @@ func (u *utxoNursery) IncubateOutputs(chanPoint wire.OutPoint,
 	// it. This may happen if the caller raced a block to call this method.
 	for _, babyOutput := range babyOutputs {
 		if uint32(bestHeight) >= babyOutput.expiry {
-			err = u.sweepCribOutput(uint32(bestHeight), &babyOutput)
+			err = u.sweepCribOutput(babyOutput.expiry, &babyOutput)
 			if err != nil {
 				return err
 			}

@@ -82,7 +82,7 @@ $(GOACC_BIN):
 
 btcd:
 	@$(call print, "Installing btcd.")
-	GO111MODULE=on go get -v github.com/btcsuite/btcd/@$(BTCD_COMMIT)
+	GO111MODULE=on go get -v github.com/Actinium-project/acmd/@$(BTCD_COMMIT)
 
 # ============
 # INSTALLATION

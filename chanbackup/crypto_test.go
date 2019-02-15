@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/lnd/keychain"
 )
 

@@ -9,8 +9,8 @@ import (
 
 	prand "math/rand"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcutil"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/lnd/channeldb"
 )
 

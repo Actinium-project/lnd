@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 )
 
 type testInsert struct {

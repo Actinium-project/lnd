@@ -33,7 +33,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/Actinium-project/acmd/btcec"
 	"github.com/btcsuite/btcwallet/wallet"
 	proxy "github.com/grpc-ecosystem/grpc-gateway/runtime"
 	flags "github.com/jessevdk/go-flags"
@@ -442,7 +442,7 @@ func fileExists(name string) bool {
 // real PKI.
 //
 // This function is adapted from https://github.com/btcsuite/btcd and
-// https://github.com/btcsuite/btcutil
+// https://github.com/Actinium-project/acmutil
 func genCertPair(certFile, keyFile string) error {
 	rpcsLog.Infof("Generating TLS certificates...")
 

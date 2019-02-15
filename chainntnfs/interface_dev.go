@@ -2,7 +2,7 @@
 
 package chainntnfs
 
-import "github.com/btcsuite/btcd/chaincfg/chainhash"
+import "github.com/Actinium-project/acmd/chaincfg/chainhash"
 
 // TestChainNotifier enables the use of methods that are only present during
 // testing for ChainNotifiers.
