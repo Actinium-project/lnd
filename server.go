@@ -24,11 +24,11 @@ import (
 	"github.com/Actinium-project/acmutil"
 	"github.com/coreos/bbolt"
 	"github.com/go-errors/errors"
-<<<<<<< HEAD
 	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/autopilot"
 	"github.com/Actinium-project/lnd/brontide"
 	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/channelnotifier"
 	"github.com/Actinium-project/lnd/contractcourt"
 	"github.com/Actinium-project/lnd/discovery"
 	"github.com/Actinium-project/lnd/htlcswitch"
@@ -45,29 +45,6 @@ import (
 	"github.com/Actinium-project/lnd/sweep"
 	"github.com/Actinium-project/lnd/ticker"
 	"github.com/Actinium-project/lnd/tor"
-=======
-	sphinx "github.com/lightningnetwork/lightning-onion"
-	"github.com/lightningnetwork/lnd/autopilot"
-	"github.com/lightningnetwork/lnd/brontide"
-	"github.com/lightningnetwork/lnd/channeldb"
-	"github.com/lightningnetwork/lnd/channelnotifier"
-	"github.com/lightningnetwork/lnd/contractcourt"
-	"github.com/lightningnetwork/lnd/discovery"
-	"github.com/lightningnetwork/lnd/htlcswitch"
-	"github.com/lightningnetwork/lnd/input"
-	"github.com/lightningnetwork/lnd/invoices"
-	"github.com/lightningnetwork/lnd/lncfg"
-	"github.com/lightningnetwork/lnd/lnpeer"
-	"github.com/lightningnetwork/lnd/lnrpc"
-	"github.com/lightningnetwork/lnd/lnwallet"
-	"github.com/lightningnetwork/lnd/lnwire"
-	"github.com/lightningnetwork/lnd/nat"
-	"github.com/lightningnetwork/lnd/netann"
-	"github.com/lightningnetwork/lnd/routing"
-	"github.com/lightningnetwork/lnd/sweep"
-	"github.com/lightningnetwork/lnd/ticker"
-	"github.com/lightningnetwork/lnd/tor"
->>>>>>> 81783a60dc87f275d415be2e55c8f03688cd63ae
 )
 
 const (
