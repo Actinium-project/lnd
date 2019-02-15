@@ -7,7 +7,6 @@ require (
 	github.com/NebulousLabs/go-upnp v0.0.0-20180202185039-29b680b06c82
 	github.com/Yawning/aez v0.0.0-20180114000226-4dad034d9db2
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da // indirect
-	github.com/Actinium-project/btcd v0.0.0-20190213025234-306aecffea32
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
 	github.com/Actinium-project/acmutil v0.0.2
 	github.com/Actinium-project/acmwallet v0.0.4
