@@ -17,8 +17,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/acmjson"
+	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/integration/rpctest"
@@ -29,9 +29,7 @@ import (
 	"github.com/Actinium-project/acmwallet/chain"
 	"github.com/Actinium-project/acmwallet/walletdb"
 	_ "github.com/Actinium-project/acmwallet/walletdb/bdb"
-	"github.com/coreos/bbolt"
-	"github.com/davecgh/go-spew/spew"
-	"github.com/Actinium-project/actrino"
+	neutrino "github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/chainntnfs/btcdnotify"
 	"github.com/Actinium-project/lnd/channeldb"
@@ -40,6 +38,8 @@ import (
 	"github.com/Actinium-project/lnd/lnwallet"
 	"github.com/Actinium-project/lnd/lnwallet/btcwallet"
 	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/coreos/bbolt"
+	"github.com/davecgh/go-spew/spew"
 )
 
 var (
