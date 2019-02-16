@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/acmjson"
+	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/integration/rpctest"
@@ -25,7 +25,7 @@ import (
 	"github.com/Actinium-project/acmwallet/walletdb"
 	_ "github.com/Actinium-project/acmwallet/walletdb/bdb" // Required to register the boltdb walletdb implementation.
 
-	"github.com/Actinium-project/actrino"
+	neutrino "github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lnd/channeldb"
 )
 
