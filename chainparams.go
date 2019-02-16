@@ -2,12 +2,11 @@ package main
 
 import (
 	"github.com/Actinium-project/acmd/chaincfg"
+	actiniumCfg "github.com/Actinium-project/acmd/chaincfg"
 	bitcoinCfg "github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	bitcoinWire "github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/keychain"
-	actiniumCfg "github.com/Actinium-project/acmd/chaincfg"
-	actiniumWire "github.com/Actinium-project/acmd/wire"
 )
 
 // activeNetParams is a pointer to the parameters specific to the currently
@@ -33,7 +32,7 @@ type actiniumNetParams struct {
 // bitcoinTestNetParams contains parameters specific to the 3rd version of the
 // test network.
 var bitcoinTestNetParams = bitcoinNetParams{
-	Params:   &bitcoinCfg.TestNet3Params,
+	Params:   &bitcoinCfg.TestNet4Params,
 	rpcPort:  "18334",
 	CoinType: keychain.CoinTypeTestnet,
 }
@@ -122,7 +121,7 @@ func applyActiniumParams(params *bitcoinNetParams, actiniumParams *actiniumNetPa
 // parameter configuration.
 func isTestnet(params *bitcoinNetParams) bool {
 	switch params.Params.Net {
-	case bitcoinWire.TestNet3, bitcoinWire.BitcoinNet(actiniumWire.TestNet4):
+	case bitcoinWire.TestNet4:
 		return true
 	default:
 		return false

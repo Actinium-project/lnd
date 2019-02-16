@@ -19,10 +19,14 @@ github.com/Actinium-project/acmwallet v0.0.5/go.mod h1:+2n5r8AFyzSScslUBdwsYm7bH
 github.com/Actinium-project/actrino v0.0.1/go.mod h1:36slvODVE7VautvYVsKL0TgJ4pnJLehzV6ZRi22riFo=
 github.com/Actinium-project/actrino v0.0.2 h1:+0GQBQ77OSQRuZdyN7n8l0Xn4NJJxMqO13XJPx1oP9s=
 github.com/Actinium-project/actrino v0.0.2/go.mod h1:zFRfMbcZ0XDloU4JV7XYegg0Qw90JQ2tVi7RcsP8I6Y=
-github.com/Actinium-project/lightning-onion v0.0.1 h1:XvOoMWtiDc0K7ffdt2EpKtF3wnrOn0mDIeIN/A637yQ=
 github.com/Actinium-project/lightning-onion v0.0.1/go.mod h1:vwGJUBPKnTSJLNAtTmgXmMABtmJf5YL+HXmpPkzCuW8=
+github.com/Actinium-project/lightning-onion v0.0.2 h1:effaIsM5GThn3I2HgdfkzRgGp3avCdFrEgt7ZIAYbcM=
+github.com/Actinium-project/lightning-onion v0.0.2/go.mod h1:JfD72RcLrnAlrPh6Y5pMKp5JG1djypXKS9K4fvCAiIY=
+github.com/Actinium-project/lnd v0.0.5/go.mod h1:wZPWINenra+pfQ9Zy9RzGfUp0d66T/2UTPxqpJCbXFE=
 github.com/NebulousLabs/fastrand v0.0.0-20180208210444-3cf7173006a0 h1:g/ETZwHx5wN2fqKWS3gCUrEU7dLko+DvVs3hakQCfyE=
 github.com/NebulousLabs/fastrand v0.0.0-20180208210444-3cf7173006a0/go.mod h1:Bdzq+51GR4/0DIhaICZEOm+OHvXGwwB2trKZ8B4Y6eQ=
+github.com/NebulousLabs/fastrand v0.0.0-20181203155948-6fb6489aac4e h1:n+DcnTNkQnHlwpsrHoQtkrJIO7CBx029fw6oR4vIob4=
+github.com/NebulousLabs/fastrand v0.0.0-20181203155948-6fb6489aac4e/go.mod h1:Bdzq+51GR4/0DIhaICZEOm+OHvXGwwB2trKZ8B4Y6eQ=
 github.com/NebulousLabs/go-upnp v0.0.0-20180202185039-29b680b06c82 h1:MG93+PZYs9PyEsj/n5/haQu2gK0h4tUtSy9ejtMwWa0=
 github.com/NebulousLabs/go-upnp v0.0.0-20180202185039-29b680b06c82/go.mod h1:GbuBk21JqF+driLX3XtJYNZjGa45YDoa9IqCTzNSfEc=
 github.com/Yawning/aez v0.0.0-20180114000226-4dad034d9db2 h1:2be4ykKKov3M1yISM2E8gnGXZ/N2SsPawfnGiXxaYEU=
@@ -32,11 +36,9 @@ github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da/go.mod h1:eHEWzANqSi
 github.com/aead/siphash v1.0.1 h1:FwHfE/T45KPKYuuSAKyyvE+oPWcaQ+CUmFW0bPlM+kg=
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=
 github.com/boltdb/bolt v1.3.1/go.mod h1:clJnj/oiGkjum5o1McbSZDSLxVThjynRyGBgiAx27Ps=
-github.com/btcsuite/btcd v0.0.0-20190213025234-306aecffea32 h1:qkOC5Gd33k54tobS36cXdAzJbeHaduLtnLQQwNoIi78=
 github.com/btcsuite/btcd v0.0.0-20190213025234-306aecffea32/go.mod h1:DrZx5ec/dmnfpw9KyYoQyYo7d0KEvTkk/5M/vbZjAr8=
 github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f h1:bAs4lUbRJpnnkd9VhRV3jjAVU7DJVjMaK+IsvSeZvFo=
 github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f/go.mod h1:TdznJufoqS23FtqVCzL0ZqgP5MqXbb4fg/WgDys70nA=
-github.com/btcsuite/btcutil v0.0.0-20190207003914-4c204d697803 h1:j3AgPKKZtZStM2nyhrDSLSYgT7YHrZKdSkq1OYeLjvM=
 github.com/btcsuite/btcutil v0.0.0-20190207003914-4c204d697803/go.mod h1:+5NJ2+qvTyV9exUAL/rxXi3DcLg2Ts+ymUAY5y4NvMg=
 github.com/btcsuite/fastsha256 v0.0.0-20160815193821-637e65642941 h1:kij1x2aL7VE6gtx8KMIt8PGPgI5GV9LgtHFG5KaEMPY=
 github.com/btcsuite/fastsha256 v0.0.0-20160815193821-637e65642941/go.mod h1:QcFA8DZHtuIAdYKCq/BzELOaznRsCvwf4zTPmaYwaig=
@@ -83,6 +85,8 @@ github.com/juju/clock v0.0.0-20180808021310-bab88fc67299/go.mod h1:nD0vlnrUjcjJh
 github.com/juju/errors v0.0.0-20181118221551-089d3ea4e4d5/go.mod h1:W54LbzXuIE0boCoNJfwqpmkKJ1O4TCTZMetAt6jGk7Q=
 github.com/juju/loggo v0.0.0-20180524022052-584905176618 h1:MK144iBQF9hTSwBW/9eJm034bVoG30IshVm688T2hi8=
 github.com/juju/loggo v0.0.0-20180524022052-584905176618/go.mod h1:vgyd7OREkbtVEN/8IXZe5Ooef3LQePvuBm9UWj6ZL8U=
+github.com/juju/loggo v0.0.0-20190212223446-d976af380377 h1:n6QjW3g5JNY3xPmIjFt6z1H6tFQA6BhwOC2bvTAm1YU=
+github.com/juju/loggo v0.0.0-20190212223446-d976af380377/go.mod h1:vgyd7OREkbtVEN/8IXZe5Ooef3LQePvuBm9UWj6ZL8U=
 github.com/juju/retry v0.0.0-20180821225755-9058e192b216/go.mod h1:OohPQGsr4pnxwD5YljhQ+TZnuVRYpa5irjugL1Yuif4=
 github.com/juju/testing v0.0.0-20180920084828-472a3e8b2073/go.mod h1:63prj8cnj0tU0S9OHjGJn+b1h0ZghCndfnbQolrYTwA=
 github.com/juju/utils v0.0.0-20180820210520-bf9cc5bdd62d/go.mod h1:6/KLg8Wz/y2KVGWEpkK9vMNGkOnu4k/cqs8Z1fKjTOk=
@@ -104,6 +108,8 @@ github.com/onsi/gomega v1.4.1/go.mod h1:C1qb7wdrVGGVU+Z6iS04AVkA3Q65CEZX59MT0QO5
 github.com/onsi/gomega v1.4.3/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
 github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af h1:gu+uRPtBe88sKxUCEXRoeCvVG90TJmwhiqRpvdhQFng=
 github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af/go.mod h1:XWv6SoW27p1b0cqNHllgS5HIMJraePCO15w5zCzIWYg=
+github.com/rogpeppe/fastuuid v1.0.0 h1:f5eq2L8Y87sP63CaPojeD05ON4/AEe/wejW/jp8N6QQ=
+github.com/rogpeppe/fastuuid v1.0.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
 github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02 h1:tcJ6OjwOMvExLlzrAVZute09ocAGa7KqOON60++Gz4E=
 github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02/go.mod h1:tHlrkM198S068ZqfrO6S8HsoJq2bF3ETfTL+kt4tInY=
 github.com/urfave/cli v1.18.0 h1:m9MfmZWX7bwr9kUcs/Asr95j0IVXzGNNc+/5ku2m26Q=
