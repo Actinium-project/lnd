@@ -1,8 +1,8 @@
 module github.com/Actinium-project/lnd
 
 require (
-	github.com/Actinium-project/acmd v0.0.12
-	github.com/Actinium-project/acmutil v0.0.8
+	github.com/Actinium-project/acmd v0.0.16
+	github.com/Actinium-project/acmutil v0.0.9
 	github.com/Actinium-project/acmwallet v0.0.5
 	github.com/Actinium-project/actrino v0.0.2
 	github.com/Actinium-project/lightning-onion v0.0.2
@@ -23,6 +23,8 @@ require (
 	github.com/juju/loggo v0.0.0-20190212223446-d976af380377 // indirect
 	github.com/kkdai/bstream v0.0.0-20181106074824-b3251f7901ec
 	github.com/miekg/dns v0.0.0-20171125082028-79bfde677fa8
+	github.com/onsi/ginkgo v1.7.0 // indirect
+	github.com/onsi/gomega v1.4.3 // indirect
 	github.com/rogpeppe/fastuuid v1.0.0 // indirect
 	github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02
 	github.com/urfave/cli v1.18.0

@@ -6,12 +6,16 @@ github.com/Actinium-project/acmd v0.0.5/go.mod h1:eyGchHNtNdu0lPt2dZwSrqiWRGJIsd
 github.com/Actinium-project/acmd v0.0.10/go.mod h1:NP0zfJrET0HbOE40WiJIfImevddTfWgYvppOSF55NXE=
 github.com/Actinium-project/acmd v0.0.12 h1:x5515riFpqP0a+N4+/nLRLS96cFA8YNq5mX9DN39xB4=
 github.com/Actinium-project/acmd v0.0.12/go.mod h1:Pj8D+0W4L8hh5XB53c/GGzd4XGagm+mH+x9QQYvoKdk=
+github.com/Actinium-project/acmd v0.0.16 h1:1N6gqZT3E/uaJO6nzT9+fortICUj8U6IcfQN8pjhBT8=
+github.com/Actinium-project/acmd v0.0.16/go.mod h1:jt01G3iKkX2fl1Dkt3FGE9YxpBmFIFfOUINSIubnTuc=
 github.com/Actinium-project/acmlog v0.0.1/go.mod h1:mYHeT//qvzCG6xv5MKbfyyy6bMchkZIH2aQ7LkTOnys=
 github.com/Actinium-project/acmutil v0.0.2/go.mod h1:8yj6Xo5JtGIeu5FN9M2bL8+YkbWNmxI/K0zlGMyAZPE=
 github.com/Actinium-project/acmutil v0.0.5/go.mod h1:Bh3jsY5rMJrkvLskUwPX8dhR4GGEcjaDGATk/EsU2oc=
 github.com/Actinium-project/acmutil v0.0.6/go.mod h1:6WsszQu/I50lm+lmB5YdiWoIOuYP3pt9qKI+67rnCxQ=
 github.com/Actinium-project/acmutil v0.0.8 h1:RfLv7+nmbhZVAbtP6YvUDiSn60JcoJ4Y5EhQmaYaLko=
 github.com/Actinium-project/acmutil v0.0.8/go.mod h1:gW56HYgZNd17eysHGOge4YZJsNic1VHYzsY4+KLzT0I=
+github.com/Actinium-project/acmutil v0.0.9 h1:2i25tmsFIqvR4caVBhS0jwHzIlykDS02cwkDJY5uB8I=
+github.com/Actinium-project/acmutil v0.0.9/go.mod h1:OCOwZ81NDTY01wMZATUWmRyii6RUJ99KtIZ83o3jmNQ=
 github.com/Actinium-project/acmwallet v0.0.3/go.mod h1:IQGKZI4+6cETS2mQs3Asq/ZHNrTq+XXnMnZqBGVexdA=
 github.com/Actinium-project/acmwallet v0.0.4/go.mod h1:7cBUBOJRQwxRqm2+1tMZbyJ7Em/hgtbU+lQ+DlTBmFk=
 github.com/Actinium-project/acmwallet v0.0.5 h1:aD3mVTZ8XNDH50bUqUYSCY4EJjwwW1651o9GIDkoe7I=
