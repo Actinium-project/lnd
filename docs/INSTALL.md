@@ -220,7 +220,7 @@ make btcd
 ```
 
 Alternatively, you can install [`btcd` directly from its
-repo](https://github.com/btcsuite/btcd).
+repo](https://github.com/github.com/Actinium-project/acmd/btcec).
 
 ### Starting btcd
 

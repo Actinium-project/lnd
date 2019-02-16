@@ -4,9 +4,9 @@ import (
 	"encoding/binary"
 	"io"
 
-	"github.com/Actinium-project/acmd/btcec"
-	"github.com/Actinium-project/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/acmd/btcec"
 )
 
 // NetworkHop indicates the blockchain network that is intended to be the next

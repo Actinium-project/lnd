@@ -9,17 +9,17 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
-	"github.com/coreos/bbolt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/contractcourt"
 	"github.com/Actinium-project/lnd/lnwallet"
 	"github.com/Actinium-project/lnd/lnwire"
 	"github.com/Actinium-project/lnd/ticker"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/coreos/bbolt"
+	"github.com/davecgh/go-spew/spew"
 )
 
 const (

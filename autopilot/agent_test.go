@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/Actinium-project/acmd/btcec"
+
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
 )

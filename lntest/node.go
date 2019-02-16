@@ -945,7 +945,7 @@ func (hn *HarnessNode) WaitForBalance(expectedBalance acmutil.Amount, confirmed 
 }
 
 // fileExists reports whether the named file or directory exists.
-// This function is taken from https://github.com/btcsuite/btcd
+// This function is taken from https://github.com/github.com/Actinium-project/acmd/btcec
 func fileExists(name string) bool {
 	if _, err := os.Stat(name); err != nil {
 		if os.IsNotExist(err) {

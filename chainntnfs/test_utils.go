@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/acmjson"
+	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/integration/rpctest"
@@ -23,7 +23,7 @@ import (
 	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/acmwallet/chain"
 	"github.com/Actinium-project/acmwallet/walletdb"
-	"github.com/Actinium-project/actrino"
+	neutrino "github.com/Actinium-project/actrino"
 )
 
 var (

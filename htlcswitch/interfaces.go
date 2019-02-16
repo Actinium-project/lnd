@@ -1,6 +1,7 @@
 package htlcswitch
 
 import (
+	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/lnpeer"
 	"github.com/Actinium-project/lnd/lntypes"

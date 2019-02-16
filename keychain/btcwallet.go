@@ -4,10 +4,10 @@ import (
 	"crypto/sha256"
 	"fmt"
 
-	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmwallet/waddrmgr"
 	"github.com/Actinium-project/acmwallet/wallet"
 	"github.com/Actinium-project/acmwallet/walletdb"
+	"github.com/Actinium-project/acmd/btcec"
 )
 
 const (

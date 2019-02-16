@@ -8,7 +8,7 @@ import (
 
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/rpcclient"
-	"github.com/Actinium-project/actrino"
+	neutrino "github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/lnd/chainntnfs"
 )
 

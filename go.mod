@@ -2,9 +2,9 @@ module github.com/Actinium-project/lnd
 
 require (
 	git.schwanenlied.me/yawning/bsaes.git v0.0.0-20180720073208-c0276d75487e // indirect
-	github.com/Actinium-project/acmd v0.0.2
-	github.com/Actinium-project/acmutil v0.0.2
-	github.com/Actinium-project/acmwallet v0.0.4
+	github.com/Actinium-project/acmd v0.0.12
+	github.com/Actinium-project/acmutil v0.0.8
+	github.com/Actinium-project/acmwallet v0.0.5
 	github.com/Actinium-project/actrino v0.0.2
 	github.com/Actinium-project/lightning-onion v0.0.1
 	github.com/NebulousLabs/fastrand v0.0.0-20180208210444-3cf7173006a0 // indirect
@@ -12,7 +12,6 @@ require (
 	github.com/Yawning/aez v0.0.0-20180114000226-4dad034d9db2
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da // indirect
 	github.com/boltdb/bolt v1.3.1 // indirect
-	github.com/btcsuite/btcd v0.0.0-20190213025234-306aecffea32 // indirect
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
 	github.com/btcsuite/fastsha256 v0.0.0-20160815193821-637e65642941
 	github.com/btcsuite/goleveldb v1.0.0 // indirect

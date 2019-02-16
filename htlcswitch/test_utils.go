@@ -15,13 +15,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
-	"github.com/btcsuite/fastsha256"
-	"github.com/coreos/bbolt"
-	"github.com/go-errors/errors"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/contractcourt"
 	"github.com/Actinium-project/lnd/input"
@@ -32,6 +28,10 @@ import (
 	"github.com/Actinium-project/lnd/lnwire"
 	"github.com/Actinium-project/lnd/shachain"
 	"github.com/Actinium-project/lnd/ticker"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/btcsuite/fastsha256"
+	"github.com/coreos/bbolt"
+	"github.com/go-errors/errors"
 )
 
 var (
