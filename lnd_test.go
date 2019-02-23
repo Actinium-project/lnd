@@ -395,43 +395,36 @@ func numOpenChannelsPending(ctxt context.Context, node *lntest.HarnessNode) (int
 func assertNumOpenChannelsPending(ctxt context.Context, t *harnessTest,
 	alice, bob *lntest.HarnessNode, expected int) {
 
-	const nPolls = 10
-
-	ticker := time.NewTicker(200 * time.Millisecond)
-	defer ticker.Stop()
-
-	for i := 0; i < nPolls; i++ {
+	err := lntest.WaitNoError(func() error {
 		aliceNumChans, err := numOpenChannelsPending(ctxt, alice)
 		if err != nil {
-			t.Fatalf("error fetching alice's node (%v) pending channels %v",
-				alice.NodeID, err)
+			return fmt.Errorf("error fetching alice's node (%v) "+
+				"pending channels %v", alice.NodeID, err)
 		}
 		bobNumChans, err := numOpenChannelsPending(ctxt, bob)
 		if err != nil {
-			t.Fatalf("error fetching bob's node (%v) pending channels %v",
-				bob.NodeID, err)
+			return fmt.Errorf("error fetching bob's node (%v) "+
+				"pending channels %v", bob.NodeID, err)
 		}
 
-		isLastIteration := i == nPolls-1
-
 		aliceStateCorrect := aliceNumChans == expected
-		if !aliceStateCorrect && isLastIteration {
-			t.Fatalf("number of pending channels for alice incorrect. "+
-				"expected %v, got %v", expected, aliceNumChans)
+		if !aliceStateCorrect {
+			return fmt.Errorf("number of pending channels for "+
+				"alice incorrect. expected %v, got %v",
+				expected, aliceNumChans)
 		}
 
 		bobStateCorrect := bobNumChans == expected
-		if !bobStateCorrect && isLastIteration {
-			t.Fatalf("number of pending channels for bob incorrect. "+
-				"expected %v, got %v",
-				expected, bobNumChans)
+		if !bobStateCorrect {
+			return fmt.Errorf("number of pending channels for bob "+
+				"incorrect. expected %v, got %v", expected,
+				bobNumChans)
 		}
 
-		if aliceStateCorrect && bobStateCorrect {
-			return
-		}
-
-		<-ticker.C
+		return nil
+	}, 15*time.Second)
+	if err != nil {
+		t.Fatalf(err.Error())
 	}
 }
 
@@ -1047,6 +1040,32 @@ out:
 			t.Fatalf("unable to recv graph update: %v", err)
 		case <-time.After(20 * time.Second):
 			t.Fatalf("did not receive channel update")
+		}
+	}
+}
+
+// assertNoChannelUpdates ensures that no ChannelUpdates are sent via the
+// graphSubscription. This method will block for the provided duration before
+// returning to the caller if successful.
+func assertNoChannelUpdates(t *harnessTest, subscription graphSubscription,
+	duration time.Duration) {
+
+	timeout := time.After(duration)
+	for {
+		select {
+		case graphUpdate := <-subscription.updateChan:
+			if len(graphUpdate.ChannelUpdates) > 0 {
+				t.Fatalf("received %d channel updates when "+
+					"none were expected",
+					len(graphUpdate.ChannelUpdates))
+			}
+
+		case err := <-subscription.errChan:
+			t.Fatalf("graph subscription failure: %v", err)
+
+		case <-timeout:
+			// No updates received, success.
+			return
 		}
 	}
 }
@@ -3079,7 +3098,9 @@ func testChannelForceClosure(net *lntest.NetworkHarness, t *harnessTest) {
 	}
 
 	// Wait for the single sweep txn to appear in the mempool.
-	htlcSweepTxID, err := waitForTxInMempool(net.Miner.Node, minerMempoolTimeout)
+	htlcSweepTxID, err := waitForTxInMempool(
+		net.Miner.Node, minerMempoolTimeout,
+	)
 	if err != nil {
 		t.Fatalf("failed to get sweep tx from mempool: %v", err)
 	}
@@ -3175,11 +3196,9 @@ func testChannelForceClosure(net *lntest.NetworkHarness, t *harnessTest) {
 	}
 
 	// Generate the final block that sweeps all htlc funds into the user's
-	// wallet.
-	blockHash, err = net.Miner.Node.Generate(1)
-	if err != nil {
-		t.Fatalf("unable to generate block: %v", err)
-	}
+	// wallet, and make sure the sweep is in this block.
+	block = mineBlocks(t, net, 1, 1)[0]
+	assertTxInBlock(t, block, htlcSweepTxID)
 
 	// Now that the channel has been fully swept, it should no longer show
 	// up within the pending channels RPC.
@@ -7405,8 +7424,11 @@ func testRevokedCloseRetributionRemoteHodl(net *lntest.NetworkHarness,
 		// attempt because of the second layer transactions, he will
 		// wait until the next block epoch before trying again. Because
 		// of this, we'll mine a block if we cannot find the justice tx
-		// immediately.
-		mineBlocks(t, net, 1, 1)
+		// immediately. Since we cannot tell for sure how many
+		// transactions will be in the mempool at this point, we pass 0
+		// as the last argument, indicating we don't care what's in the
+		// mempool.
+		mineBlocks(t, net, 1, 0)
 		err = lntest.WaitPredicate(func() bool {
 			txid, err := findJusticeTx()
 			if err != nil {
@@ -7692,6 +7714,10 @@ func testDataLossProtection(net *lntest.NetworkHarness, t *harnessTest) {
 			t.Fatalf("unable to restart node: %v", err)
 		}
 
+		// Make sure the channel is still there from the PoV of the
+		// node.
+		assertNodeNumChannels(t, node, 1)
+
 		// Now query for the channel state, it should show that it's at
 		// a state number in the past, not the *latest* state.
 		ctxt, _ = context.WithTimeout(ctxb, defaultTimeout)
@@ -7702,7 +7728,6 @@ func testDataLossProtection(net *lntest.NetworkHarness, t *harnessTest) {
 		if nodeChan.NumUpdates != stateNumPreCopy {
 			t.Fatalf("db copy failed: %v", nodeChan.NumUpdates)
 		}
-		assertNodeNumChannels(t, node, 1)
 
 		balReq := &lnrpc.WalletBalanceRequest{}
 		ctxt, _ = context.WithTimeout(ctxb, defaultTimeout)
@@ -12689,7 +12714,9 @@ func testRouteFeeCutoff(net *lntest.NetworkHarness, t *harnessTest) {
 	// route using Carol as an intermediate hop is 10% of the payment's
 	// amount, we'll use a lower percentage in order to invalid that route.
 	feeLimitPercent := &lnrpc.FeeLimit{
-		Limit: &lnrpc.FeeLimit_Percent{baseFee/1000 - 1},
+		Limit: &lnrpc.FeeLimit_Percent{
+			Percent: baseFee/1000 - 1,
+		},
 	}
 	testFeeCutoff(feeLimitPercent)
 
@@ -12697,7 +12724,9 @@ func testRouteFeeCutoff(net *lntest.NetworkHarness, t *harnessTest) {
 	// fee for the route using Carol as an intermediate hop earlier, we can
 	// use a smaller value in order to invalidate that route.
 	feeLimitFixed := &lnrpc.FeeLimit{
-		Limit: &lnrpc.FeeLimit_Fixed{int64(carolFee.ToSatoshis()) - 1},
+		Limit: &lnrpc.FeeLimit_Fixed{
+			Fixed: int64(carolFee.ToSatoshis()) - 1,
+		},
 	}
 	testFeeCutoff(feeLimitFixed)
 
@@ -12734,7 +12763,13 @@ func testSendUpdateDisableChannel(net *lntest.NetworkHarness, t *harnessTest) {
 		},
 	)
 
-	carol, err := net.NewNode("Carol", nil)
+	carol, err := net.NewNode("Carol", []string{
+		"--minbackoff=10s",
+		"--unsafe-disconnect",
+		"--chan-enable-timeout=1.5s",
+		"--chan-disable-timeout=3s",
+		"--chan-status-sample-interval=.5s",
+	})
 	if err != nil {
 		t.Fatalf("unable to create carol's node: %v", err)
 	}
@@ -12755,7 +12790,12 @@ func testSendUpdateDisableChannel(net *lntest.NetworkHarness, t *harnessTest) {
 	// We create a new node Eve that has an inactive channel timeout of
 	// just 2 seconds (down from the default 20m). It will be used to test
 	// channel updates for channels going inactive.
-	eve, err := net.NewNode("Eve", []string{"--inactivechantimeout=2s"})
+	eve, err := net.NewNode("Eve", []string{
+		"--minbackoff=10s",
+		"--chan-enable-timeout=1.5s",
+		"--chan-disable-timeout=3s",
+		"--chan-status-sample-interval=.5s",
+	})
 	if err != nil {
 		t.Fatalf("unable to create eve's node: %v", err)
 	}
@@ -12839,6 +12879,60 @@ func testSendUpdateDisableChannel(net *lntest.NetworkHarness, t *harnessTest) {
 			{eve.PubKeyStr, expectedPolicy, chanPointEveCarol},
 		},
 	)
+
+	// Now we'll test a long disconnection. Disconnect Carol and Eve and
+	// ensure they both detect each other as disabled. Their min backoffs
+	// are high enough to not interfere with disabling logic.
+	ctxt, _ = context.WithTimeout(ctxb, defaultTimeout)
+	if err := net.DisconnectNodes(ctxt, carol, eve); err != nil {
+		t.Fatalf("unable to disconnect Carol from Eve: %v", err)
+	}
+
+	// Wait for a disable from both Carol and Eve to come through.
+	expectedPolicy.Disabled = true
+	waitForChannelUpdate(
+		t, daveSub,
+		[]expectedChanUpdate{
+			{eve.PubKeyStr, expectedPolicy, chanPointEveCarol},
+			{carol.PubKeyStr, expectedPolicy, chanPointEveCarol},
+		},
+	)
+
+	// Reconnect Carol and Eve, this should cause them to reenable the
+	// channel from both ends after a short delay.
+	ctxt, _ = context.WithTimeout(ctxb, defaultTimeout)
+	if err := net.EnsureConnected(ctxt, carol, eve); err != nil {
+		t.Fatalf("unable to reconnect Carol to Eve: %v", err)
+	}
+
+	expectedPolicy.Disabled = false
+	waitForChannelUpdate(
+		t, daveSub,
+		[]expectedChanUpdate{
+			{eve.PubKeyStr, expectedPolicy, chanPointEveCarol},
+			{carol.PubKeyStr, expectedPolicy, chanPointEveCarol},
+		},
+	)
+
+	// Now we'll test a short disconnection. Disconnect Carol and Eve, then
+	// reconnect them after one second so that their scheduled disables are
+	// aborted. One second is twice the status sample interval, so this
+	// should allow for the disconnect to be detected, but still leave time
+	// to cancel the announcement before the 3 second inactive timeout is
+	// hit.
+	ctxt, _ = context.WithTimeout(ctxb, defaultTimeout)
+	if err := net.DisconnectNodes(ctxt, carol, eve); err != nil {
+		t.Fatalf("unable to disconnect Carol from Eve: %v", err)
+	}
+	time.Sleep(time.Second)
+	ctxt, _ = context.WithTimeout(ctxb, defaultTimeout)
+	if err := net.EnsureConnected(ctxt, eve, carol); err != nil {
+		t.Fatalf("unable to reconnect Carol to Eve: %v", err)
+	}
+
+	// Since the disable should have been canceled by both Carol and Eve, we
+	// expect no channel updates to appear on the network.
+	assertNoChannelUpdates(t, daveSub, 4*time.Second)
 
 	// Close Alice's channels with Bob and Carol cooperatively and
 	// unilaterally respectively.

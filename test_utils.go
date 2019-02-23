@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net"
 	"os"
+	"time"
 
 	"github.com/Actinium-project/acmd/btcec"
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
@@ -22,6 +23,7 @@ import (
 	"github.com/Actinium-project/lnd/keychain"
 	"github.com/Actinium-project/lnd/lnwallet"
 	"github.com/Actinium-project/lnd/lnwire"
+	"github.com/Actinium-project/lnd/netann"
 	"github.com/Actinium-project/lnd/shachain"
 	"github.com/Actinium-project/lnd/ticker"
 )
@@ -367,8 +369,30 @@ func createTestPeer(notifier chainntnfs.ChainNotifier,
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
+	if err = htlcSwitch.Start(); err != nil {
+		return nil, nil, nil, nil, err
+	}
 	s.htlcSwitch = htlcSwitch
-	s.htlcSwitch.Start()
+
+	nodeSignerAlice := netann.NewNodeSigner(aliceKeyPriv)
+
+	const chanActiveTimeout = time.Minute
+
+	chanStatusMgr, err := netann.NewChanStatusManager(&netann.ChanStatusConfig{
+		ChanStatusSampleInterval: 30 * time.Second,
+		ChanEnableTimeout:        chanActiveTimeout,
+		ChanDisableTimeout:       2 * time.Minute,
+		DB:                       dbAlice,
+		Graph:                    dbAlice.ChannelGraph(),
+		MessageSigner:            nodeSignerAlice,
+		OurPubKey:                aliceKeyPub,
+		IsChannelActive:          s.htlcSwitch.HasActiveLink,
+		ApplyChannelUpdate:       func(*lnwire.ChannelUpdate) error { return nil },
+	})
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+	s.chanStatusMgr = chanStatusMgr
 
 	alicePeer := &peer{
 		addr: &lnwire.NetAddress{
@@ -387,6 +411,8 @@ func createTestPeer(notifier chainntnfs.ChainNotifier,
 		localCloseChanReqs: make(chan *htlcswitch.ChanClose),
 		chanCloseMsgs:      make(chan *closeMsg),
 
+		chanActiveTimeout: chanActiveTimeout,
+
 		queueQuit: make(chan struct{}),
 		quit:      make(chan struct{}),
 	}
@@ -394,6 +420,7 @@ func createTestPeer(notifier chainntnfs.ChainNotifier,
 	chanID := lnwire.NewChanIDFromOutPoint(channelAlice.ChannelPoint())
 	alicePeer.activeChannels[chanID] = channelAlice
 
+	alicePeer.wg.Add(1)
 	go alicePeer.channelManager()
 
 	return alicePeer, channelAlice, channelBob, cleanUpFunc, nil

@@ -3,15 +3,16 @@ package contractcourt
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/Actinium-project/lnd/input"
 	"io"
-
-	"github.com/Actinium-project/lnd/channeldb"
-	"github.com/Actinium-project/lnd/lnwire"
 
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/davecgh/go-spew/spew"
+
+	"github.com/Actinium-project/lnd/channeldb"
+	"github.com/Actinium-project/lnd/input"
+	"github.com/Actinium-project/lnd/lntypes"
 	"github.com/Actinium-project/lnd/lnwallet"
+	"github.com/Actinium-project/lnd/lnwire"
 	"github.com/Actinium-project/lnd/sweep"
 )
 
@@ -41,7 +42,7 @@ type htlcSuccessResolver struct {
 	broadcastHeight uint32
 
 	// payHash is the payment hash of the original HTLC extended to us.
-	payHash [32]byte
+	payHash lntypes.Hash
 
 	// sweepTx will be non-nil if we've already crafted a transaction to
 	// sweep a direct HTLC output. This is only a concern if we're sweeping
