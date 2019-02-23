@@ -97,7 +97,7 @@ Note that the core design of the Lightning Network has shifted over time as
 concrete implementation and design has expanded our knowledge beyond the
 original white paper. Therefore, specific information outlined in the resources
 above may be a bit out of date. Many implementers are currently working on an
-initial [Lightning Network Specifications](https://github.com/lightningnetwork/lightning-rfc).
+initial [Lightning Network Specifications](https://github.com/Actinium-project/lightning-rfc).
 Once the specification is finalized, it will be the most up-to-date
 comprehensive document explaining the Lightning Network. As a result, it will
 be recommended for newcomers to read first in order to get up to speed. 

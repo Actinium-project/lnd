@@ -3,7 +3,7 @@ package netann
 import (
 	"time"
 
-	"github.com/btcsuite/btcd/wire"
+	"github.com/Actinium-project/acmd/wire"
 )
 
 // ChanStatus is a type that enumerates the possible states a ChanStatusManager

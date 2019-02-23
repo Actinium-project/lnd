@@ -15,7 +15,7 @@ which allows the encrypted transport to be seamlessly integrated into a
 codebase.
 
 The secure messaging scheme implemented within this package is described in
-detail in [BOLT #8 of the Lightning Network specifications](https://github.com/lightningnetwork/lightning-rfc/blob/master/08-transport.md).
+detail in [BOLT #8 of the Lightning Network specifications](https://github.com/Actinium-project/lightning-rfc/blob/master/08-transport.md).
 
 This package has intentionally been designed so it can be used as a standalone
 package for any projects needing secure encrypted+authenticated communications

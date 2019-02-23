@@ -3,9 +3,9 @@ package discovery
 import (
 	"sync"
 
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/lightningnetwork/lnd/lnpeer"
-	"github.com/lightningnetwork/lnd/lnwire"
+	"github.com/Actinium-project/acmd/btcec"
+	"github.com/Actinium-project/lnd/lnpeer"
+	"github.com/Actinium-project/lnd/lnwire"
 )
 
 // reliableSenderCfg contains all of necessary items for the reliableSender to

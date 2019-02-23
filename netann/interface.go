@@ -1,8 +1,8 @@
 package netann
 
 import (
-	"github.com/btcsuite/btcd/wire"
-	"github.com/lightningnetwork/lnd/channeldb"
+	"github.com/Actinium-project/acmd/wire"
+	"github.com/Actinium-project/lnd/channeldb"
 )
 
 // DB abstracts the required database functionality needed by the

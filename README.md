@@ -28,7 +28,7 @@ through the network.
 
 ## Lightning Network Specification Compliance
 `lnd` _fully_ conforms to the [Lightning Network specification
-(BOLTs)](https://github.com/lightningnetwork/lightning-rfc). BOLT stands for:
+(BOLTs)](https://github.com/Actinium-project/lightning-rfc). BOLT stands for:
 Basis of Lightning Technology. The specifications are currently being drafted
 by several groups of implementers based around the world including the
 developers of `lnd`. The set of specification documents as well as our

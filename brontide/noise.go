@@ -15,8 +15,8 @@ import (
 	"golang.org/x/crypto/hkdf"
 
 	"github.com/Actinium-project/acmd/btcec"
-	"github.com/lightningnetwork/lnd/buffer"
-	"github.com/lightningnetwork/lnd/pool"
+	"github.com/Actinium-project/lnd/buffer"
+	"github.com/Actinium-project/lnd/pool"
 )
 
 const (
