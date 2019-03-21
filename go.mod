@@ -28,8 +28,6 @@ require (
 	github.com/miekg/dns v0.0.0-20171125082028-79bfde677fa8
 	github.com/onsi/ginkgo v1.7.0 // indirect
 	github.com/onsi/gomega v1.4.3 // indirect
-	github.com/roasbeef/btcd v0.0.0-20180418012700-a03db407e40d // indirect
-	github.com/roasbeef/btcutil v0.0.0-20180406014609-dfb640c57141 // indirect
 	github.com/rogpeppe/fastuuid v1.0.0 // indirect
 	github.com/tv42/zbase32 v0.0.0-20160707012821-501572607d02
 	github.com/urfave/cli v1.18.0

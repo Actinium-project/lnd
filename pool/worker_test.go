@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lightningnetwork/lnd/buffer"
-	"github.com/lightningnetwork/lnd/pool"
+	"github.com/Actinium-project/lnd/buffer"
+	"github.com/Actinium-project/lnd/pool"
 )
 
 type workerPoolTest struct {
