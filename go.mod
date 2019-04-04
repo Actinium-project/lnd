@@ -4,8 +4,8 @@ require (
 	git.schwanenlied.me/yawning/bsaes.git v0.0.0-20190222205624-e466e3c35f68 // indirect
 	github.com/Actinium-project/acmd v0.0.17
 	github.com/Actinium-project/acmutil v0.0.10
-	github.com/Actinium-project/acmwallet v0.0.6
-	github.com/Actinium-project/actrino v0.0.2
+	github.com/Actinium-project/acmwallet v0.0.7
+	github.com/Actinium-project/actrino v0.0.3
 	github.com/Actinium-project/lightning-onion v0.0.2
 	github.com/Actinium-project/lnd/queue v1.0.0
 	github.com/Actinium-project/lnd/ticker v1.0.0
