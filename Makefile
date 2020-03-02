@@ -1,5 +1,5 @@
-PKG := github.com/lightningnetwork/lnd
-ESCPKG := github.com\/lightningnetwork\/lnd
+PKG := github.com/Actinium-project/lnd
+ESCPKG := github.com\/Actinium-project\/lnd
 MOBILE_PKG := $(PKG)/mobile
 
 BTCD_PKG := github.com/Actinium-project/acmd
