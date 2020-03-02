@@ -120,7 +120,13 @@ description):
        enforced by the node globally for each channel.
   * UpdateChannelPolicy
      * Allows the caller to update the fee schedule and channel policies for all channels
-       globally, or a particular channel
+       globally, or a particular channel.
+  * ForwardingHistory
+     * ForwardingHistory allows the caller to query the htlcswitch for a
+       record of all HTLCs forwarded.
+  * BakeMacaroon
+     * Bakes a new macaroon with the provided list of permissions and
+       restrictions
 
 ## Service: WalletUnlocker
 
@@ -149,11 +155,11 @@ $ unzip protoc-3.4.0-osx-x86_64.zip -d protoc
 $ export PATH=$PWD/protoc/bin:$PATH
 ```
 
-2. Install `golang/protobuf` at commit `aa810b61a9c79d51363740d207bb46cf8e620ed5` (v1.2.0).
+2. Install `golang/protobuf` at commit `b5d812f8a3706043e23a9cd5babf2e5423744d30` (v1.3.1).
 ```bash
 $ git clone https://github.com/golang/protobuf $GOPATH/src/github.com/golang/protobuf
 $ cd $GOPATH/src/github.com/golang/protobuf
-$ git reset --hard aa810b61a9c79d51363740d207bb46cf8e620ed5
+$ git reset --hard v1.3.1
 $ make
 ```
 
@@ -164,11 +170,11 @@ $ cd $GOPATH/src/google.golang.org/genproto
 $ git reset --hard a8101f21cf983e773d0c1133ebc5424792003214
 ```
 
-4. Install `grpc-ecosystem/grpc-gateway` at commit `f2862b476edcef83412c7af8687c9cd8e4097c0f`.
+4. Install `grpc-ecosystem/grpc-gateway` at version `v1.8.6`.
 ```bash
 $ git clone https://github.com/grpc-ecosystem/grpc-gateway $GOPATH/src/github.com/grpc-ecosystem/grpc-gateway
 $ cd $GOPATH/src/github.com/grpc-ecosystem/grpc-gateway
-$ git reset --hard f2862b476edcef83412c7af8687c9cd8e4097c0f
+$ git reset --hard v1.8.6
 $ go install ./protoc-gen-grpc-gateway ./protoc-gen-swagger
 ```
 

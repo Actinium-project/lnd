@@ -315,7 +315,7 @@ func SenderHtlcSpendRedeem(signer Signer, signDesc *SignDescriptor,
 		return nil, err
 	}
 
-	// The stack require to spend this output is simply the signature
+	// The stack required to spend this output is simply the signature
 	// generated above under the receiver's public key, and the payment
 	// pre-image.
 	witnessStack := wire.TxWitness(make([][]byte, 3))
@@ -340,7 +340,7 @@ func SenderHtlcSpendTimeout(receiverSig []byte, signer Signer,
 
 	// We place a zero as the first item of the evaluated witness stack in
 	// order to force Script execution to the HTLC timeout clause. The
-	// second zero is require to consume the extra pop due to a bug in the
+	// second zero is required to consume the extra pop due to a bug in the
 	// original OP_CHECKMULTISIG.
 	witnessStack := wire.TxWitness(make([][]byte, 5))
 	witnessStack[0] = nil
@@ -832,7 +832,7 @@ func CommitScriptToSelf(csvTimeout uint32, selfKey, revokeKey *btcec.PublicKey) 
 // transaction paying to the "other" party. The constructed output is a normal
 // p2wkh output spendable immediately, requiring no contestation period.
 func CommitScriptUnencumbered(key *btcec.PublicKey) ([]byte, error) {
-	// This script goes to the "other" party, and it spendable immediately.
+	// This script goes to the "other" party, and is spendable immediately.
 	builder := txscript.NewScriptBuilder()
 	builder.AddOp(txscript.OP_0)
 	builder.AddData(acmutil.Hash160(key.SerializeCompressed()))
@@ -902,13 +902,15 @@ func CommitSpendRevoke(signer Signer, signDesc *SignDescriptor,
 }
 
 // CommitSpendNoDelay constructs a valid witness allowing a node to spend their
-// settled no-delay output on the counterparty's commitment transaction.
+// settled no-delay output on the counterparty's commitment transaction. If the
+// tweakless field is true, then we'll omit the set where we tweak the pubkey
+// with a random set of bytes, and use it directly in the witness stack.
 //
 // NOTE: The passed SignDescriptor should include the raw (untweaked) public
 // key of the receiver and also the proper single tweak value based on the
 // current commitment point.
 func CommitSpendNoDelay(signer Signer, signDesc *SignDescriptor,
-	sweepTx *wire.MsgTx) (wire.TxWitness, error) {
+	sweepTx *wire.MsgTx, tweakless bool) (wire.TxWitness, error) {
 
 	if signDesc.KeyDesc.PubKey == nil {
 		return nil, fmt.Errorf("cannot generate witness with nil " +
@@ -923,14 +925,25 @@ func CommitSpendNoDelay(signer Signer, signDesc *SignDescriptor,
 	}
 
 	// Finally, we'll manually craft the witness. The witness here is the
-	// exact same as a regular p2wkh witness, but we'll need to ensure that
-	// we use the tweaked public key as the last item in the witness stack
-	// which was originally used to created the pkScript we're spending.
+	// exact same as a regular p2wkh witness, depending on the value of the
+	// tweakless bool.
 	witness := make([][]byte, 2)
 	witness[0] = append(sweepSig, byte(signDesc.HashType))
-	witness[1] = TweakPubKeyWithTweak(
-		signDesc.KeyDesc.PubKey, signDesc.SingleTweak,
-	).SerializeCompressed()
+
+	switch tweakless {
+	// If we're tweaking the key, then we use the tweaked public key as the
+	// last item in the witness stack which was originally used to created
+	// the pkScript we're spending.
+	case false:
+		witness[1] = TweakPubKeyWithTweak(
+			signDesc.KeyDesc.PubKey, signDesc.SingleTweak,
+		).SerializeCompressed()
+
+	// Otherwise, we can just use the raw pubkey, since there's no random
+	// value to be combined.
+	case true:
+		witness[1] = signDesc.KeyDesc.PubKey.SerializeCompressed()
+	}
 
 	return witness, nil
 }
@@ -961,8 +974,8 @@ func SingleTweakBytes(commitPoint, basePoint *btcec.PublicKey) []byte {
 //            := G*(k + sha256(commitPoint || basePoint))
 //
 // Therefore, if a party possess the value k, the private key of the base
-// point, then they are able to derive the private key by computing: compute
-// the proper private key for the revokeKey by computing:
+// point, then they are able to derive the proper private key for the
+// revokeKey by computing:
 //
 //   revokePriv := k + sha256(commitPoint || basePoint) mod N
 //

@@ -3,7 +3,6 @@ package netann
 import (
 	"errors"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	"github.com/Actinium-project/acmd/btcec"
@@ -85,8 +84,8 @@ type ChanStatusConfig struct {
 // passively. The ChanStatusManager state machine is designed to reduce the
 // likelihood of spamming the network with updates for flapping peers.
 type ChanStatusManager struct {
-	started uint32 // to be used atomically
-	stopped uint32 // to be used atomically
+	started sync.Once
+	stopped sync.Once
 
 	cfg *ChanStatusConfig
 
@@ -155,10 +154,14 @@ func NewChanStatusManager(cfg *ChanStatusConfig) (*ChanStatusManager, error) {
 
 // Start safely starts the ChanStatusManager.
 func (m *ChanStatusManager) Start() error {
-	if !atomic.CompareAndSwapUint32(&m.started, 0, 1) {
-		return nil
-	}
+	var err error
+	m.started.Do(func() {
+		err = m.start()
+	})
+	return err
+}
 
+func (m *ChanStatusManager) start() error {
 	channels, err := m.fetchChannels()
 	if err != nil {
 		return err
@@ -192,13 +195,10 @@ func (m *ChanStatusManager) Start() error {
 
 // Stop safely shuts down the ChanStatusManager.
 func (m *ChanStatusManager) Stop() error {
-	if !atomic.CompareAndSwapUint32(&m.stopped, 0, 1) {
-		return nil
-	}
-
-	close(m.quit)
-	m.wg.Wait()
-
+	m.stopped.Do(func() {
+		close(m.quit)
+		m.wg.Wait()
+	})
 	return nil
 }
 
@@ -466,6 +466,18 @@ func (m *ChanStatusManager) disableInactiveChannels() {
 		if err != nil {
 			log.Errorf("Unable to sign update disabling "+
 				"channel(%v): %v", outpoint, err)
+
+			// If the edge was not found, this is a likely indicator
+			// that the channel has been closed. Thus we remove the
+			// outpoint from the set of tracked outpoints to prevent
+			// further attempts.
+			if err == channeldb.ErrEdgeNotFound {
+				log.Debugf("Removing channel(%v) from "+
+					"consideration for passive disabling",
+					outpoint)
+				delete(m.chanStates, outpoint)
+			}
+
 			continue
 		}
 

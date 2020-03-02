@@ -10,9 +10,12 @@ import (
 // requests it.
 var log btclog.Logger
 
+// Subsystem defines the logging code for this subsystem.
+const Subsystem = "RRPC"
+
 // The default amount of logging is none.
 func init() {
-	UseLogger(build.NewSubLogger("RRPC", nil))
+	UseLogger(build.NewSubLogger(Subsystem, nil))
 }
 
 // DisableLog disables all library log output.  Logging output is disabled
@@ -30,7 +33,7 @@ func UseLogger(logger btclog.Logger) {
 
 // logClosure is used to provide a closure over expensive logging operations so
 // don't have to be performed when the logging level doesn't warrant it.
-type logClosure func() string
+type logClosure func() string // nolint:unused
 
 // String invokes the underlying function and returns the result.
 func (c logClosure) String() string {
@@ -40,6 +43,6 @@ func (c logClosure) String() string {
 // newLogClosure returns a new closure over a function that returns a string
 // which itself provides a Stringer interface so that it can be used with the
 // logging system.
-func newLogClosure(c func() string) logClosure {
+func newLogClosure(c func() string) logClosure { // nolint:unused
 	return logClosure(c)
 }

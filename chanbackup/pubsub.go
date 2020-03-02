@@ -2,9 +2,9 @@ package chanbackup
 
 import (
 	"bytes"
+	"fmt"
 	"net"
 	"sync"
-	"sync/atomic"
 
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/channeldb"
@@ -47,9 +47,9 @@ type ChannelEvent struct {
 // ChannelSubscription represents an intent to be notified of any updates to
 // the primary channel state.
 type ChannelSubscription struct {
-	// ChanUpdates is a read-only channel that will be sent upon once the
-	// primary channel state is updated.
-	ChanUpdates <-chan ChannelEvent
+	// ChanUpdates is a channel that will be sent upon once the primary
+	// channel state is updated.
+	ChanUpdates chan ChannelEvent
 
 	// Cancel is a closure that allows the caller to cancel their
 	// subscription and free up any resources allocated.
@@ -78,8 +78,8 @@ type ChannelNotifier interface {
 //
 // TODO(roasbeef): better name lol
 type SubSwapper struct {
-	started uint32
-	stopped uint32
+	started sync.Once
+	stopped sync.Once
 
 	// backupState are the set of SCBs for all open channels we know of.
 	backupState map[wire.OutPoint]Single
@@ -134,28 +134,52 @@ func NewSubSwapper(startingChans []Single, chanNotifier ChannelNotifier,
 
 // Start starts the chanbackup.SubSwapper.
 func (s *SubSwapper) Start() error {
-	if !atomic.CompareAndSwapUint32(&s.started, 0, 1) {
-		return nil
-	}
+	s.started.Do(func() {
+		log.Infof("Starting chanbackup.SubSwapper")
 
-	log.Infof("Starting chanbackup.SubSwapper")
-
-	s.wg.Add(1)
-	go s.backupUpdater()
-
+		s.wg.Add(1)
+		go s.backupUpdater()
+	})
 	return nil
 }
 
 // Stop signals the SubSwapper to being a graceful shutdown.
 func (s *SubSwapper) Stop() error {
-	if !atomic.CompareAndSwapUint32(&s.stopped, 0, 1) {
-		return nil
+	s.stopped.Do(func() {
+		log.Infof("Stopping chanbackup.SubSwapper")
+
+		close(s.quit)
+		s.wg.Wait()
+	})
+	return nil
+}
+
+// updateBackupFile updates the backup file in place given the current state of
+// the SubSwapper.
+func (s *SubSwapper) updateBackupFile() error {
+	// With our updated channel state obtained, we'll create a new multi
+	// from our series of singles.
+	var newMulti Multi
+	for _, backup := range s.backupState {
+		newMulti.StaticBackups = append(
+			newMulti.StaticBackups, backup,
+		)
 	}
 
-	log.Infof("Stopping chanbackup.SubSwapper")
+	// Now that our multi has been assembled, we'll attempt to pack
+	// (encrypt+encode) the new channel state to our target reader.
+	var b bytes.Buffer
+	err := newMulti.PackToWriter(&b, s.keyRing)
+	if err != nil {
+		return fmt.Errorf("unable to pack multi backup: %v", err)
+	}
 
-	close(s.quit)
-	s.wg.Wait()
+	// Finally, we'll swap out the old backup for this new one in a single
+	// atomic step.
+	err = s.Swapper.UpdateAndSwap(PackedMulti(b.Bytes()))
+	if err != nil {
+		return fmt.Errorf("unable to update multi backup: %v", err)
+	}
 
 	return nil
 }
@@ -172,6 +196,12 @@ func (s *SubSwapper) backupUpdater() {
 
 	log.Debugf("SubSwapper's backupUpdater is active!")
 
+	// Before we enter our main loop, we'll update the on-disk state with
+	// the latest Single state, as nodes may have new advertised addresses.
+	if err := s.updateBackupFile(); err != nil {
+		log.Errorf("Unable to refresh backup file: %v", err)
+	}
+
 	for {
 		select {
 		// The channel state has been modified! We'll evaluate all
@@ -183,7 +213,7 @@ func (s *SubSwapper) backupUpdater() {
 			// For all new open channels, we'll create a new SCB
 			// given the required information.
 			for _, newChan := range chanUpdate.NewChans {
-				log.Debugf("Adding chanenl %v to backup state",
+				log.Debugf("Adding channel %v to backup state",
 					newChan.FundingOutpoint)
 
 				s.backupState[newChan.FundingOutpoint] = NewSingle(
@@ -193,10 +223,10 @@ func (s *SubSwapper) backupUpdater() {
 
 			// For all closed channels, we'll remove the prior
 			// backup state.
-			for _, closedChan := range chanUpdate.ClosedChans {
+			for i, closedChan := range chanUpdate.ClosedChans {
 				log.Debugf("Removing channel %v from backup "+
 					"state", newLogClosure(func() string {
-					return closedChan.String()
+					return chanUpdate.ClosedChans[i].String()
 				}))
 
 				delete(s.backupState, closedChan)
@@ -204,40 +234,19 @@ func (s *SubSwapper) backupUpdater() {
 
 			newStateSize := len(s.backupState)
 
-			// With our updated channel state obtained, we'll
-			// create a new multi from our series of singles.
-			var newMulti Multi
-			for _, backup := range s.backupState {
-				newMulti.StaticBackups = append(
-					newMulti.StaticBackups, backup,
-				)
-			}
-
-			// Now that our multi has been assembled, we'll attempt
-			// to pack (encrypt+encode) the new channel state to
-			// our target reader.
-			var b bytes.Buffer
-			err := newMulti.PackToWriter(&b, s.keyRing)
-			if err != nil {
-				log.Errorf("unable to pack multi backup: %v",
-					err)
-				continue
-			}
-
 			log.Infof("Updating on-disk multi SCB backup: "+
 				"num_old_chans=%v, num_new_chans=%v",
 				oldStateSize, newStateSize)
 
-			// Finally, we'll swap out the old backup for this new
-			// one in a single atomic step.
-			err = s.Swapper.UpdateAndSwap(
-				PackedMulti(b.Bytes()),
-			)
-			if err != nil {
-				log.Errorf("unable to update multi "+
-					"backup: %v", err)
-				continue
+			// With out new state constructed, we'll, atomically
+			// update the on-disk backup state.
+			if err := s.updateBackupFile(); err != nil {
+				log.Errorf("unable to update backup file: %v",
+					err)
 			}
+
+		// TODO(roasbeef): refresh periodically on a time basis due to
+		// possible addr changes from node
 
 		// Exit at once if a quit signal is detected.
 		case <-s.quit:

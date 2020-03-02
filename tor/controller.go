@@ -81,12 +81,17 @@ type Controller struct {
 
 	// version is the current version of the Tor server.
 	version string
+
+	// The IP address which we tell the Tor server to use to connect to the LND node.
+	// This is required when the Tor server runs on another host, otherwise the service
+	// will not be reachable.
+	targetIPAddress string
 }
 
 // NewController returns a new Tor controller that will be able to interact with
 // a Tor server.
-func NewController(controlAddr string) *Controller {
-	return &Controller{controlAddr: controlAddr}
+func NewController(controlAddr string, targetIPAddress string) *Controller {
+	return &Controller{controlAddr: controlAddr, targetIPAddress: targetIPAddress}
 }
 
 // Start establishes and authenticates the connection between the controller and
@@ -163,7 +168,7 @@ func parseTorReply(reply string) map[string]string {
 }
 
 // authenticate authenticates the connection between the controller and the
-// Tor server using the SAFECOOKIE authentication method.
+// Tor server using the SAFECOOKIE or NULL authentication method.
 func (c *Controller) authenticate() error {
 	// Before proceeding to authenticate the connection, we'll retrieve
 	// the authentication cookie of the Tor server. This will be used
@@ -174,6 +179,13 @@ func (c *Controller) authenticate() error {
 	if err != nil {
 		return fmt.Errorf("unable to retrieve authentication cookie: "+
 			"%v", err)
+	}
+
+	// If cookie is empty and there's no error, we have a NULL
+	// authentication method that we should use instead.
+	if len(cookie) == 0 {
+		_, _, err := c.sendCommand("AUTHENTICATE")
+		return err
 	}
 
 	// Authenticating using the SAFECOOKIE authentication method is a two
@@ -274,17 +286,21 @@ func (c *Controller) getAuthCookie() ([]byte, error) {
 	c.version = version
 
 	// Ensure that the Tor server supports the SAFECOOKIE authentication
-	// method.
+	// method or the NULL method. If NULL, we don't need the cookie info
+	// below this loop, so we just return.
 	safeCookieSupport := false
 	for _, authMethod := range authMethods {
 		if authMethod == "SAFECOOKIE" {
 			safeCookieSupport = true
 		}
+		if authMethod == "NULL" {
+			return nil, nil
+		}
 	}
 
 	if !safeCookieSupport {
 		return nil, errors.New("the Tor server is currently not " +
-			"configured for cookie authentication")
+			"configured for cookie or null authentication")
 	}
 
 	// Read the cookie from the file and ensure it has the correct length.
@@ -314,7 +330,6 @@ func computeHMAC256(key, message []byte) []byte {
 func supportsV3(version string) error {
 	// We'll split the minimum Tor version that's supported and the given
 	// version in order to individually compare each number.
-	requiredParts := strings.Split(MinTorVersion, ".")
 	parts := strings.Split(version, ".")
 	if len(parts) != 4 {
 		return errors.New("version string is not of the format " +
@@ -327,22 +342,19 @@ func supportsV3(version string) error {
 	build := strings.Split(parts[len(parts)-1], "-")
 	parts[len(parts)-1] = build[0]
 
-	// Convert them each number from its string representation to integers
-	// and check that they respect the minimum version.
-	for i := range parts {
-		n, err := strconv.Atoi(parts[i])
-		if err != nil {
+	// Ensure that each part of the version string corresponds to a number.
+	for _, part := range parts {
+		if _, err := strconv.Atoi(part); err != nil {
 			return err
 		}
-		requiredN, err := strconv.Atoi(requiredParts[i])
-		if err != nil {
-			return err
-		}
+	}
 
-		if n < requiredN {
-			return fmt.Errorf("version %v below minimum version "+
-				"supported %v", version, MinTorVersion)
-		}
+	// Once we've determined we have a proper version string of the format
+	// major.minor.revision.build, we can just do a string comparison to
+	// determine if it satisfies the minimum version supported.
+	if version < MinTorVersion {
+		return fmt.Errorf("version %v below minimum version supported "+
+			"%v", version, MinTorVersion)
 	}
 
 	return nil
@@ -374,7 +386,7 @@ func (c *Controller) ProtocolInfo() ([]string, string, string, error) {
 	}
 
 	cookieFile, ok := info["COOKIEFILE"]
-	if !ok {
+	if !ok && !strings.Contains(methods, "NULL") {
 		return nil, "", "", errors.New("cookie file path not found " +
 			"in reply")
 	}
@@ -403,7 +415,7 @@ const (
 	V3
 )
 
-// AddOnionConfig houses all of the required paramaters in order to succesfully
+// AddOnionConfig houses all of the required parameters in order to successfully
 // create a new onion service or restore an existing one.
 type AddOnionConfig struct {
 	// Type denotes the type of the onion service that should be created.
@@ -462,13 +474,24 @@ func (c *Controller) AddOnion(cfg AddOnionConfig) (*OnionAddr, error) {
 	// port. If no target ports were specified, we'll use the virtual port
 	// to provide a one-to-one mapping.
 	var portParam string
-	if len(cfg.TargetPorts) == 0 {
-		portParam += fmt.Sprintf("Port=%d,%d ", cfg.VirtualPort,
-			cfg.VirtualPort)
-	} else {
-		for _, targetPort := range cfg.TargetPorts {
+
+	// Helper function which appends the correct Port param depending on
+	// whether the user chose to use a custom target IP address or not.
+	pushPortParam := func(targetPort int) {
+		if c.targetIPAddress == "" {
 			portParam += fmt.Sprintf("Port=%d,%d ", cfg.VirtualPort,
 				targetPort)
+		} else {
+			portParam += fmt.Sprintf("Port=%d,%s:%d ", cfg.VirtualPort,
+				c.targetIPAddress, targetPort)
+		}
+	}
+
+	if len(cfg.TargetPorts) == 0 {
+		pushPortParam(cfg.VirtualPort)
+	} else {
+		for _, targetPort := range cfg.TargetPorts {
+			pushPortParam(targetPort)
 		}
 	}
 

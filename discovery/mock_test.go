@@ -1,6 +1,7 @@
 package discovery
 
 import (
+	"errors"
 	"net"
 	"sync"
 
@@ -30,11 +31,17 @@ func (p *mockPeer) SendMessage(_ bool, msgs ...lnwire.Message) error {
 		select {
 		case p.sentMsgs <- msg:
 		case <-p.quit:
+			return errors.New("peer disconnected")
 		}
 	}
 
 	return nil
 }
+
+func (p *mockPeer) SendMessageLazy(sync bool, msgs ...lnwire.Message) error {
+	return p.SendMessage(sync, msgs...)
+}
+
 func (p *mockPeer) AddNewChannel(_ *channeldb.OpenChannel, _ <-chan struct{}) error {
 	return nil
 }
@@ -48,6 +55,12 @@ func (p *mockPeer) PubKey() [33]byte {
 func (p *mockPeer) Address() net.Addr { return nil }
 func (p *mockPeer) QuitSignal() <-chan struct{} {
 	return p.quit
+}
+func (p *mockPeer) LocalFeatures() *lnwire.FeatureVector {
+	return nil
+}
+func (p *mockPeer) RemoteFeatures() *lnwire.FeatureVector {
+	return nil
 }
 
 // mockMessageStore is an in-memory implementation of the MessageStore interface

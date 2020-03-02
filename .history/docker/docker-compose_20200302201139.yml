@@ -1,0 +1,133 @@
+version: '2'
+services:
+    # btc is an image of bitcoin node which used as base image for btcd and
+    # btccli. The environment variables default values determined on stage of
+    # container start within starting script.
+    btcd:
+      image: btcd
+      container_name: btcd
+      build:
+        context: btcd/
+      volumes:
+        - shared:/rpc
+        - bitcoin:/data
+      environment:
+        - RPCUSER
+        - RPCPASS
+        - NETWORK
+        - DEBUG
+        - MINING_ADDRESS
+      entrypoint: ["./start-btcd.sh"]
+
+<<<<<<< HEAD
+    btcd:
+        extends: btc
+        container_name: btcd
+        environment:
+          - DEBUG
+          - MINING_ADDRESS
+        entrypoint: ["./start-btcd.sh"]
+
+    btcctl:
+        extends: btc
+        container_name: btcctl
+        links:
+            - "btcd:rpcserver"
+        entrypoint: ["./start-btcctl.sh"]
+
+
+    # ltc is an image of actinium node which used as base image for acmd and
+    # ltcctl. The environment variables default values determined on stage of
+    # container start within starting script.
+    ltc:
+      image: acmd
+      build:
+        context: acmd/
+      volumes:
+            - shared:/rpc
+            - actinium:/data
+=======
+    lnd:
+      image: lnd
+      container_name: lnd
+      build:
+        context: ../
+        dockerfile: docker/lnd/Dockerfile
+>>>>>>> 1467cd4dd382f9de7dc7ee89d779324ee9d2b4da
+      environment:
+        - RPCUSER
+        - RPCPASS
+        - NETWORK
+<<<<<<< HEAD
+
+    acmd:
+        extends: ltc
+        container_name: acmd
+        environment:
+          - DEBUG
+          - MINING_ADDRESS
+        entrypoint: ["./start-acmd.sh"]
+
+    ltcctl:
+        extends: ltc
+        container_name: ltcctl
+        links:
+            - "acmd:rpcserver"
+        entrypoint: ["./start-ltcctl.sh"]
+
+    lnd:
+        image: lnd
+        build:
+          context: ../
+          dockerfile: docker/lnd/Dockerfile
+        environment:
+          - RPCUSER
+          - RPCPASS
+          - NETWORK
+          - CHAIN
+          - DEBUG
+        volumes:
+            - shared:/rpc
+        entrypoint: ["./start-lnd.sh"]
+
+    lnd_ltc:
+      extends: lnd
+      container_name: lnd_ltc
+      links:
+          - "acmd:blockchain"
+
+    lnd_btc:
+      extends: lnd
+      container_name: lnd_btc
+=======
+        - CHAIN
+        - DEBUG
+      volumes:
+        - shared:/rpc
+        - lnd:/root/.lnd
+      entrypoint: ["./start-lnd.sh"]
+>>>>>>> 1467cd4dd382f9de7dc7ee89d779324ee9d2b4da
+      links:
+        - "btcd:blockchain"
+
+volumes:
+  # shared volume is need to store the btcd rpc certificates and use it within
+  # btcctl and lnd containers.
+  shared:
+    driver: local
+
+  # bitcoin volume is needed for maintaining blockchain persistence
+  # during btcd container recreation.
+  bitcoin:
+    driver: local
+
+<<<<<<< HEAD
+  # actinium volume is needed for maintaining blockchain persistence
+  # during acmd container recreation.
+  actinium:
+=======
+  # lnd volume is used for persisting lnd application data and chain state
+  # during container lifecycle.
+  lnd:
+>>>>>>> 1467cd4dd382f9de7dc7ee89d779324ee9d2b4da
+    driver: local

@@ -1,6 +1,6 @@
-FROM golang:1.11-alpine as builder
+FROM golang:1.12-alpine as builder
 
-MAINTAINER Olaoluwa Osuntokun <lightning.engineering>
+LABEL maintainer="Olaoluwa Osuntokun <laolu@lightning.engineering>"
 
 # Grab and install the latest version of roasbeef's fork of acmd and all
 # related dependencies.
@@ -15,16 +15,13 @@ RUN apk add --no-cache git \
 FROM alpine as final
 
 # Expose mainnet ports (server, rpc)
-EXPOSE 8333 8334
+EXPOSE 9333 9334
 
 # Expose testnet ports (server, rpc)
-EXPOSE 18333 18334
+EXPOSE 19334 19335
 
 # Expose simnet ports (server, rpc)
 EXPOSE 18555 18556
-
-# Expose segnet ports (server, rpc)
-EXPOSE 28901 28902
 
 # Copy the compiled binaries from the builder image.
 COPY --from=builder /go/bin/ltcctl /bin/

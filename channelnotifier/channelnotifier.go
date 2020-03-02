@@ -1,7 +1,7 @@
 package channelnotifier
 
 import (
-	"sync/atomic"
+	"sync"
 
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/lnd/channeldb"
@@ -12,12 +12,19 @@ import (
 // events pipe through. It takes subscriptions for its events, and whenever
 // it receives a new event it notifies its subscribers over the proper channel.
 type ChannelNotifier struct {
-	started uint32
-	stopped uint32
+	started sync.Once
+	stopped sync.Once
 
 	ntfnServer *subscribe.Server
 
 	chanDB *channeldb.DB
+}
+
+// PendingOpenChannelEvent represents a new event where a new channel has
+// entered a pending open state.
+type PendingOpenChannelEvent struct {
+	// ChannelPoint is the channelpoint for the new channel.
+	ChannelPoint *wire.OutPoint
 }
 
 // OpenChannelEvent represents a new event where a channel goes from pending
@@ -57,32 +64,39 @@ func New(chanDB *channeldb.DB) *ChannelNotifier {
 
 // Start starts the ChannelNotifier and all goroutines it needs to carry out its task.
 func (c *ChannelNotifier) Start() error {
-	if !atomic.CompareAndSwapUint32(&c.started, 0, 1) {
-		return nil
-	}
-
-	log.Tracef("ChannelNotifier %v starting", c)
-
-	if err := c.ntfnServer.Start(); err != nil {
-		return err
-	}
-
-	return nil
+	var err error
+	c.started.Do(func() {
+		log.Trace("ChannelNotifier starting")
+		err = c.ntfnServer.Start()
+	})
+	return err
 }
 
 // Stop signals the notifier for a graceful shutdown.
 func (c *ChannelNotifier) Stop() {
-	if !atomic.CompareAndSwapUint32(&c.stopped, 0, 1) {
-		return
-	}
-
-	c.ntfnServer.Stop()
+	c.stopped.Do(func() {
+		c.ntfnServer.Stop()
+	})
 }
 
 // SubscribeChannelEvents returns a subscribe.Client that will receive updates
-// any time the Server is made aware of a new event.
+// any time the Server is made aware of a new event. The subscription provides
+// channel events from the point of subscription onwards.
+//
+// TODO(carlaKC): update  to allow subscriptions to specify a block height from
+// which we would like to subscribe to events.
 func (c *ChannelNotifier) SubscribeChannelEvents() (*subscribe.Client, error) {
 	return c.ntfnServer.Subscribe()
+}
+
+// NotifyPendingOpenChannelEvent notifies the channelEventNotifier goroutine that a
+// new channel is pending.
+func (c *ChannelNotifier) NotifyPendingOpenChannelEvent(chanPoint wire.OutPoint) {
+	event := PendingOpenChannelEvent{ChannelPoint: &chanPoint}
+
+	if err := c.ntfnServer.SendUpdate(event); err != nil {
+		log.Warnf("Unable to send pending open channel update: %v", err)
+	}
 }
 
 // NotifyOpenChannelEvent notifies the channelEventNotifier goroutine that a
