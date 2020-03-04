@@ -70,7 +70,7 @@ const (
 	// Protocol.
 	maxLtcFundingAmount = MaxBtcFundingAmount * btcToLtcConversionRate
 
-	maxAcmFundingAmount = MaxBtcFundingAmount * btcToLtcConversionRate
+	maxAcmFundingAmount = MaxBtcFundingAmount * btcToAcmConversionRate
 )
 
 var (
