@@ -34,19 +34,9 @@ import (
 	"github.com/coreos/bbolt"
 	"github.com/go-errors/errors"
 	sphinx "github.com/Actinium-project/lightning-onion"
-	"github.com/Actinium-project/lnd/channeldb"
-	"github.com/Actinium-project/lnd/contractcourt"
 	"github.com/Actinium-project/lnd/htlcswitch/hop"
-	"github.com/Actinium-project/lnd/input"
-	"github.com/Actinium-project/lnd/keychain"
-	"github.com/Actinium-project/lnd/lnpeer"
 	"github.com/Actinium-project/lnd/lntest/wait"
-	"github.com/Actinium-project/lnd/lntypes"
-	"github.com/Actinium-project/lnd/lnwallet"
 	"github.com/Actinium-project/lnd/lnwallet/chainfee"
-	"github.com/Actinium-project/lnd/lnwire"
-	"github.com/Actinium-project/lnd/shachain"
-	"github.com/Actinium-project/lnd/ticker"
 )
 
 var (

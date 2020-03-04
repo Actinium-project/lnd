@@ -53,11 +53,9 @@ var bitcoinSimNetParams = bitcoinNetParams{
 	CoinType: keychain.CoinTypeTestnet,
 }
 
-// litecoinSimNetParams contains parameters specific to the simulation test
-// network.
-var litecoinSimNetParams = litecoinNetParams{
-	Params:   &litecoinCfg.SimNetParams,
-	rpcPort:  "18556",
+var actiniumSimNetParams = actiniumNetParams{
+	Params:   &actiniumCfg.SimNetParams,
+	rpcPort:  "18433",
 	CoinType: keychain.CoinTypeTestnet,
 }
 
@@ -73,16 +71,8 @@ var actiniumTestNetParams = actiniumNetParams{
 // Actinium mainnet.
 var actiniumMainNetParams = actiniumNetParams{
 	Params:   &actiniumCfg.MainNetParams,
-	rpcPort:  "9334",
+	rpcPort:  "2300",
 	CoinType: keychain.CoinTypeActinium,
-}
-
-// litecoinRegTestNetParams contains parameters specific to a local litecoin
-// regtest network.
-var litecoinRegTestNetParams = litecoinNetParams{
-	Params:   &litecoinCfg.RegressionNetParams,
-	rpcPort:  "18334",
-	CoinType: keychain.CoinTypeTestnet,
 }
 
 // bitcoinRegTestNetParams contains parameters specific to a local bitcoin
@@ -93,11 +83,17 @@ var bitcoinRegTestNetParams = bitcoinNetParams{
 	CoinType: keychain.CoinTypeTestnet,
 }
 
+var actiniumRegTestNetParams = actiniumNetParams{
+	Params:   &actiniumCfg.RegressionNetParams,
+	rpcPort:  "19335",
+	CoinType: keychain.CoinTypeTestnet,
+}
+
 // applyActiniumParams applies the relevant chain configuration parameters that
 // differ for actinium to the chain parameters typed for btcsuite derivation.
 // This function is used in place of using something like interface{} to
 // abstract over _which_ chain (or fork) the parameters are for.
-func applyActiniumParams(params *bitcoinNetParams, actiniumParams *actiniumNetParams) {
+func applyActiniumParams(params *actiniumNetParams, actiniumParams *actiniumNetParams) {
 	params.Name = actiniumParams.Name
 	params.Net = bitcoinWire.BitcoinNet(actiniumParams.Net)
 	params.DefaultPort = actiniumParams.DefaultPort
@@ -136,7 +132,7 @@ func applyActiniumParams(params *bitcoinNetParams, actiniumParams *actiniumNetPa
 
 // isTestnet tests if the given params correspond to a testnet
 // parameter configuration.
-func isTestnet(params *bitcoinNetParams) bool {
+func isTestnet(params *actiniumNetParams) bool {
 	switch params.Params.Net {
 	case bitcoinWire.TestNet4:
 		return true

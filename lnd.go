@@ -31,7 +31,7 @@ import (
 	"github.com/Actinium-project/acmutil"
 	"github.com/Actinium-project/acmwallet/wallet"
 	proxy "github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/Actinium-project/actrino"
+	neutrino "github.com/Actinium-project/actrino"
 
 	"github.com/Actinium-project/lnd/autopilot"
 	"github.com/Actinium-project/lnd/build"
@@ -180,10 +180,10 @@ func Main(lisCfg ListenerCfg) error {
 	case cfg.Bitcoin.MainNet || cfg.Actinium.MainNet:
 		network = "mainnet"
 
-	case cfg.Bitcoin.SimNet || cfg.Litecoin.SimNet:
+	case cfg.Bitcoin.SimNet || cfg.Actinium.SimNet:
 		network = "simnet"
 
-	case cfg.Bitcoin.RegTest || cfg.Litecoin.RegTest:
+	case cfg.Bitcoin.RegTest || cfg.Actinium.RegTest:
 		network = "regtest"
 	}
 
@@ -278,8 +278,8 @@ func Main(lisCfg ListenerCfg) error {
 	// light client instance, if enabled, in order to allow it to sync
 	// while the rest of the daemon continues startup.
 	mainChain := cfg.Bitcoin
-	if registeredChains.PrimaryChain() == litecoinChain {
-		mainChain = cfg.Litecoin
+	if registeredChains.PrimaryChain() == actiniumChain {
+		mainChain = cfg.Actinium
 	}
 	var neutrinoCS *neutrino.ChainService
 	if mainChain.Node == "neutrino" {
@@ -611,7 +611,7 @@ func Main(lisCfg ListenerCfg) error {
 	// ensures that we don't accept any possibly invalid state transitions, or
 	// accept channels with spent funds.
 	if !(cfg.Bitcoin.RegTest || cfg.Bitcoin.SimNet ||
-		cfg.Actinium.RegTest || cfg.Litecoin.SimNet) {
+		cfg.Actinium.RegTest || cfg.Actinium.SimNet) {
 
 		_, bestHeight, err := activeChainControl.chainIO.GetBestBlock()
 		if err != nil {

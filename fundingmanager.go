@@ -69,6 +69,8 @@ const (
 	// currently accepted on the Actinium chain within the Lightning
 	// Protocol.
 	maxLtcFundingAmount = MaxBtcFundingAmount * btcToLtcConversionRate
+
+	maxAcmFundingAmount = MaxBtcFundingAmount * btcToLtcConversionRate
 )
 
 var (

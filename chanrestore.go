@@ -164,7 +164,7 @@ func (c *chanDBRestorer) RestoreChansFromSingles(backups ...chanbackup.Single) e
 		case chainHash.IsEqual(chaincfg.MainNetParams.GenesisHash):
 			firstChanHeight = mainnetSCBLaunchBlock
 
-		case chainHash.IsEqual(chaincfg.TestNet3Params.GenesisHash):
+		case chainHash.IsEqual(chaincfg.TestNet4Params.GenesisHash):
 			firstChanHeight = testnetSCBLaunchBlock
 
 		default:

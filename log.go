@@ -5,7 +5,7 @@ import (
 
 	"github.com/Actinium-project/acmd/connmgr"
 	"github.com/btcsuite/btclog"
-	"github.com/Actinium-project/actrino"
+	neutrino "github.com/Actinium-project/actrino"
 	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/autopilot"
 	"github.com/Actinium-project/lnd/build"

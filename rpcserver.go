@@ -74,6 +74,9 @@ const (
 	// permitted.
 	maxLtcPaymentMSat = lnwire.MilliSatoshi(math.MaxUint32) *
 		btcToLtcConversionRate
+
+	maxAcmPaymentMSat = lnwire.MilliSatoshi(math.MaxUint32) *
+		btcToAcmConversionRate
 )
 
 var (
@@ -4068,8 +4071,8 @@ func (r *rpcServer) AddInvoice(ctx context.Context,
 	invoice *lnrpc.Invoice) (*lnrpc.AddInvoiceResponse, error) {
 
 	defaultDelta := cfg.Bitcoin.TimeLockDelta
-	if registeredChains.PrimaryChain() == litecoinChain {
-		defaultDelta = cfg.Litecoin.TimeLockDelta
+	if registeredChains.PrimaryChain() == actiniumChain {
+		defaultDelta = cfg.Actinium.TimeLockDelta
 	}
 
 	addInvoiceCfg := &invoicesrpc.AddInvoiceConfig{

@@ -386,13 +386,13 @@ func loadConfig() (*config, error) {
 			Dir:     defaultBitcoindDir,
 			RPCHost: defaultRPCHost,
 		},
-		Litecoin: &chainConfig{
-			MinHTLCIn:     defaultLitecoinMinHTLCInMSat,
-			MinHTLCOut:    defaultLitecoinMinHTLCOutMSat,
-			BaseFee:       defaultLitecoinBaseFeeMSat,
-			FeeRate:       defaultLitecoinFeeRate,
-			TimeLockDelta: defaultLitecoinTimeLockDelta,
-			Node:          "ltcd",
+		Actinium: &chainConfig{
+			MinHTLCIn:     defaultActiniumMinHTLCInMSat,
+			MinHTLCOut:    defaultActiniumMinHTLCOutMSat,
+			BaseFee:       defaultActiniumBaseFeeMSat,
+			FeeRate:       defaultActiniumFeeRate,
+			TimeLockDelta: defaultActiniumTimeLockDelta,
+			Node:          "acmd",
 		},
 		AcmdMode: &btcdConfig{
 			Dir:     defaultAcmdDir,
@@ -705,8 +705,8 @@ func loadConfig() (*config, error) {
 		return nil, fmt.Errorf("%s: either bitcoin.active or "+
 			"actinium.active must be set to 1 (true)", funcName)
 
-	case cfg.Litecoin.Active:
-		if cfg.Litecoin.TimeLockDelta < minTimeLockDelta {
+	case cfg.Actinium.Active:
+		if cfg.Actinium.TimeLockDelta < minTimeLockDelta {
 			return nil, fmt.Errorf("timelockdelta must be at least %v",
 				minTimeLockDelta)
 		}
@@ -714,22 +714,18 @@ func loadConfig() (*config, error) {
 		// number of network flags passed; assign active network params
 		// while we're at it.
 		numNets := 0
-		var ltcParams actiniumNetParams
+		var acmParams actiniumNetParams
 		if cfg.Actinium.MainNet {
 			numNets++
-			ltcParams = actiniumMainNetParams
+			acmParams = actiniumMainNetParams
 		}
 		if cfg.Actinium.TestNet3 {
 			numNets++
-			ltcParams = actiniumTestNetParams
+			acmParams = actiniumTestNetParams
 		}
-		if cfg.Litecoin.RegTest {
+		if cfg.Actinium.RegTest {
 			numNets++
-			ltcParams = litecoinRegTestNetParams
-		}
-		if cfg.Litecoin.SimNet {
-			numNets++
-			ltcParams = litecoinSimNetParams
+			acmParams = actiniumRegTestNetParams
 		}
 
 		if numNets > 1 {
@@ -753,7 +749,7 @@ func loadConfig() (*config, error) {
 		// throughout the codebase we required chaincfg.Params. So as a
 		// temporary hack, we'll mutate the default net params for
 		// bitcoin with the actinium specific information.
-		applyActiniumParams(&activeNetParams, &ltcParams)
+		applyActiniumParams(&activeNetParams, &acmParams)
 
 		switch cfg.Actinium.Node {
 		case "acmd":
@@ -788,9 +784,9 @@ func loadConfig() (*config, error) {
 
 		// Finally we'll register the actinium chain as our current
 		// primary chain.
-		registeredChains.RegisterPrimaryChain(litecoinChain)
-		MaxFundingAmount = maxLtcFundingAmount
-		MaxPaymentMSat = maxLtcPaymentMSat
+		registeredChains.RegisterPrimaryChain(actiniumChain)
+		MaxFundingAmount = maxAcmFundingAmount
+		MaxPaymentMSat = maxAcmPaymentMSat
 
 	case cfg.Bitcoin.Active:
 		// Multiple networks can't be selected simultaneously.  Count
@@ -799,19 +795,19 @@ func loadConfig() (*config, error) {
 		numNets := 0
 		if cfg.Bitcoin.MainNet {
 			numNets++
-			activeNetParams = bitcoinMainNetParams
+			activeNetParams = actiniumMainNetParams
 		}
 		if cfg.Bitcoin.TestNet3 {
 			numNets++
-			activeNetParams = bitcoinTestNetParams
+			activeNetParams = actiniumTestNetParams
 		}
 		if cfg.Bitcoin.RegTest {
 			numNets++
-			activeNetParams = bitcoinRegTestNetParams
+			activeNetParams = actiniumRegTestNetParams
 		}
 		if cfg.Bitcoin.SimNet {
 			numNets++
-			activeNetParams = bitcoinSimNetParams
+			activeNetParams = actiniumSimNetParams
 		}
 		if numNets > 1 {
 			str := "%s: The mainnet, testnet, regtest, and " +

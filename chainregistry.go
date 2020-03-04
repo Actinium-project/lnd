@@ -18,7 +18,7 @@ import (
 	"github.com/Actinium-project/acmwallet/chain"
 	"github.com/Actinium-project/acmwallet/wallet"
 	"github.com/Actinium-project/acmwallet/walletdb"
-	"github.com/Actinium-project/actrino"
+	neutrino "github.com/Actinium-project/actrino"
 	"github.com/Actinium-project/actrino/headerfs"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/chainntnfs/bitcoindnotify"
@@ -70,6 +70,13 @@ const (
 	defaultLitecoinTimeLockDelta  = 576
 	defaultLitecoinDustLimit      = acmutil.Amount(54600)
 
+	defaultActiniumMinHTLCInMSat  = lnwire.MilliSatoshi(1)
+	defaultActiniumMinHTLCOutMSat = lnwire.MilliSatoshi(1000)
+	defaultActiniumBaseFeeMSat    = lnwire.MilliSatoshi(1000)
+	defaultActiniumFeeRate        = lnwire.MilliSatoshi(1)
+	defaultActiniumTimeLockDelta  = 576
+	defaultActiniumDustLimit      = acmutil.Amount(54600)
+
 	// defaultBitcoinStaticFeePerKW is the fee rate of 50 sat/vbyte
 	// expressed in sat/kw.
 	defaultBitcoinStaticFeePerKW = chainfee.SatPerKWeight(12500)
@@ -82,9 +89,12 @@ const (
 	// expressed in sat/kw.
 	defaultLitecoinStaticFeePerKW = chainfee.SatPerKWeight(50000)
 
+	defaultActiniumStaticFeePerKW = chainfee.SatPerKWeight(50000)
+
 	// btcToLtcConversionRate is a fixed ratio used in order to scale up
 	// payments when running on the Actinium chain.
 	btcToLtcConversionRate = 60
+	btcToAcmConversionRate = 60
 )
 
 // defaultBtcChannelConstraints is the default set of channel constraints that are
@@ -98,8 +108,8 @@ var defaultBtcChannelConstraints = channeldb.ChannelConstraints{
 
 // defaultLtcChannelConstraints is the default set of channel constraints that are
 // meant to be used when initially funding a Actinium channel.
-var defaultLtcChannelConstraints = channeldb.ChannelConstraints{
-	DustLimit:        defaultActiniumDustLimit,
+var defaultAcmChannelConstraints = channeldb.ChannelConstraints{
+	DustLimit:        lnwallet.DefaultDustLimit(),
 	MaxAcceptedHtlcs: input.MaxHTLCNumber / 2,
 }
 
@@ -191,14 +201,14 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 		)
 	case actiniumChain:
 		cc.routingPolicy = htlcswitch.ForwardingPolicy{
-			MinHTLCOut:    cfg.Litecoin.MinHTLCOut,
-			BaseFee:       cfg.Litecoin.BaseFee,
-			FeeRate:       cfg.Litecoin.FeeRate,
-			TimeLockDelta: cfg.Litecoin.TimeLockDelta,
+			MinHTLCOut:    cfg.Actinium.MinHTLCOut,
+			BaseFee:       cfg.Actinium.BaseFee,
+			FeeRate:       cfg.Actinium.FeeRate,
+			TimeLockDelta: cfg.Actinium.TimeLockDelta,
 		}
-		cc.minHtlcIn = cfg.Litecoin.MinHTLCIn
+		cc.minHtlcIn = cfg.Actinium.MinHTLCIn
 		cc.feeEstimator = chainfee.NewStaticEstimator(
-			defaultLitecoinStaticFeePerKW, 0,
+			defaultBitcoinStaticFeePerKW, 0,
 		)
 	default:
 		return nil, fmt.Errorf("Default routing policy for chain %v is "+
@@ -291,13 +301,13 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 			bitcoindHost = fmt.Sprintf("%v:%d",
 				bitcoindMode.RPCHost, rpcPort)
 			if (cfg.Bitcoin.Active && cfg.Bitcoin.RegTest) ||
-				(cfg.Litecoin.Active && cfg.Litecoin.RegTest) {
+				(cfg.Actinium.Active && cfg.Actinium.RegTest) {
 				conn, err := net.Dial("tcp", bitcoindHost)
 				if err != nil || conn == nil {
 					if cfg.Bitcoin.Active && cfg.Bitcoin.RegTest {
 						rpcPort = 18443
-					} else if cfg.Litecoin.Active && cfg.Litecoin.RegTest {
-						rpcPort = 19443
+					} else if cfg.Actinium.Active && cfg.Actinium.RegTest {
+						rpcPort = 4334
 					}
 					bitcoindHost = fmt.Sprintf("%v:%d",
 						bitcoindMode.RPCHost,
@@ -359,8 +369,8 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 			if err := cc.feeEstimator.Start(); err != nil {
 				return nil, err
 			}
-		} else if cfg.Litecoin.Active && !cfg.Litecoin.RegTest {
-			ltndLog.Infof("Initializing litecoind backed fee estimator")
+		} else if cfg.Actinium.Active && !cfg.Actinium.RegTest {
+			ltndLog.Infof("Initializing Actiniumd backed fee estimator")
 
 			// Finally, we'll re-initialize the fee estimator, as
 			// if we're using Actiniumd as a backend, then we can
@@ -499,9 +509,9 @@ func newChainControlFromConfig(cfg *config, chanDB *channeldb.DB,
 	cc.wc = wc
 
 	// Select the default channel constraints for the primary chain.
-	channelConstraints := defaultBtcChannelConstraints
+	channelConstraints := defaultAcmChannelConstraints
 	if registeredChains.PrimaryChain() == actiniumChain {
-		channelConstraints = defaultLtcChannelConstraints
+		channelConstraints = defaultAcmChannelConstraints
 	}
 
 	keyRing := keychain.NewBtcWalletKeyRing(
