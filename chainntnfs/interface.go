@@ -598,11 +598,11 @@ type TxIndexConn interface {
 	// GetRawTransactionVerbose returns the transaction identified by the
 	// passed chain hash, and returns additional information such as the
 	// block that the transaction confirmed.
-	GetRawTransactionVerbose(*chainhash.Hash) (*btcjson.TxRawResult, error)
+	GetRawTransactionVerbose(*chainhash.Hash) (*acmjson.TxRawResult, error)
 
 	// GetBlockVerbose returns the block identified by the chain hash along
 	// with additional information such as the block's height in the chain.
-	GetBlockVerbose(*chainhash.Hash) (*btcjson.GetBlockVerboseResult, error)
+	GetBlockVerbose(*chainhash.Hash) (*acmjson.GetBlockVerboseResult, error)
 }
 
 // ConfDetailsFromTxIndex looks up whether a transaction is already included in
@@ -622,8 +622,8 @@ func ConfDetailsFromTxIndex(chainConn TxIndexConn, r ConfRequest,
 		// within the index itself, then we can exit early. We'll also
 		// need to look at the error message returned as the error code
 		// is used for multiple errors.
-		jsonErr, ok := err.(*btcjson.RPCError)
-		if ok && jsonErr.Code == btcjson.ErrRPCNoTxInfo &&
+		jsonErr, ok := err.(*acmjson.RPCError)
+		if ok && jsonErr.Code == acmjson.ErrRPCNoTxInfo &&
 			strings.Contains(jsonErr.Message, txNotFoundErr) {
 
 			return nil, TxNotFoundIndex, nil

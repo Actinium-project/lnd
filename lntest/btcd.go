@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Actinium-project/acmd/btcjson"
+	"github.com/Actinium-project/acmd/acmjson"
 	"github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/acmd/integration/rpctest"
 	"github.com/Actinium-project/acmd/rpcclient"
@@ -55,12 +55,12 @@ func (b BtcdBackendConfig) GenArgs() []string {
 
 // ConnectMiner is called to establish a connection to the test miner.
 func (b BtcdBackendConfig) ConnectMiner() error {
-	return b.harness.Node.Node(btcjson.NConnect, b.minerAddr, &perm)
+	return b.harness.Node.Node(acmjson.NConnect, b.minerAddr, &perm)
 }
 
 // DisconnectMiner is called to disconnect the miner.
 func (b BtcdBackendConfig) DisconnectMiner() error {
-	return b.harness.Node.Node(btcjson.NRemove, b.minerAddr, &perm)
+	return b.harness.Node.Node(acmjson.NRemove, b.minerAddr, &perm)
 }
 
 // Name returns the name of the backend type.

@@ -14,7 +14,7 @@ import (
 	"github.com/Actinium-project/acmd/chaincfg/chainhash"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
-	_ "github.com/Actinium-project/btcwallet/walletdb/bdb"
+	_ "github.com/Actinium-project/acmwallet/walletdb/bdb"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/Actinium-project/lnd/clock"
 	"github.com/Actinium-project/lnd/keychain"
