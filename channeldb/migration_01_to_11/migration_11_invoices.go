@@ -44,7 +44,7 @@ func MigrateInvoices(tx *bbolt.Tx) error {
 
 	nets := []*bitcoinCfg.Params{
 		&bitcoinCfg.MainNetParams, &bitcoinCfg.SimNetParams,
-		&bitcoinCfg.RegressionNetParams, &bitcoinCfg.TestNet3Params,
+		&bitcoinCfg.RegressionNetParams, &bitcoinCfg.TestNet4Params,
 	}
 
 	ltcNets := []*litecoinCfg.Params{
