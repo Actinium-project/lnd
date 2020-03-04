@@ -726,7 +726,7 @@ func testReservationInitiatorBalanceBelowDustCancel(miner *rpctest.Harness,
 	}
 
 	feePerKw := chainfee.SatPerKWeight(
-		numBTC * numBTC * btcutil.SatoshiPerBitcoin,
+		numBTC * numBTC * acmutil.SatoshiPerBitcoin,
 	)
 	req := &lnwallet.InitFundingReserveMsg{
 		ChainHash:        chainHash,
@@ -1445,8 +1445,8 @@ func testTransactionSubscriptions(miner *rpctest.Harness,
 
 // scriptFromKey creates a P2WKH script from the given pubkey.
 func scriptFromKey(pubkey *btcec.PublicKey) ([]byte, error) {
-	pubkeyHash := btcutil.Hash160(pubkey.SerializeCompressed())
-	keyAddr, err := btcutil.NewAddressWitnessPubKeyHash(
+	pubkeyHash := acmutil.Hash160(pubkey.SerializeCompressed())
+	keyAddr, err := acmutil.NewAddressWitnessPubKeyHash(
 		pubkeyHash, &chaincfg.RegressionNetParams,
 	)
 	if err != nil {
@@ -1497,7 +1497,7 @@ func mineAndAssert(r *rpctest.Harness, tx *wire.MsgTx) error {
 // txFromOutput takes a tx paying to fromPubKey, and creates a new tx that
 // spends the output from this tx, to an address derived from payToPubKey.
 func txFromOutput(tx *wire.MsgTx, signer input.Signer, fromPubKey,
-	payToPubKey *btcec.PublicKey, txFee btcutil.Amount,
+	payToPubKey *btcec.PublicKey, txFee acmutil.Amount,
 	rbf bool) (*wire.MsgTx, error) {
 
 	// Generate the script we want to spend from.
@@ -1600,7 +1600,7 @@ func newTx(t *testing.T, r *rpctest.Harness, pubKey *btcec.PublicKey,
 	// Instruct the wallet to fund the output with a newly created
 	// transaction.
 	newOutput := &wire.TxOut{
-		Value:    btcutil.SatoshiPerBitcoin,
+		Value:    acmutil.SatoshiPerBitcoin,
 		PkScript: keyScript,
 	}
 	tx, err := alice.SendOutputs([]*wire.TxOut{newOutput}, 2500)
@@ -1615,7 +1615,7 @@ func newTx(t *testing.T, r *rpctest.Harness, pubKey *btcec.PublicKey,
 	}
 
 	// Create a new unconfirmed tx that spends this output.
-	txFee := btcutil.Amount(0.001 * btcutil.SatoshiPerBitcoin)
+	txFee := acmutil.Amount(0.001 * acmutil.SatoshiPerBitcoin)
 	tx1, err := txFromOutput(
 		tx, alice.Cfg.Signer, pubKey, pubKey, txFee, rbf,
 	)
@@ -1692,7 +1692,7 @@ func testPublishTransaction(r *rpctest.Harness,
 	// We'll do the next mempool check on both RBF and non-RBF enabled
 	// transactions.
 	var (
-		txFee         = btcutil.Amount(0.005 * btcutil.SatoshiPerBitcoin)
+		txFee         = acmutil.Amount(0.005 * acmutil.SatoshiPerBitcoin)
 		tx3, tx3Spend *wire.MsgTx
 	)
 
@@ -2173,7 +2173,7 @@ func testChangeOutputSpendConfirmation(r *rpctest.Harness,
 	// TODO(wilmer): replace this once SendOutputs easily supports sending
 	// all funds in one transaction.
 	txFeeRate := chainfee.SatPerKWeight(2500)
-	txFee := btcutil.Amount(14380)
+	txFee := acmutil.Amount(14380)
 	output := &wire.TxOut{
 		Value:    int64(aliceBalance - txFee),
 		PkScript: bobPkScript,
@@ -2720,7 +2720,7 @@ func testSingleFunderExternalFundingTx(miner *rpctest.Harness,
 
 	// We'll now set up for them to open a 4 BTC channel, with 1 BTC pushed
 	// to Bob's side.
-	chanAmt := 4 * btcutil.SatoshiPerBitcoin
+	chanAmt := 4 * acmutil.SatoshiPerBitcoin
 
 	// Simulating external funding negotiation, we'll now create the
 	// funding transaction for both parties. Utilizing existing tools,
@@ -2737,10 +2737,10 @@ func testSingleFunderExternalFundingTx(miner *rpctest.Harness,
 	// bind the keys we obtained above, and finally obtain our funding
 	// transaction and outpoint.
 	fundingIntent, err := aliceChanFunder.ProvisionChannel(&chanfunding.Request{
-		LocalAmt: btcutil.Amount(chanAmt),
+		LocalAmt: acmutil.Amount(chanAmt),
 		MinConfs: 1,
 		FeeRate:  253,
-		ChangeAddr: func() (btcutil.Address, error) {
+		ChangeAddr: func() (acmutil.Address, error) {
 			return alice.NewAddress(lnwallet.WitnessPubKey, true)
 		},
 	})
@@ -2774,17 +2774,17 @@ func testSingleFunderExternalFundingTx(miner *rpctest.Harness,
 	// create a new shim external funder out of it for Alice, and prep a
 	// shim intent for Bob.
 	aliceExternalFunder := chanfunding.NewCannedAssembler(
-		*chanPoint, btcutil.Amount(chanAmt), &aliceFundingKey,
+		*chanPoint, acmutil.Amount(chanAmt), &aliceFundingKey,
 		bobFundingKey.PubKey, true,
 	)
 	bobShimIntent, err := chanfunding.NewCannedAssembler(
-		*chanPoint, btcutil.Amount(chanAmt), &bobFundingKey,
+		*chanPoint, acmutil.Amount(chanAmt), &bobFundingKey,
 		aliceFundingKey.PubKey, false,
 	).ProvisionChannel(&chanfunding.Request{
-		LocalAmt: btcutil.Amount(chanAmt),
+		LocalAmt: acmutil.Amount(chanAmt),
 		MinConfs: 1,
 		FeeRate:  253,
-		ChangeAddr: func() (btcutil.Address, error) {
+		ChangeAddr: func() (acmutil.Address, error) {
 			return bob.NewAddress(lnwallet.WitnessPubKey, true)
 		},
 	})

@@ -40,7 +40,7 @@ func newUnifiedPolicies(sourceNode, toNode route.Vertex,
 // addPolicy adds a single channel policy. Capacity may be zero if unknown
 // (light clients).
 func (u *unifiedPolicies) addPolicy(fromNode route.Vertex,
-	edge *channeldb.ChannelEdgePolicy, capacity btcutil.Amount) {
+	edge *channeldb.ChannelEdgePolicy, capacity acmutil.Amount) {
 
 	localChan := fromNode == u.sourceNode
 
@@ -99,7 +99,7 @@ func (u *unifiedPolicies) addGraphPolicies(g routingGraph) error {
 // unifiedPolicy object.
 type unifiedPolicyEdge struct {
 	policy   *channeldb.ChannelEdgePolicy
-	capacity btcutil.Amount
+	capacity acmutil.Amount
 }
 
 // amtInRange checks whether an amount falls within the valid range for a

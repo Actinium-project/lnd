@@ -187,7 +187,7 @@ type WalletConfig struct {
 
 	// DustLimit is the current dust limit. We'll use this to ensure that
 	// we don't make dust outputs on the funding transaction.
-	DustLimit btcutil.Amount
+	DustLimit acmutil.Amount
 }
 
 // WalletAssembler is an instance of the Assembler interface that is backed by
@@ -237,8 +237,8 @@ func (w *WalletAssembler) ProvisionChannel(r *Request) (Intent, error) {
 
 		var (
 			selectedCoins        []Coin
-			localContributionAmt btcutil.Amount
-			changeAmt            btcutil.Amount
+			localContributionAmt acmutil.Amount
+			changeAmt            acmutil.Amount
 		)
 
 		// Perform coin selection over our available, unlocked unspent

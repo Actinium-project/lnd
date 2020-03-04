@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	sphinx "github.com/lightningnetwork/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/htlcswitch/hop"
 	"github.com/Actinium-project/lnd/lnwire"
 )

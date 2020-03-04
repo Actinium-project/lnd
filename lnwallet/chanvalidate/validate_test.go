@@ -276,7 +276,7 @@ func TestValidate(t *testing.T) {
 
 		if testCase.commitTx != nil {
 			ctx.CommitCtx = &CommitmentContext{
-				Value: btcutil.Amount(
+				Value: acmutil.Amount(
 					testCase.expectedValue,
 				),
 				FullySignedCommitTx: testCase.commitTx,

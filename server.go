@@ -25,7 +25,7 @@ import (
 	"github.com/Actinium-project/acmutil"
 	"github.com/coreos/bbolt"
 	"github.com/go-errors/errors"
-	sphinx "github.com/lightningnetwork/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/autopilot"
 	"github.com/Actinium-project/lnd/brontide"
 	"github.com/Actinium-project/lnd/chanacceptor"
@@ -1005,7 +1005,7 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB,
 		},
 		DefaultRoutingPolicy: cc.routingPolicy,
 		DefaultMinHtlcIn:     cc.minHtlcIn,
-		NumRequiredConfs: func(chanAmt btcutil.Amount,
+		NumRequiredConfs: func(chanAmt acmutil.Amount,
 			pushAmt lnwire.MilliSatoshi) uint16 {
 			// For large channels we increase the number
 			// of confirmations we require for the
@@ -1061,7 +1061,7 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB,
 			}
 
 			// If not we scale according to channel size.
-			delay := uint16(btcutil.Amount(maxRemoteDelay) *
+			delay := uint16(acmutil.Amount(maxRemoteDelay) *
 				chanAmt / MaxFundingAmount)
 			if delay < minRemoteDelay {
 				delay = minRemoteDelay
@@ -1124,7 +1124,7 @@ func newServer(listenAddrs []net.Addr, chanDB *channeldb.DB,
 		},
 		ZombieSweeperInterval:         1 * time.Minute,
 		ReservationTimeout:            10 * time.Minute,
-		MinChanSize:                   btcutil.Amount(cfg.MinChanSize),
+		MinChanSize:                   acmutil.Amount(cfg.MinChanSize),
 		MaxPendingChannels:            cfg.MaxPendingChannels,
 		RejectPush:                    cfg.RejectPush,
 		NotifyOpenChannelEvent:        s.channelNotifier.NotifyOpenChannelEvent,
@@ -3102,7 +3102,7 @@ type openChanReq struct {
 	chainHash chainhash.Hash
 
 	subtractFees    bool
-	localFundingAmt btcutil.Amount
+	localFundingAmt acmutil.Amount
 
 	pushAmt lnwire.MilliSatoshi
 

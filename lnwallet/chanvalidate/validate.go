@@ -119,7 +119,7 @@ func (s *ShortChanIDChanLocator) Locate(fundingTx *wire.MsgTx) (
 // of the funding output.
 type CommitmentContext struct {
 	// Value is the known size of the channel.
-	Value btcutil.Amount
+	Value acmutil.Amount
 
 	// FullySignedCommitTx is the fully signed commitment transaction. This
 	// should include a valid witness.
@@ -179,7 +179,7 @@ func Validate(ctx *Context) (*wire.OutPoint, error) {
 	// Now that we know this is our channel, we'll verify the amount of the
 	// created output against our expected size of the channel.
 	fundingValue := fundingOutput.Value
-	if btcutil.Amount(fundingValue) != ctx.CommitCtx.Value {
+	if acmutil.Amount(fundingValue) != ctx.CommitCtx.Value {
 		return nil, ErrInvalidSize
 	}
 

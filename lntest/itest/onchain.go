@@ -31,7 +31,7 @@ func testCPFP(net *lntest.NetworkHarness, t *harnessTest) {
 	// send to Bob.
 	ctxb := context.Background()
 	ctxt, _ := context.WithTimeout(ctxb, defaultTimeout)
-	err := net.SendCoins(ctxt, btcutil.SatoshiPerBitcoin, net.Alice)
+	err := net.SendCoins(ctxt, acmutil.SatoshiPerBitcoin, net.Alice)
 	if err != nil {
 		t.Fatalf("unable to send coins to alice: %v", err)
 	}
@@ -50,7 +50,7 @@ func testCPFP(net *lntest.NetworkHarness, t *harnessTest) {
 	// be broadcast and seen in the mempool.
 	sendReq := &lnrpc.SendCoinsRequest{
 		Addr:   resp.Address,
-		Amount: btcutil.SatoshiPerBitcoin,
+		Amount: acmutil.SatoshiPerBitcoin,
 	}
 	ctxt, _ = context.WithTimeout(ctxb, defaultTimeout)
 	if _, err = net.Alice.SendCoins(ctxt, sendReq); err != nil {

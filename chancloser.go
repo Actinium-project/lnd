@@ -200,7 +200,7 @@ func newChannelCloser(cfg chanCloseCfg, deliveryScript []byte,
 		negotiationHeight:   negotiationHeight,
 		idealFeeSat:         idealFeeSat,
 		localDeliveryScript: deliveryScript,
-		priorFeeOffers:      make(map[btcutil.Amount]*lnwire.ClosingSigned),
+		priorFeeOffers:      make(map[acmutil.Amount]*lnwire.ClosingSigned),
 		locallyInitiated:    locallyInitiated,
 	}
 }
@@ -562,7 +562,7 @@ func (c *channelCloser) ProcessCloseMsg(msg lnwire.Message) ([]lnwire.Message, b
 // proposeCloseSigned attempts to propose a new signature for the closing
 // transaction for a channel based on the prior fee negotiations and our
 // current compromise fee.
-func (c *channelCloser) proposeCloseSigned(fee btcutil.Amount) (*lnwire.ClosingSigned, error) {
+func (c *channelCloser) proposeCloseSigned(fee acmutil.Amount) (*lnwire.ClosingSigned, error) {
 	rawSig, _, _, err := c.cfg.channel.CreateCloseProposal(
 		fee, c.localDeliveryScript, c.remoteDeliveryScript,
 	)

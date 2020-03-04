@@ -85,7 +85,7 @@ func (p *PrefAttachment) NodeScores(g ChannelGraph, chans []Channel,
 	// We first run though the graph once in order to find the median
 	// channel size.
 	var (
-		allChans  []btcutil.Amount
+		allChans  []acmutil.Amount
 		seenChans = make(map[uint64]struct{})
 	)
 	if err := g.ForEachNode(func(n Node) error {

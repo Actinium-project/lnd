@@ -537,7 +537,7 @@ func newRPCServer(s *server, macService *macaroons.Service,
 	routerBackend := &routerrpc.RouterBackend{
 		MaxPaymentMSat: MaxPaymentMSat,
 		SelfNode:       selfNode.PubKeyBytes,
-		FetchChannelCapacity: func(chanID uint64) (btcutil.Amount,
+		FetchChannelCapacity: func(chanID uint64) (acmutil.Amount,
 			error) {
 
 			info, _, _, err := graph.FetchChannelEdgesByID(chanID)
@@ -1061,7 +1061,7 @@ func (r *rpcServer) SendCoins(ctx context.Context,
 
 	// Decode the address receiving the coins, we need to check whether the
 	// address is valid for this network.
-	targetAddr, err := btcutil.DecodeAddress(in.Addr, activeNetParams.Params)
+	targetAddr, err := acmutil.DecodeAddress(in.Addr, activeNetParams.Params)
 	if err != nil {
 		return nil, err
 	}
@@ -1214,7 +1214,7 @@ func (r *rpcServer) NewAddress(ctx context.Context,
 	// Translate the gRPC proto address type to the wallet controller's
 	// available address types.
 	var (
-		addr btcutil.Address
+		addr acmutil.Address
 		err  error
 	)
 	switch in.Type {
@@ -1544,7 +1544,7 @@ func newFundingShimAssembler(chanPointShim *lnrpc.ChanPointShim,
 	// With all the parts assembled, we can now make the canned assembler
 	// to pass into the wallet.
 	return chanfunding.NewCannedAssembler(
-		*chanPoint, btcutil.Amount(chanPointShim.Amt),
+		*chanPoint, acmutil.Amount(chanPointShim.Amt),
 		&localKeyDesc, remoteKey, initiator,
 	), nil
 }
@@ -1562,8 +1562,8 @@ func (r *rpcServer) OpenChannel(in *lnrpc.OpenChannelRequest,
 		return ErrServerNotActive
 	}
 
-	localFundingAmt := btcutil.Amount(in.LocalFundingAmount)
-	remoteInitialBalance := btcutil.Amount(in.PushSat)
+	localFundingAmt := acmutil.Amount(in.LocalFundingAmount)
+	remoteInitialBalance := acmutil.Amount(in.PushSat)
 	minHtlcIn := lnwire.MilliSatoshi(in.MinHtlcMsat)
 	remoteCsvDelay := uint16(in.RemoteCsvDelay)
 
@@ -1772,8 +1772,8 @@ func (r *rpcServer) OpenChannelSync(ctx context.Context,
 		return nil, err
 	}
 
-	localFundingAmt := btcutil.Amount(in.LocalFundingAmount)
-	remoteInitialBalance := btcutil.Amount(in.PushSat)
+	localFundingAmt := acmutil.Amount(in.LocalFundingAmount)
+	remoteInitialBalance := acmutil.Amount(in.PushSat)
 	minHtlcIn := lnwire.MilliSatoshi(in.MinHtlcMsat)
 	remoteCsvDelay := uint16(in.RemoteCsvDelay)
 
@@ -1874,7 +1874,7 @@ func parseUpfrontShutdownAddress(address string) (lnwire.DeliveryAddress, error)
 		return nil, nil
 	}
 
-	addr, err := btcutil.DecodeAddress(
+	addr, err := acmutil.DecodeAddress(
 		address, activeNetParams.Params,
 	)
 	if err != nil {
@@ -2059,7 +2059,7 @@ func (r *rpcServer) CloseChannel(in *lnrpc.CloseChannelRequest,
 		// If a delivery address to close out to was specified, decode it.
 		if len(in.DeliveryAddress) > 0 {
 			// Decode the address provided.
-			addr, err := btcutil.DecodeAddress(
+			addr, err := acmutil.DecodeAddress(
 				in.DeliveryAddress, activeNetParams.Params,
 			)
 			if err != nil {
@@ -4533,7 +4533,7 @@ func (r *rpcServer) GetNodeInfo(ctx context.Context,
 	// edges to gather some basic statistics about its out going channels.
 	var (
 		numChannels   uint32
-		totalCapacity btcutil.Amount
+		totalCapacity acmutil.Amount
 		channels      []*lnrpc.ChannelEdge
 	)
 
@@ -4616,10 +4616,10 @@ func (r *rpcServer) GetNetworkInfo(ctx context.Context,
 		numNodes             uint32
 		numChannels          uint32
 		maxChanOut           uint32
-		totalNetworkCapacity btcutil.Amount
-		minChannelSize       btcutil.Amount = math.MaxInt64
-		maxChannelSize       btcutil.Amount
-		medianChanSize       btcutil.Amount
+		totalNetworkCapacity acmutil.Amount
+		minChannelSize       acmutil.Amount = math.MaxInt64
+		maxChannelSize       acmutil.Amount
+		medianChanSize       acmutil.Amount
 	)
 
 	// We'll use this map to de-duplicate channels during our traversal.
@@ -4629,7 +4629,7 @@ func (r *rpcServer) GetNetworkInfo(ctx context.Context,
 
 	// We also keep a list of all encountered capacities, in order to
 	// calculate the median channel size.
-	var allChans []btcutil.Amount
+	var allChans []acmutil.Amount
 
 	// We'll run through all the known nodes in the within our view of the
 	// network, tallying up the total number of nodes, and also gathering
@@ -6013,7 +6013,7 @@ func (r *rpcServer) FundingStateStep(ctx context.Context,
 			return nil, err
 		}
 		req := &chanfunding.Request{
-			RemoteAmt: btcutil.Amount(rpcShimIntent.Amt),
+			RemoteAmt: acmutil.Amount(rpcShimIntent.Amt),
 		}
 		shimIntent, err := shimAssembler.ProvisionChannel(req)
 		if err != nil {

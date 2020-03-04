@@ -12,31 +12,31 @@ func TestMedian(t *testing.T) {
 	t.Parallel()
 
 	testCases := []struct {
-		values []btcutil.Amount
-		median btcutil.Amount
+		values []acmutil.Amount
+		median acmutil.Amount
 	}{
 		{
-			values: []btcutil.Amount{},
+			values: []acmutil.Amount{},
 			median: 0,
 		},
 		{
-			values: []btcutil.Amount{10},
+			values: []acmutil.Amount{10},
 			median: 10,
 		},
 		{
-			values: []btcutil.Amount{10, 20},
+			values: []acmutil.Amount{10, 20},
 			median: 15,
 		},
 		{
-			values: []btcutil.Amount{10, 20, 30},
+			values: []acmutil.Amount{10, 20, 30},
 			median: 20,
 		},
 		{
-			values: []btcutil.Amount{30, 10, 20},
+			values: []acmutil.Amount{30, 10, 20},
 			median: 20,
 		},
 		{
-			values: []btcutil.Amount{10, 10, 10, 10, 5000000},
+			values: []acmutil.Amount{10, 10, 10, 10, 5000000},
 			median: 10,
 		},
 	}

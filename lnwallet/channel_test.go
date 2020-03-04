@@ -292,7 +292,7 @@ func testAddSettleWorkflow(t *testing.T, tweakless bool) {
 	// having 4 BTC. Alice's channel should show 1 BTC sent and Bob's
 	// channel should show 1 BTC received. They should also be at
 	// commitment height two, with the revocation window extended by 1 (5).
-	mSatTransferred := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	mSatTransferred := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	if aliceChannel.channelState.TotalMSatSent != mSatTransferred {
 		t.Fatalf("alice satoshis sent incorrect %v vs %v expected",
 			aliceChannel.channelState.TotalMSatSent,
@@ -1011,7 +1011,7 @@ func TestHTLCDustLimit(t *testing.T) {
 
 	// The amount of the HTLC should be above Alice's dust limit and below
 	// Bob's dust limit.
-	htlcSat := (btcutil.Amount(500) + htlcTimeoutFee(
+	htlcSat := (acmutil.Amount(500) + htlcTimeoutFee(
 		chainfee.SatPerKWeight(
 			aliceChannel.channelState.LocalCommitment.FeePerKw,
 		),
@@ -4736,8 +4736,8 @@ func TestChanAvailableBalanceNearHtlcFee(t *testing.T) {
 	defer cleanUp()
 
 	// Alice and Bob start with half the channel capacity.
-	aliceBalance := lnwire.NewMSatFromSatoshis(5 * btcutil.SatoshiPerBitcoin)
-	bobBalance := lnwire.NewMSatFromSatoshis(5 * btcutil.SatoshiPerBitcoin)
+	aliceBalance := lnwire.NewMSatFromSatoshis(5 * acmutil.SatoshiPerBitcoin)
+	bobBalance := lnwire.NewMSatFromSatoshis(5 * acmutil.SatoshiPerBitcoin)
 
 	aliceReserve := lnwire.NewMSatFromSatoshis(
 		aliceChannel.channelState.LocalChanCfg.ChanReserve,
@@ -5801,7 +5801,7 @@ func TestMaxAsynchronousHtlcs(t *testing.T) {
 	bobChannel.channelState.LocalChanCfg.MaxAcceptedHtlcs = numHTLCs
 
 	// Each HTLC amount is 0.1 BTC.
-	htlcAmt := lnwire.NewMSatFromSatoshis(0.1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(0.1 * acmutil.SatoshiPerBitcoin)
 
 	var htlcID uint64
 
@@ -6024,7 +6024,7 @@ func TestChanReserve(t *testing.T) {
 		// his current balance in the channel. This will ensure that
 		// after a channel is first opened, Bob can still receive HTLCs
 		// even though his balance is less than his channel reserve.
-		bobMinReserve := btcutil.Amount(6 * btcutil.SatoshiPerBitcoin)
+		bobMinReserve := acmutil.Amount(6 * acmutil.SatoshiPerBitcoin)
 		bobChannel.channelState.LocalChanCfg.ChanReserve = bobMinReserve
 		aliceChannel.channelState.RemoteChanCfg.ChanReserve = bobMinReserve
 
@@ -6221,7 +6221,7 @@ func TestChanReserveRemoteInitiator(t *testing.T) {
 	// high is unrealistic, a channel can easiliy get into a situation
 	// where the initiator cannot pay for the fee of any more HTLCs.
 	commitFee := aliceChannel.channelState.LocalCommitment.CommitFee
-	aliceMinReserve := 5*btcutil.SatoshiPerBitcoin - commitFee
+	aliceMinReserve := 5*acmutil.SatoshiPerBitcoin - commitFee
 
 	aliceChannel.channelState.LocalChanCfg.ChanReserve = aliceMinReserve
 	bobChannel.channelState.RemoteChanCfg.ChanReserve = aliceMinReserve
@@ -6230,7 +6230,7 @@ func TestChanReserveRemoteInitiator(t *testing.T) {
 	// money available to spend, but Alice, which is the initiator, cannot
 	// afford any more HTLCs on the commitment transaction because that
 	// would take here below her channel reserve..
-	htlcAmt := lnwire.NewMSatFromSatoshis(0.1 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(0.1 * acmutil.SatoshiPerBitcoin)
 	htlc, _ := createHTLC(0, htlcAmt)
 
 	// Bob should refuse to add this HTLC, since he realizes it will create
@@ -6273,7 +6273,7 @@ func TestChanReserveLocalInitiatorDustHtlc(t *testing.T) {
 	// limit (1300 sat). It is considered dust if the amount remaining
 	// after paying the HTLC fee is below the dustlimit, so we choose a
 	// size of 500+htlcFee.
-	htlcSat := btcutil.Amount(500) + htlcTimeoutFee(
+	htlcSat := acmutil.Amount(500) + htlcTimeoutFee(
 		chainfee.SatPerKWeight(
 			aliceChannel.channelState.LocalCommitment.FeePerKw,
 		),
@@ -6283,7 +6283,7 @@ func TestChanReserveLocalInitiatorDustHtlc(t *testing.T) {
 	// the HTLC, but not low enough to allow the extra fee from adding the
 	// HTLC to the commitment.
 	commitFee := aliceChannel.channelState.LocalCommitment.CommitFee
-	aliceMinReserve := 5*btcutil.SatoshiPerBitcoin - commitFee - htlcSat
+	aliceMinReserve := 5*acmutil.SatoshiPerBitcoin - commitFee - htlcSat
 
 	aliceChannel.channelState.LocalChanCfg.ChanReserve = aliceMinReserve
 	bobChannel.channelState.RemoteChanCfg.ChanReserve = aliceMinReserve

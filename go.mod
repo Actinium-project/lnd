@@ -10,6 +10,7 @@ require (
 	github.com/Actinium-project/acmwallet/walletdb v1.3.0
 	github.com/Actinium-project/acmwallet/wtxmgr v1.1.0
 	github.com/Actinium-project/actrino v0.0.19
+	github.com/Actinium-project/lightning-onion v1.0.4
 	github.com/Actinium-project/lnd/cert v1.0.0
 	github.com/Actinium-project/lnd/queue v1.0.2
 	github.com/Actinium-project/lnd/ticker v1.0.0
@@ -38,8 +39,6 @@ require (
 	github.com/juju/version v0.0.0-20180108022336-b64dbd566305 // indirect
 	github.com/kkdai/bstream v1.0.0
 	github.com/lightninglabs/protobuf-hex-display v1.3.3-0.20191212020323-b444784ce75d
-	github.com/lightningnetwork/lightning-onion v1.0.1
-	github.com/Actinium-project/lnd v0.9.1-beta.rc1
 	github.com/ltcsuite/ltcd v0.20.1-beta
 	github.com/miekg/dns v0.0.0-20171125082028-79bfde677fa8
 	github.com/prometheus/client_golang v0.9.3

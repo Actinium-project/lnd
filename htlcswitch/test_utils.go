@@ -33,7 +33,7 @@ import (
 	"github.com/btcsuite/fastsha256"
 	"github.com/coreos/bbolt"
 	"github.com/go-errors/errors"
-	sphinx "github.com/lightningnetwork/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/contractcourt"
 	"github.com/Actinium-project/lnd/htlcswitch/hop"
@@ -167,7 +167,7 @@ type testLightningChannel struct {
 //
 // TODO(roasbeef): need to factor out, similar func re-used in many parts of codebase
 func createTestChannel(alicePrivKey, bobPrivKey []byte,
-	aliceAmount, bobAmount, aliceReserve, bobReserve btcutil.Amount,
+	aliceAmount, bobAmount, aliceReserve, bobReserve acmutil.Amount,
 	chanID lnwire.ShortChannelID) (*testLightningChannel,
 	*testLightningChannel, func(), error) {
 
@@ -1093,7 +1093,7 @@ func serverOptionRejectHtlc(alice, bob, carol bool) serverOption {
 
 // createTwoClusterChannels creates lightning channels which are needed for
 // a 2 hop network cluster to be initialized.
-func createTwoClusterChannels(aliceToBob, bobToCarol btcutil.Amount) (
+func createTwoClusterChannels(aliceToBob, bobToCarol acmutil.Amount) (
 	*testLightningChannel, *testLightningChannel,
 	func(), error) {
 

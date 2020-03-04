@@ -260,7 +260,7 @@ func (b *BtcWallet) NewAddress(t lnwallet.AddressType, change bool) (acmutil.Add
 // NewAddress it can derive a specified address type, and also optionally a
 // change address.
 func (b *BtcWallet) LastUnusedAddress(addrType lnwallet.AddressType) (
-	btcutil.Address, error) {
+	acmutil.Address, error) {
 
 	var keyScope waddrmgr.KeyScope
 
@@ -319,7 +319,7 @@ func (b *BtcWallet) CreateSimpleTx(outputs []*wire.TxOut,
 
 	// The fee rate is passed in using units of sat/kw, so we'll convert
 	// this to sat/KB as the CreateSimpleTx method requires this unit.
-	feeSatPerKB := btcutil.Amount(feeRate.FeePerKVByte())
+	feeSatPerKB := acmutil.Amount(feeRate.FeePerKVByte())
 
 	// Sanity check outputs.
 	if len(outputs) < 1 {
@@ -540,7 +540,7 @@ func unminedTransactionsToDetail(
 		return nil, err
 	}
 
-	var destAddresses []btcutil.Address
+	var destAddresses []acmutil.Address
 	for _, txOut := range wireTx.TxOut {
 		_, outAddresses, _, err :=
 			txscript.ExtractPkScriptAddrs(txOut.PkScript, chainParams)

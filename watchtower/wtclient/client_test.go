@@ -55,7 +55,7 @@ var (
 	}
 
 	// addr is the server's reward address given to watchtower clients.
-	addr, _ = btcutil.DecodeAddress(
+	addr, _ = acmutil.DecodeAddress(
 		"mrX9vMRYLfVy1BnZbc5gZjuyaqH3ZW2ZHz", &chaincfg.TestNet3Params,
 	)
 
@@ -416,7 +416,7 @@ func newHarness(t *testing.T, cfg harnessCfg) *testHarness {
 		ReadTimeout:  timeout,
 		WriteTimeout: timeout,
 		NodePrivKey:  privKey,
-		NewAddress: func() (btcutil.Address, error) {
+		NewAddress: func() (acmutil.Address, error) {
 			return addr, nil
 		},
 		NoAckCreateSession: cfg.noAckCreateSession,

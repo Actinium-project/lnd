@@ -631,7 +631,7 @@ func TestTxNotifierFutureConfDispatchReuseSafe(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unable to register ntfn: %v", err)
 	}
-	block := btcutil.NewBlock(&wire.MsgBlock{
+	block := acmutil.NewBlock(&wire.MsgBlock{
 		Transactions: []*wire.MsgTx{&tx1},
 	})
 	currentBlock++
@@ -690,7 +690,7 @@ func TestTxNotifierFutureConfDispatchReuseSafe(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unable to register ntfn: %v", err)
 	}
-	block2 := btcutil.NewBlock(&wire.MsgBlock{
+	block2 := acmutil.NewBlock(&wire.MsgBlock{
 		Transactions: []*wire.MsgTx{&tx2},
 	})
 	currentBlock++
@@ -738,7 +738,7 @@ func TestTxNotifierFutureConfDispatchReuseSafe(t *testing.T) {
 
 	// Finally, mine a few empty blocks and expect both TXs to be confirmed.
 	for currentBlock < 15 {
-		block := btcutil.NewBlock(&wire.MsgBlock{})
+		block := acmutil.NewBlock(&wire.MsgBlock{})
 		currentBlock++
 		err = n.ConnectTip(
 			block.Hash(), currentBlock, block.Transactions(),
@@ -2200,7 +2200,7 @@ func TestTxNotifierSpendDuringHistoricalRescan(t *testing.T) {
 
 	// Create a new empty block and extend the chain.
 	height := uint32(startingHeight) + 1
-	emptyBlock := btcutil.NewBlock(&wire.MsgBlock{})
+	emptyBlock := acmutil.NewBlock(&wire.MsgBlock{})
 	err = n.ConnectTip(
 		emptyBlock.Hash(), height, emptyBlock.Transactions(),
 	)
@@ -2228,7 +2228,7 @@ func TestTxNotifierSpendDuringHistoricalRescan(t *testing.T) {
 		height++
 
 		// Let the outpoint we are watching be spent midway.
-		var block *btcutil.Block
+		var block *acmutil.Block
 		if i == 5 {
 			// We'll create a new block that only contains the
 			// spending transaction of the outpoint.
@@ -2237,13 +2237,13 @@ func TestTxNotifierSpendDuringHistoricalRescan(t *testing.T) {
 				PreviousOutPoint: op1,
 				SignatureScript:  testSigScript,
 			})
-			block = btcutil.NewBlock(&wire.MsgBlock{
+			block = acmutil.NewBlock(&wire.MsgBlock{
 				Transactions: []*wire.MsgTx{spendTx1},
 			})
 			spendHeight = height
 		} else {
 			// Otherwise we just create an empty block.
-			block = btcutil.NewBlock(&wire.MsgBlock{})
+			block = acmutil.NewBlock(&wire.MsgBlock{})
 		}
 
 		err = n.ConnectTip(
@@ -2302,7 +2302,7 @@ func TestTxNotifierSpendDuringHistoricalRescan(t *testing.T) {
 		SignatureScript:  testSigScript,
 	})
 	height++
-	block2 := btcutil.NewBlock(&wire.MsgBlock{
+	block2 := acmutil.NewBlock(&wire.MsgBlock{
 		Transactions: []*wire.MsgTx{spendTx2},
 	})
 	err = n.ConnectTip(block2.Hash(), height, block2.Transactions())
@@ -2326,7 +2326,7 @@ func TestTxNotifierSpendDuringHistoricalRescan(t *testing.T) {
 	// Now mine enough blocks for the spend notification to be forgotten.
 	for i := 0; i < 2*reorgSafety; i++ {
 		height++
-		block := btcutil.NewBlock(&wire.MsgBlock{})
+		block := acmutil.NewBlock(&wire.MsgBlock{})
 
 		err := n.ConnectTip(
 			block.Hash(), height, block.Transactions(),

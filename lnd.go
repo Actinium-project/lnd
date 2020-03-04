@@ -511,7 +511,7 @@ func Main(lisCfg ListenerCfg) error {
 			DB:             towerDB,
 			EpochRegistrar: activeChainControl.chainNotifier,
 			Net:            cfg.net,
-			NewAddress: func() (btcutil.Address, error) {
+			NewAddress: func() (acmutil.Address, error) {
 				return activeChainControl.wallet.NewAddress(
 					lnwallet.WitnessPubKey, false,
 				)

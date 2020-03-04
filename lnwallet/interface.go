@@ -98,7 +98,7 @@ type TransactionDetail struct {
 	TotalFees int64
 
 	// DestAddresses are the destinations for a transaction
-	DestAddresses []btcutil.Address
+	DestAddresses []acmutil.Address
 
 	// RawTx returns the raw serialized transaction.
 	RawTx []byte
@@ -162,7 +162,7 @@ type WalletController interface {
 	// "freshest" address without having to worry about "address inflation"
 	// caused by continual refreshing. Similar to NewAddress it can derive
 	// a specified address type. By default, this is a non-change address.
-	LastUnusedAddress(addrType AddressType) (btcutil.Address, error)
+	LastUnusedAddress(addrType AddressType) (acmutil.Address, error)
 
 	// IsOurAddress checks if the passed address belongs to this wallet
 	IsOurAddress(a acmutil.Address) bool

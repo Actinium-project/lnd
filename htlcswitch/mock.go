@@ -19,7 +19,7 @@ import (
 	"github.com/Actinium-project/acmd/txscript"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/go-errors/errors"
-	sphinx "github.com/lightningnetwork/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/chainntnfs"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/clock"

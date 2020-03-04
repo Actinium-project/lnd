@@ -98,7 +98,7 @@ func TestTxInputSetFromWallet(t *testing.T) {
 }
 
 // createP2WKHInput returns a P2WKH test input with the specified amount.
-func createP2WKHInput(amt btcutil.Amount) input.Input {
+func createP2WKHInput(amt acmutil.Amount) input.Input {
 	input := createTestInput(int64(amt), input.WitnessKeyHash)
 	return &input
 }

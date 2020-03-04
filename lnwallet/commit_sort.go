@@ -49,7 +49,7 @@ func (s sortableInputSlice) Swap(i, j int) {
 
 // Less is the BIP69 input comparison function. The sort is first applied on
 // input hash (reversed / rpc-style), then index. This logic is copied from
-// btcutil/txsort.
+// acmutil/txsort.
 //
 // NOTE: Part of the sort.Interface interface.
 func (s sortableInputSlice) Less(i, j int) bool {

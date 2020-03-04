@@ -152,7 +152,7 @@ type PendingInput struct {
 	WitnessType input.WitnessType
 
 	// Amount is the amount of the input being swept.
-	Amount btcutil.Amount
+	Amount acmutil.Amount
 
 	// LastFeeRate is the most recent fee rate used for the input being
 	// swept within a transaction broadcast to the network.
@@ -414,7 +414,7 @@ func (s *UtxoSweeper) SweepInput(input input.Input,
 	log.Infof("Sweep request received: out_point=%v, witness_type=%v, "+
 		"time_lock=%v, amount=%v, params=(%v)",
 		input.OutPoint(), input.WitnessType(), input.BlocksToMaturity(),
-		btcutil.Amount(input.SignDesc().Output.Value), params)
+		acmutil.Amount(input.SignDesc().Output.Value), params)
 
 	sweeperInput := &sweepInputMessage{
 		input:      input,
@@ -1089,7 +1089,7 @@ func (s *UtxoSweeper) handlePendingSweepsReq(
 		pendingInputs[op] = &PendingInput{
 			OutPoint:    op,
 			WitnessType: pendingInput.WitnessType(),
-			Amount: btcutil.Amount(
+			Amount: acmutil.Amount(
 				pendingInput.SignDesc().Output.Value,
 			),
 			LastFeeRate:         pendingInput.lastFeeRate,

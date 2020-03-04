@@ -718,7 +718,7 @@ func TestFetchHistoricalChannel(t *testing.T) {
 	if err := channel.CloseChannel(&ChannelCloseSummary{
 		ChanPoint:      channel.FundingOutpoint,
 		RemotePub:      channel.IdentityPub,
-		SettledBalance: btcutil.Amount(500),
+		SettledBalance: acmutil.Amount(500),
 	}); err != nil {
 		t.Fatalf("unexpected error closing channel: %v", err)
 	}

@@ -342,7 +342,7 @@ func createTestFundingManager(t *testing.T, privKey *btcec.PrivateKey,
 			TimeLockDelta: 10,
 		},
 		DefaultMinHtlcIn: 5,
-		NumRequiredConfs: func(chanAmt btcutil.Amount,
+		NumRequiredConfs: func(chanAmt acmutil.Amount,
 			pushAmt lnwire.MilliSatoshi) uint16 {
 			return 3
 		},
@@ -571,7 +571,7 @@ func tearDownFundingManagers(t *testing.T, a, b *testNode) {
 // openChannel takes the funding process to the point where the funding
 // transaction is confirmed on-chain. Returns the funding out point.
 func openChannel(t *testing.T, alice, bob *testNode, localFundingAmt,
-	pushAmt btcutil.Amount, numConfs uint32,
+	pushAmt acmutil.Amount, numConfs uint32,
 	updateChan chan *lnrpc.OpenStatusUpdate, announceChan bool) (
 	*wire.OutPoint, *wire.MsgTx) {
 
@@ -589,7 +589,7 @@ func openChannel(t *testing.T, alice, bob *testNode, localFundingAmt,
 // fundChannel takes the funding process to the point where the funding
 // transaction is confirmed on-chain. Returns the funding tx.
 func fundChannel(t *testing.T, alice, bob *testNode, localFundingAmt,
-	pushAmt btcutil.Amount, subtractFees bool, numConfs uint32,
+	pushAmt acmutil.Amount, subtractFees bool, numConfs uint32,
 	updateChan chan *lnrpc.OpenStatusUpdate, announceChan bool) *wire.MsgTx {
 
 	// Create a funding request and start the workflow.
@@ -2867,8 +2867,8 @@ func TestFundingManagerFundAll(t *testing.T) {
 	allCoins := []*lnwallet.Utxo{
 		{
 			AddressType: lnwallet.WitnessPubKey,
-			Value: btcutil.Amount(
-				0.05 * btcutil.SatoshiPerBitcoin,
+			Value: acmutil.Amount(
+				0.05 * acmutil.SatoshiPerBitcoin,
 			),
 			PkScript: coinPkScript,
 			OutPoint: wire.OutPoint{
@@ -2878,8 +2878,8 @@ func TestFundingManagerFundAll(t *testing.T) {
 		},
 		{
 			AddressType: lnwallet.WitnessPubKey,
-			Value: btcutil.Amount(
-				0.06 * btcutil.SatoshiPerBitcoin,
+			Value: acmutil.Amount(
+				0.06 * acmutil.SatoshiPerBitcoin,
 			),
 			PkScript: coinPkScript,
 			OutPoint: wire.OutPoint{
@@ -2890,22 +2890,22 @@ func TestFundingManagerFundAll(t *testing.T) {
 	}
 
 	tests := []struct {
-		spendAmt btcutil.Amount
+		spendAmt acmutil.Amount
 		change   bool
 	}{
 		{
 			// We will spend all the funds in the wallet, and
 			// expects no change output.
-			spendAmt: btcutil.Amount(
-				0.11 * btcutil.SatoshiPerBitcoin,
+			spendAmt: acmutil.Amount(
+				0.11 * acmutil.SatoshiPerBitcoin,
 			),
 			change: false,
 		},
 		{
 			// We spend a little less than the funds in the wallet,
 			// so a change output should be created.
-			spendAmt: btcutil.Amount(
-				0.10 * btcutil.SatoshiPerBitcoin,
+			spendAmt: acmutil.Amount(
+				0.10 * acmutil.SatoshiPerBitcoin,
 			),
 			change: true,
 		},
@@ -2922,7 +2922,7 @@ func TestFundingManagerFundAll(t *testing.T) {
 		updateChan := make(chan *lnrpc.OpenStatusUpdate)
 
 		// Initiate a fund channel, and inspect the funding tx.
-		pushAmt := btcutil.Amount(0)
+		pushAmt := acmutil.Amount(0)
 		fundingTx := fundChannel(
 			t, alice, bob, test.spendAmt, pushAmt, true, 1,
 			updateChan, true,

@@ -12,9 +12,9 @@ RUN apk add --no-cache --update alpine-sdk \
     make 
 
 # Copy in the local repository to build from.
-COPY . /go/src/github.com/lightningnetwork/lnd
+COPY . /go/src/github.com/Actinium-project/lnd
 
-RUN cd /go/src/github.com/lightningnetwork/lnd \
+RUN cd /go/src/github.com/Actinium-project/lnd \
 &&  make \
 &&  make install tags="signrpc walletrpc chainrpc invoicesrpc routerrpc"
 

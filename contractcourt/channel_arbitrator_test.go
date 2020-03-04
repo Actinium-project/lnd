@@ -1960,8 +1960,8 @@ func TestRemoteCloseInitiator(t *testing.T) {
 				ChannelCloseSummary: channeldb.ChannelCloseSummary{
 					ChanPoint:         channel.FundingOutpoint,
 					RemotePub:         channel.IdentityPub,
-					SettledBalance:    btcutil.Amount(500),
-					TimeLockedBalance: btcutil.Amount(10000),
+					SettledBalance:    acmutil.Amount(500),
+					TimeLockedBalance: acmutil.Amount(10000),
 					IsPending:         false,
 				},
 				HtlcResolutions: &lnwallet.HtlcResolutions{},

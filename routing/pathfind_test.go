@@ -351,7 +351,7 @@ type testChannelEnd struct {
 	*testChannelPolicy
 }
 
-func symmetricTestChannel(alias1, alias2 string, capacity btcutil.Amount,
+func symmetricTestChannel(alias1, alias2 string, capacity acmutil.Amount,
 	policy *testChannelPolicy, chanID ...uint64) *testChannel {
 
 	// Leaving id zero will result in auto-generation of a channel id during
@@ -368,7 +368,7 @@ func symmetricTestChannel(alias1, alias2 string, capacity btcutil.Amount,
 	)
 }
 
-func asymmetricTestChannel(alias1, alias2 string, capacity btcutil.Amount,
+func asymmetricTestChannel(alias1, alias2 string, capacity acmutil.Amount,
 	policy1, policy2 *testChannelPolicy, id uint64) *testChannel {
 
 	return &testChannel{
@@ -1764,7 +1764,7 @@ func TestPathInsufficientCapacity(t *testing.T) {
 	// though we have a 2-hop link.
 	target := graph.aliasMap["sophon"]
 
-	payAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	payAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	_, err = findPath(
 		&graphParams{
 			graph: graph.graph,

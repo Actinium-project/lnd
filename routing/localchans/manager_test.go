@@ -20,7 +20,7 @@ import (
 func TestManager(t *testing.T) {
 	var (
 		chanPoint        = wire.OutPoint{Hash: chainhash.Hash{1}, Index: 2}
-		chanCap          = btcutil.Amount(1000)
+		chanCap          = acmutil.Amount(1000)
 		maxPendingAmount = lnwire.MilliSatoshi(999000)
 		minHTLC          = lnwire.MilliSatoshi(2000)
 	)

@@ -9,7 +9,7 @@ import (
 
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightningnetwork/lnd"
+	"github.com/Actinium-project/lnd"
 	"github.com/Actinium-project/lnd/lnrpc"
 	"github.com/Actinium-project/lnd/lnrpc/invoicesrpc"
 	"github.com/Actinium-project/lnd/lntest"

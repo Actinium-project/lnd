@@ -94,7 +94,7 @@ var (
 func CreateTestChannels(tweaklessCommits bool) (
 	*LightningChannel, *LightningChannel, func(), error) {
 
-	channelCapacity, err := btcutil.NewAmount(10)
+	channelCapacity, err := acmutil.NewAmount(10)
 	if err != nil {
 		return nil, nil, nil, err
 	}

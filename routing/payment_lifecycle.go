@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
-	sphinx "github.com/lightningnetwork/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/htlcswitch"
 	"github.com/Actinium-project/lnd/lnwire"

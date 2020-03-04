@@ -19,7 +19,7 @@ import (
 	"github.com/Actinium-project/acmd/txscript"
 	"github.com/Actinium-project/acmd/wire"
 	"github.com/Actinium-project/acmutil"
-	"github.com/lightningnetwork/lnd"
+	"github.com/Actinium-project/lnd"
 	"github.com/Actinium-project/lnd/lnrpc"
 	"github.com/Actinium-project/lnd/lntest/wait"
 	"github.com/Actinium-project/lnd/lnwire"

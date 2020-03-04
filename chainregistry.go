@@ -68,7 +68,7 @@ const (
 	defaultLitecoinBaseFeeMSat    = lnwire.MilliSatoshi(1000)
 	defaultLitecoinFeeRate        = lnwire.MilliSatoshi(1)
 	defaultLitecoinTimeLockDelta  = 576
-	defaultLitecoinDustLimit      = btcutil.Amount(54600)
+	defaultLitecoinDustLimit      = acmutil.Amount(54600)
 
 	// defaultBitcoinStaticFeePerKW is the fee rate of 50 sat/vbyte
 	// expressed in sat/kw.

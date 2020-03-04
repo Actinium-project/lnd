@@ -133,7 +133,7 @@ type ChannelReservation struct {
 // used only internally by lnwallet. In order to concurrent safety, the
 // creation of all channel reservations should be carried out via the
 // lnwallet.InitChannelReservation interface.
-func NewChannelReservation(capacity, localFundingAmt btcutil.Amount,
+func NewChannelReservation(capacity, localFundingAmt acmutil.Amount,
 	commitFeePerKw chainfee.SatPerKWeight, wallet *LightningWallet,
 	id uint64, pushMSat lnwire.MilliSatoshi, chainHash *chainhash.Hash,
 	flags lnwire.FundingFlag, tweaklessCommit bool,
@@ -544,7 +544,7 @@ func (r *ChannelReservation) SetOurUpfrontShutdown(shutdown lnwire.DeliveryAddre
 }
 
 // Capacity returns the channel capacity for this reservation.
-func (r *ChannelReservation) Capacity() btcutil.Amount {
+func (r *ChannelReservation) Capacity() acmutil.Amount {
 	r.RLock()
 	defer r.RUnlock()
 	return r.partialState.Capacity

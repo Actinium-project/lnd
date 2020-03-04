@@ -81,7 +81,7 @@ type Single struct {
 	Addresses []net.Addr
 
 	// Capacity is the size of the original channel.
-	Capacity btcutil.Amount
+	Capacity acmutil.Amount
 
 	// LocalChanCfg is our local channel configuration. It contains all the
 	// information we need to re-derive the keys we used within the

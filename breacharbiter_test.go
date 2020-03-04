@@ -144,7 +144,7 @@ var (
 			secondLevelWitnessScript: breachKeys[0],
 		},
 		{
-			amt:         btcutil.Amount(1e7),
+			amt:         acmutil.Amount(1e7),
 			outpoint:    breachOutPoints[0],
 			witnessType: input.CommitSpendNoDelayTweakless,
 			signDesc: input.SignDescriptor{
@@ -180,7 +180,7 @@ var (
 			secondLevelWitnessScript: breachKeys[0],
 		},
 		{
-			amt:         btcutil.Amount(2e9),
+			amt:         acmutil.Amount(2e9),
 			outpoint:    breachOutPoints[1],
 			witnessType: input.CommitmentRevoke,
 			signDesc: input.SignDescriptor{

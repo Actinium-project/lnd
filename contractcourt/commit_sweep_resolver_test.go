@@ -173,8 +173,8 @@ func TestCommitSweepResolverDelay(t *testing.T) {
 	if !reflect.DeepEqual(report, &ContractReport{
 		Outpoint:     outpoint,
 		Type:         ReportOutputUnencumbered,
-		Amount:       btcutil.Amount(amt),
-		LimboBalance: btcutil.Amount(amt),
+		Amount:       acmutil.Amount(amt),
+		LimboBalance: acmutil.Amount(amt),
 	}) {
 		t.Fatal("unexpected resolver report")
 	}
@@ -216,8 +216,8 @@ func TestCommitSweepResolverDelay(t *testing.T) {
 	if !reflect.DeepEqual(report, &ContractReport{
 		Outpoint:         outpoint,
 		Type:             ReportOutputUnencumbered,
-		Amount:           btcutil.Amount(amt),
-		RecoveredBalance: btcutil.Amount(amt),
+		Amount:           acmutil.Amount(amt),
+		RecoveredBalance: acmutil.Amount(amt),
 		MaturityHeight:   testInitialBlockHeight + 2,
 	}) {
 		t.Fatal("unexpected resolver report")

@@ -338,7 +338,7 @@ func (c *commitSweepResolver) report() *ContractReport {
 
 // initReport initializes the pending channels report for this resolver.
 func (c *commitSweepResolver) initReport() {
-	amt := btcutil.Amount(
+	amt := acmutil.Amount(
 		c.commitResolution.SelfOutputSignDesc.Output.Value,
 	)
 

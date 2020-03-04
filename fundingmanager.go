@@ -63,7 +63,7 @@ const (
 	// Protocol. This limit is defined in BOLT-0002, and serves as an
 	// initial precautionary limit while implementations are battle tested
 	// in the real world.
-	MaxBtcFundingAmount = btcutil.Amount(1<<24) - 1
+	MaxBtcFundingAmount = acmutil.Amount(1<<24) - 1
 
 	// maxLtcFundingAmount is a soft-limit of the maximum channel size
 	// currently accepted on the Actinium chain within the Lightning

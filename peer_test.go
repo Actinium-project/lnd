@@ -817,7 +817,7 @@ func TestCustomShutdownScript(t *testing.T) {
 // be a valid address.
 func genScript(t *testing.T, address string) lnwire.DeliveryAddress {
 	// Generate an address which can be used for testing.
-	deliveryAddr, err := btcutil.DecodeAddress(
+	deliveryAddr, err := acmutil.DecodeAddress(
 		address,
 		activeNetParams.Params,
 	)

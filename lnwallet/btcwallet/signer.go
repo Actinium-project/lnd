@@ -64,7 +64,7 @@ func (b *BtcWallet) FetchInputInfo(prevOut *wire.OutPoint) (*lnwallet.Utxo, erro
 
 	return &lnwallet.Utxo{
 		AddressType: addressType,
-		Value: btcutil.Amount(
+		Value: acmutil.Amount(
 			txDetail.TxRecord.MsgTx.TxOut[prevOut.Index].Value,
 		),
 		PkScript:      pkScript,

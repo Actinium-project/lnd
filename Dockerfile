@@ -14,8 +14,8 @@ RUN apk add --no-cache --update alpine-sdk \
     git \
     make \
     gcc \
-&&  git clone https://github.com/lightningnetwork/lnd /go/src/github.com/lightningnetwork/lnd \
-&&  cd /go/src/github.com/lightningnetwork/lnd \
+&&  git clone https://github.com/Actinium-project/lnd /go/src/github.com/Actinium-project/lnd \
+&&  cd /go/src/github.com/Actinium-project/lnd \
 &&  git checkout $checkout \
 &&  make \
 &&  make install tags="signrpc walletrpc chainrpc invoicesrpc routerrpc"

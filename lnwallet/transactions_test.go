@@ -1023,7 +1023,7 @@ func testSpendValidation(t *testing.T, tweakless bool) {
 	}
 	fakeFundingTxIn := wire.NewTxIn(fundingOut, nil, nil)
 
-	const channelBalance = btcutil.Amount(1 * 10e8)
+	const channelBalance = acmutil.Amount(1 * 10e8)
 	const csvTimeout = 5
 
 	// We also set up set some resources for the commitment transaction.

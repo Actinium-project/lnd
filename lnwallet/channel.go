@@ -1376,7 +1376,7 @@ func (lc *LightningChannel) ResetState() {
 func (lc *LightningChannel) logUpdateToPayDesc(logUpdate *channeldb.LogUpdate,
 	remoteUpdateLog *updateLog, commitHeight uint64,
 	feeRate chainfee.SatPerKWeight, remoteCommitKeys *CommitmentKeyRing,
-	remoteDustLimit btcutil.Amount) (*PaymentDescriptor, error) {
+	remoteDustLimit acmutil.Amount) (*PaymentDescriptor, error) {
 
 	// Depending on the type of update message we'll map that to a distinct
 	// PaymentDescriptor instance.
@@ -1584,7 +1584,7 @@ func (lc *LightningChannel) remoteLogUpdateToPayDesc(logUpdate *channeldb.LogUpd
 		return &PaymentDescriptor{
 			LogIndex: logUpdate.LogIndex,
 			Amount: lnwire.NewMSatFromSatoshis(
-				btcutil.Amount(wireMsg.FeePerKw),
+				acmutil.Amount(wireMsg.FeePerKw),
 			),
 			EntryType:               FeeUpdate,
 			addCommitHeightLocal:    commitHeight,
@@ -2255,13 +2255,13 @@ func NewBreachRetribution(chanState *channeldb.OpenChannel, stateNum uint64,
 
 // htlcTimeoutFee returns the fee in satoshis required for an HTLC timeout
 // transaction based on the current fee rate.
-func htlcTimeoutFee(feePerKw chainfee.SatPerKWeight) btcutil.Amount {
+func htlcTimeoutFee(feePerKw chainfee.SatPerKWeight) acmutil.Amount {
 	return feePerKw.FeeForWeight(input.HtlcTimeoutWeight)
 }
 
 // htlcSuccessFee returns the fee in satoshis required for an HTLC success
 // transaction based on the current fee rate.
-func htlcSuccessFee(feePerKw chainfee.SatPerKWeight) btcutil.Amount {
+func htlcSuccessFee(feePerKw chainfee.SatPerKWeight) acmutil.Amount {
 	return feePerKw.FeeForWeight(input.HtlcSuccessWeight)
 }
 
@@ -2272,7 +2272,7 @@ func htlcSuccessFee(feePerKw chainfee.SatPerKWeight) btcutil.Amount {
 // covenants. Depending on the two bits, we'll either be using a timeout or
 // success transaction which have different weights.
 func htlcIsDust(incoming, ourCommit bool, feePerKw chainfee.SatPerKWeight,
-	htlcAmt, dustLimit btcutil.Amount) bool {
+	htlcAmt, dustLimit acmutil.Amount) bool {
 
 	// First we'll determine the fee required for this HTLC based on if this is
 	// an incoming HTLC or not, and also on whose commitment transaction it
@@ -4627,7 +4627,7 @@ func (lc *LightningChannel) InitNextRevocation(revKey *btcec.PublicKey) error {
 // AvailableBalance does), so one could get into the "stuck channel" state by
 // sending dust HTLCs.
 // TODO(halseth): fix this either by using additional reserve, or better commit
-// format. See https://github.com/lightningnetwork/lightning-rfc/issues/728
+// format. See https://github.com/Actinium-project/lightning-rfc/issues/728
 //
 // NOTE: It is okay for sourceRef to be nil when unit testing the wallet.
 func (lc *LightningChannel) AddHTLC(htlc *lnwire.UpdateAddHTLC,
@@ -6318,7 +6318,7 @@ func (lc *LightningChannel) generateRevocation(height uint64) (*lnwire.RevokeAnd
 // expected that the initiator pays the transaction fees for the closing
 // transaction in full.
 func CreateCooperativeCloseTx(fundingTxIn wire.TxIn,
-	localDust, remoteDust, ourBalance, theirBalance btcutil.Amount,
+	localDust, remoteDust, ourBalance, theirBalance acmutil.Amount,
 	ourDeliveryScript, theirDeliveryScript []byte) *wire.MsgTx {
 
 	// Construct the transaction to perform a cooperative closure of the
@@ -6350,7 +6350,7 @@ func CreateCooperativeCloseTx(fundingTxIn wire.TxIn,
 
 // CalcFee returns the commitment fee to use for the given
 // fee rate (fee-per-kw).
-func (lc *LightningChannel) CalcFee(feeRate chainfee.SatPerKWeight) btcutil.Amount {
+func (lc *LightningChannel) CalcFee(feeRate chainfee.SatPerKWeight) acmutil.Amount {
 	return feeRate.FeeForWeight(input.CommitWeight)
 }
 
@@ -6497,7 +6497,7 @@ func (lc *LightningChannel) ActiveHtlcs() []channeldb.HTLC {
 }
 
 // LocalChanReserve returns our local ChanReserve requirement for the remote party.
-func (lc *LightningChannel) LocalChanReserve() btcutil.Amount {
+func (lc *LightningChannel) LocalChanReserve() acmutil.Amount {
 	return lc.channelState.LocalChanCfg.ChanReserve
 }
 

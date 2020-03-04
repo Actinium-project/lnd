@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	sphinx "github.com/lightningnetwork/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/lnwire"
 	"github.com/Actinium-project/lnd/record"
 	"github.com/Actinium-project/lnd/tlv"

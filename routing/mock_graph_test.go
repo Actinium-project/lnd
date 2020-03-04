@@ -25,7 +25,7 @@ func createPubkey() route.Vertex {
 // mockChannel holds the channel state of a channel in the mock graph.
 type mockChannel struct {
 	id       uint64
-	capacity btcutil.Amount
+	capacity acmutil.Amount
 	balance  lnwire.MilliSatoshi
 }
 
@@ -131,7 +131,7 @@ func (m *mockGraph) addNode(node *mockNode) {
 // Ignore linter error because addChannel isn't yet called with different
 // capacities.
 // nolint:unparam
-func (m *mockGraph) addChannel(node1, node2 *mockNode, capacity btcutil.Amount) {
+func (m *mockGraph) addChannel(node1, node2 *mockNode, capacity acmutil.Amount) {
 	id := m.nextChanID
 	m.nextChanID++
 

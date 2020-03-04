@@ -70,11 +70,11 @@ type InitFundingReserveMsg struct {
 
 	// LocalFundingAmt is the amount of funds requested from us for this
 	// channel.
-	LocalFundingAmt btcutil.Amount
+	LocalFundingAmt acmutil.Amount
 
 	// RemoteFundingAmnt is the amount of funds the remote will contribute
 	// to this channel.
-	RemoteFundingAmt btcutil.Amount
+	RemoteFundingAmt acmutil.Amount
 
 	// CommitFeePerKw is the starting accepted satoshis/Kw fee for the set
 	// of initial commitment transactions. In order to ensure timely
@@ -543,7 +543,7 @@ func (l *LightningWallet) handleFundingReserveRequest(req *InitFundingReserveMsg
 			MinConfs:     req.MinConfs,
 			SubtractFees: req.SubtractFees,
 			FeeRate:      req.FundingFeePerKw,
-			ChangeAddr: func() (btcutil.Address, error) {
+			ChangeAddr: func() (acmutil.Address, error) {
 				return l.NewAddress(WitnessPubKey, true)
 			},
 		}

@@ -101,7 +101,7 @@ func createSweeperTestContext(t *testing.T) *sweeperTestContext {
 	backend := newMockBackend(t, notifier)
 	backend.walletUtxos = []*lnwallet.Utxo{
 		{
-			Value:       btcutil.Amount(10000),
+			Value:       acmutil.Amount(10000),
 			AddressType: lnwallet.WitnessPubKey,
 		},
 	}
@@ -335,7 +335,7 @@ func assertTxFeeRate(t *testing.T, tx *wire.MsgTx,
 	}
 	outputAmt := tx.TxOut[0].Value
 
-	fee := btcutil.Amount(inputAmt - outputAmt)
+	fee := acmutil.Amount(inputAmt - outputAmt)
 	_, txWeight := getWeightEstimate(inputs)
 
 	expectedFee := expectedFeeRate.FeeForWeight(txWeight)
@@ -1188,7 +1188,7 @@ func TestBumpFeeRBF(t *testing.T) {
 	// We'll then attempt to sweep an input, which we'll use to bump its fee
 	// later on.
 	input := createTestInput(
-		btcutil.SatoshiPerBitcoin, input.CommitmentTimeLock,
+		acmutil.SatoshiPerBitcoin, input.CommitmentTimeLock,
 	)
 	sweepResult, err := ctx.sweeper.SweepInput(
 		&input, Params{Fee: lowFeePref},

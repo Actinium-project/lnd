@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/lightningnetwork/lnd"
+	"github.com/Actinium-project/lnd"
 	"github.com/Actinium-project/lnd/lnrpc/routerrpc"
 	"github.com/Actinium-project/lnd/routing/route"
 	"github.com/urfave/cli"

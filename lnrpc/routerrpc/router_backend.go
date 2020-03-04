@@ -33,7 +33,7 @@ type RouterBackend struct {
 
 	// FetchChannelCapacity is a closure that we'll use the fetch the total
 	// capacity of a channel to populate in responses.
-	FetchChannelCapacity func(chanID uint64) (btcutil.Amount, error)
+	FetchChannelCapacity func(chanID uint64) (acmutil.Amount, error)
 
 	// FetchChannelEndpoints returns the pubkeys of both endpoints of the
 	// given channel id.

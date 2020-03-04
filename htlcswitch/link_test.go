@@ -22,7 +22,7 @@ import (
 	"github.com/coreos/bbolt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-errors/errors"
-	sphinx "github.com/lightningnetwork/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/build"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/contractcourt"
@@ -186,8 +186,8 @@ func TestChannelLinkSingleHopPayment(t *testing.T) {
 
 	// Setup a alice-bob network.
 	alice, bob, cleanUp, err := createTwoClusterChannels(
-		btcutil.SatoshiPerBitcoin*3,
-		btcutil.SatoshiPerBitcoin*5)
+		acmutil.SatoshiPerBitcoin*3,
+		acmutil.SatoshiPerBitcoin*5)
 	if err != nil {
 		t.Fatalf("unable to create channel: %v", err)
 	}
@@ -811,7 +811,7 @@ func TestLinkForwardMaxHTLCPolicyMismatch(t *testing.T) {
 	t.Parallel()
 
 	channels, cleanUp, _, err := createClusterChannels(
-		btcutil.SatoshiPerBitcoin*5, btcutil.SatoshiPerBitcoin*5,
+		acmutil.SatoshiPerBitcoin*5, acmutil.SatoshiPerBitcoin*5,
 	)
 	if err != nil {
 		t.Fatalf("unable to create channel: %v", err)
@@ -1993,7 +1993,7 @@ func TestChannelLinkBandwidthConsistency(t *testing.T) {
 	// Next, we'll create an HTLC worth 1 ACM, and send it into the link as
 	// a switch initiated payment.  The resulting bandwidth should
 	// now be decremented to reflect the new HTLC.
-	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	invoice, htlc, _, err := generatePayment(
 		htlcAmt, htlcAmt, 5, mockBlob,
 	)
@@ -2673,7 +2673,7 @@ func TestChannelLinkTrimCircuitsPending(t *testing.T) {
 	// Next, we'll create an HTLC worth 1 ACM that will be used as a dummy
 	// message for the test.
 	var mockBlob [lnwire.OnionPacketSize]byte
-	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	_, htlc, _, err := generatePayment(htlcAmt, htlcAmt, 5, mockBlob)
 	if err != nil {
 		t.Fatalf("unable to create payment: %v", err)
@@ -2954,7 +2954,7 @@ func TestChannelLinkTrimCircuitsNoCommit(t *testing.T) {
 	// Next, we'll create an HTLC worth 1 ACM that will be used as a dummy
 	// message for the test.
 	var mockBlob [lnwire.OnionPacketSize]byte
-	htlcAmt := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	_, htlc, _, err := generatePayment(htlcAmt, htlcAmt, 5, mockBlob)
 	if err != nil {
 		t.Fatalf("unable to create payment: %v", err)
@@ -3207,7 +3207,7 @@ func TestChannelLinkBandwidthChanReserve(t *testing.T) {
 	// Next, we'll create an HTLC worth 3 ACM, and send it into the link as
 	// a switch initiated payment.  The resulting bandwidth should
 	// now be decremented to reflect the new HTLC.
-	htlcAmt := lnwire.NewMSatFromSatoshis(3 * btcutil.SatoshiPerBitcoin)
+	htlcAmt := lnwire.NewMSatFromSatoshis(3 * acmutil.SatoshiPerBitcoin)
 	invoice, htlc, _, err := generatePayment(htlcAmt, htlcAmt, 5, mockBlob)
 	if err != nil {
 		t.Fatalf("unable to create payment: %v", err)
@@ -3807,9 +3807,9 @@ func TestChannelLinkUpdateCommitFee(t *testing.T) {
 	// First, we'll create our traditional three hop network. We'll only be
 	// interacting with and asserting the state of two of the end points
 	// for this test.
-	const aliceInitialBalance = btcutil.SatoshiPerBitcoin * 3
+	const aliceInitialBalance = acmutil.SatoshiPerBitcoin * 3
 	channels, cleanUp, _, err := createClusterChannels(
-		aliceInitialBalance, btcutil.SatoshiPerBitcoin*5,
+		aliceInitialBalance, acmutil.SatoshiPerBitcoin*5,
 	)
 	if err != nil {
 		t.Fatalf("unable to create channel: %v", err)
@@ -4405,8 +4405,8 @@ func generateHtlcAndInvoice(t *testing.T,
 func TestChannelLinkNoMoreUpdates(t *testing.T) {
 	t.Parallel()
 
-	const chanAmt = btcutil.SatoshiPerBitcoin * 5
-	const chanReserve = btcutil.SatoshiPerBitcoin * 1
+	const chanAmt = acmutil.SatoshiPerBitcoin * 5
+	const chanReserve = acmutil.SatoshiPerBitcoin * 1
 	aliceLink, bobChannel, _, start, cleanUp, _, err :=
 		newSingleLinkTestHarness(chanAmt, chanReserve)
 	if err != nil {
@@ -4645,8 +4645,8 @@ func TestChannelLinkWaitForRevocation(t *testing.T) {
 func TestChannelLinkNoEmptySig(t *testing.T) {
 	t.Parallel()
 
-	const chanAmt = btcutil.SatoshiPerBitcoin * 5
-	const chanReserve = btcutil.SatoshiPerBitcoin * 1
+	const chanAmt = acmutil.SatoshiPerBitcoin * 5
+	const chanReserve = acmutil.SatoshiPerBitcoin * 1
 	aliceLink, bobChannel, batchTicker, start, cleanUp, _, err :=
 		newSingleLinkTestHarness(chanAmt, chanReserve)
 	if err != nil {
@@ -4754,8 +4754,8 @@ func TestChannelLinkBatchPreimageWrite(t *testing.T) {
 }
 
 func testChannelLinkBatchPreimageWrite(t *testing.T, disconnect bool) {
-	const chanAmt = btcutil.SatoshiPerBitcoin * 5
-	const chanReserve = btcutil.SatoshiPerBitcoin * 1
+	const chanAmt = acmutil.SatoshiPerBitcoin * 5
+	const chanReserve = acmutil.SatoshiPerBitcoin * 1
 	aliceLink, bobChannel, batchTicker, startUp, cleanUp, _, err :=
 		newSingleLinkTestHarness(chanAmt, chanReserve)
 	if err != nil {
@@ -5344,7 +5344,7 @@ func TestChannelLinkFail(t *testing.T) {
 		},
 	}
 
-	const chanAmt = btcutil.SatoshiPerBitcoin * 5
+	const chanAmt = acmutil.SatoshiPerBitcoin * 5
 
 	// Execute each test case.
 	for i, test := range testCases {
@@ -5607,8 +5607,8 @@ func TestChannelLinkCanceledInvoice(t *testing.T) {
 
 	// Setup a alice-bob network.
 	alice, bob, cleanUp, err := createTwoClusterChannels(
-		btcutil.SatoshiPerBitcoin*3,
-		btcutil.SatoshiPerBitcoin*5)
+		acmutil.SatoshiPerBitcoin*3,
+		acmutil.SatoshiPerBitcoin*5)
 	if err != nil {
 		t.Fatalf("unable to create channel: %v", err)
 	}
@@ -5674,8 +5674,8 @@ type hodlInvoiceTestCtx struct {
 func newHodlInvoiceTestCtx(t *testing.T) (*hodlInvoiceTestCtx, error) {
 	// Setup a alice-bob network.
 	alice, bob, cleanUp, err := createTwoClusterChannels(
-		btcutil.SatoshiPerBitcoin*3,
-		btcutil.SatoshiPerBitcoin*5,
+		acmutil.SatoshiPerBitcoin*3,
+		acmutil.SatoshiPerBitcoin*5,
 	)
 	if err != nil {
 		t.Fatalf("unable to create channel: %v", err)
@@ -5702,7 +5702,7 @@ func newHodlInvoiceTestCtx(t *testing.T) (*hodlInvoiceTestCtx, error) {
 		)
 	}
 
-	amount := lnwire.NewMSatFromSatoshis(btcutil.SatoshiPerBitcoin)
+	amount := lnwire.NewMSatFromSatoshis(acmutil.SatoshiPerBitcoin)
 	htlcAmt, totalTimelock, hops := generateHops(
 		amount, testStartingHeight, n.bobChannelLink,
 	)
@@ -5832,7 +5832,7 @@ func TestChannelLinkHoldInvoiceRestart(t *testing.T) {
 	defer timeout(t)()
 
 	const (
-		chanAmt = btcutil.SatoshiPerBitcoin * 5
+		chanAmt = acmutil.SatoshiPerBitcoin * 5
 	)
 
 	// We'll start by creating a new link with our chanAmt (5 BTC). We will
@@ -5929,7 +5929,7 @@ func TestChannelLinkRevocationWindowRegular(t *testing.T) {
 	t.Parallel()
 
 	const (
-		chanAmt = btcutil.SatoshiPerBitcoin * 5
+		chanAmt = acmutil.SatoshiPerBitcoin * 5
 	)
 
 	// We'll start by creating a new link with our chanAmt (5 BTC). We will
@@ -6018,7 +6018,7 @@ func TestChannelLinkRevocationWindowHodl(t *testing.T) {
 	t.Parallel()
 
 	const (
-		chanAmt = btcutil.SatoshiPerBitcoin * 5
+		chanAmt = acmutil.SatoshiPerBitcoin * 5
 	)
 
 	// We'll start by creating a new link with our chanAmt (5 BTC). We will
@@ -6163,8 +6163,8 @@ func TestChannelLinkRevocationWindowHodl(t *testing.T) {
 func TestChannelLinkReceiveEmptySig(t *testing.T) {
 	t.Parallel()
 
-	const chanAmt = btcutil.SatoshiPerBitcoin * 5
-	const chanReserve = btcutil.SatoshiPerBitcoin * 1
+	const chanAmt = acmutil.SatoshiPerBitcoin * 5
+	const chanReserve = acmutil.SatoshiPerBitcoin * 1
 	aliceLink, bobChannel, batchTicker, start, cleanUp, _, err :=
 		newSingleLinkTestHarness(chanAmt, chanReserve)
 	if err != nil {

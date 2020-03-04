@@ -154,7 +154,7 @@ type WalletSweepPackage struct {
 // target fee rate, and will use the utxoSource and outpointLocker as sources
 // for wallet funds.
 func CraftSweepAllTx(feeRate chainfee.SatPerKWeight, blockHeight uint32,
-	deliveryAddr btcutil.Address, coinSelectLocker CoinSelectionLocker,
+	deliveryAddr acmutil.Address, coinSelectLocker CoinSelectionLocker,
 	utxoSource UtxoSource, outpointLocker OutpointLocker,
 	feeEstimator chainfee.Estimator,
 	signer input.Signer) (*WalletSweepPackage, error) {

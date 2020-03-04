@@ -1035,7 +1035,7 @@ type contractMaturityReport struct {
 
 	// recoveredBalance is the total value that has been successfully swept
 	// back to the user's wallet.
-	recoveredBalance btcutil.Amount
+	recoveredBalance acmutil.Amount
 	// htlcs records a maturity report for each htlc output in this channel.
 	htlcs []htlcMaturityReport
 }

@@ -25,7 +25,7 @@ func CalculateFeeLimit(feeLimit *FeeLimit,
 
 	case *FeeLimit_Fixed:
 		return lnwire.NewMSatFromSatoshis(
-			btcutil.Amount(feeLimit.GetFixed()),
+			acmutil.Amount(feeLimit.GetFixed()),
 		)
 
 	case *FeeLimit_FixedMsat:
@@ -49,7 +49,7 @@ func UnmarshallAmt(amtSat, amtMsat int64) (lnwire.MilliSatoshi, error) {
 	}
 
 	if amtSat != 0 {
-		return lnwire.NewMSatFromSatoshis(btcutil.Amount(amtSat)), nil
+		return lnwire.NewMSatFromSatoshis(acmutil.Amount(amtSat)), nil
 	}
 
 	return lnwire.MilliSatoshi(amtMsat), nil

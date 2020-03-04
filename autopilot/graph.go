@@ -517,7 +517,7 @@ func (m memNode) ForEachChannel(cb func(ChannelEdge) error) error {
 }
 
 // Median returns the median value in the slice of Amounts.
-func Median(vals []btcutil.Amount) btcutil.Amount {
+func Median(vals []acmutil.Amount) acmutil.Amount {
 	sort.Slice(vals, func(i, j int) bool {
 		return vals[i] < vals[j]
 	})

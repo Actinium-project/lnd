@@ -162,7 +162,7 @@ type chainWatcherConfig struct {
 
 	// isOurAddr is a function that returns true if the passed address is
 	// known to us.
-	isOurAddr func(btcutil.Address) bool
+	isOurAddr func(acmutil.Address) bool
 
 	// extractStateNumHint extracts the encoded state hint using the passed
 	// obfuscater. This is used by the chain watcher to identify which

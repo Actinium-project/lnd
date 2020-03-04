@@ -171,7 +171,7 @@ func (b *BtcdEstimator) Start() error {
 		return err
 	}
 
-	relayFee, err := btcutil.NewAmount(info.RelayFee)
+	relayFee, err := acmutil.NewAmount(info.RelayFee)
 	if err != nil {
 		return err
 	}
@@ -244,7 +244,7 @@ func (b *BtcdEstimator) fetchEstimate(confTarget uint32) (SatPerKWeight, error) 
 
 	// Next, we'll convert the returned value to satoshis, as it's
 	// currently returned in BTC.
-	satPerKB, err := btcutil.NewAmount(btcPerKB)
+	satPerKB, err := acmutil.NewAmount(btcPerKB)
 	if err != nil {
 		return 0, err
 	}
@@ -334,7 +334,7 @@ func (b *BitcoindEstimator) Start() error {
 		return err
 	}
 
-	relayFee, err := btcutil.NewAmount(info.RelayFee)
+	relayFee, err := acmutil.NewAmount(info.RelayFee)
 	if err != nil {
 		return err
 	}
@@ -422,7 +422,7 @@ func (b *BitcoindEstimator) fetchEstimate(confTarget uint32) (SatPerKWeight, err
 
 	// Next, we'll convert the returned value to satoshis, as it's currently
 	// returned in BTC.
-	satPerKB, err := btcutil.NewAmount(feeEstimate.FeeRate)
+	satPerKB, err := acmutil.NewAmount(feeEstimate.FeeRate)
 	if err != nil {
 		return 0, err
 	}

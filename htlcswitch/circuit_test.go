@@ -9,7 +9,7 @@ import (
 	"github.com/Actinium-project/acmd/btcec"
 	bitcoinCfg "github.com/Actinium-project/acmd/chaincfg"
 	"github.com/Actinium-project/acmutil"
-	sphinx "github.com/lightningnetwork/lightning-onion"
+	sphinx "github.com/Actinium-project/lightning-onion"
 	"github.com/Actinium-project/lnd/channeldb"
 	"github.com/Actinium-project/lnd/htlcswitch"
 	"github.com/Actinium-project/lnd/htlcswitch/hop"

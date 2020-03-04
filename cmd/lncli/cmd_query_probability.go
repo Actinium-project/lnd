@@ -45,7 +45,7 @@ func queryProb(ctx *cli.Context) error {
 	}
 
 	amtMsat := lnwire.NewMSatFromSatoshis(
-		btcutil.Amount(amtSat),
+		acmutil.Amount(amtSat),
 	)
 
 	conn := getClientConn(ctx, false)

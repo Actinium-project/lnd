@@ -249,7 +249,7 @@ func (*mockWalletController) FetchInputInfo(
 	prevOut *wire.OutPoint) (*lnwallet.Utxo, error) {
 	utxo := &lnwallet.Utxo{
 		AddressType:   lnwallet.WitnessPubKey,
-		Value:         10 * btcutil.SatoshiPerBitcoin,
+		Value:         10 * acmutil.SatoshiPerBitcoin,
 		PkScript:      []byte("dummy"),
 		Confirmations: 1,
 		OutPoint:      *prevOut,
@@ -268,11 +268,11 @@ func (m *mockWalletController) NewAddress(addrType lnwallet.AddressType,
 	return addr, nil
 }
 func (*mockWalletController) LastUnusedAddress(addrType lnwallet.AddressType) (
-	btcutil.Address, error) {
+	acmutil.Address, error) {
 	return nil, nil
 }
 
-func (*mockWalletController) IsOurAddress(a btcutil.Address) bool {
+func (*mockWalletController) IsOurAddress(a acmutil.Address) bool {
 	return false
 }
 
@@ -301,7 +301,7 @@ func (m *mockWalletController) ListUnspentWitness(minconfirms,
 	// Otherwise create one to return.
 	utxo := &lnwallet.Utxo{
 		AddressType: lnwallet.WitnessPubKey,
-		Value:       btcutil.Amount(10 * btcutil.SatoshiPerBitcoin),
+		Value:       acmutil.Amount(10 * acmutil.SatoshiPerBitcoin),
 		PkScript:    coinPkScript,
 		OutPoint: wire.OutPoint{
 			Hash:  chainhash.Hash{},

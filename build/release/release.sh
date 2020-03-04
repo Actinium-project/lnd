@@ -109,7 +109,7 @@ SYS=${LNDBUILDSYS:-"
 
 # Use the first element of $GOPATH in the case where GOPATH is a list
 # (something that is totally allowed).
-PKG="github.com/lightningnetwork/lnd"
+PKG="github.com/Actinium-project/lnd"
 COMMIT=$(git describe --abbrev=40 --dirty)
 COMMITFLAGS="-X $PKG/build.Commit=$COMMIT"
 
